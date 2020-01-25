@@ -1,0 +1,75 @@
+class Solution {
+    public int romanToInt(String s) {
+        int arabic = 0;
+        char[] roman = s.toCharArray(); 
+        for (int i = 0; i <= roman.length - 1; i++) {
+            if (roman[i] == 'V') {
+                arabic += 5;
+            }
+            else if (roman[i] == 'L') {
+                arabic += 50;
+            }
+            else if (roman[i] == 'D') {
+                arabic += 500;
+            }
+            else if (roman[i] == 'M') {
+                arabic += 1000;
+            }
+            else if (roman[i] == 'I') {
+                if(i != roman.length - 1) {
+                    if (roman[i] == 'I' && roman[i+1] == 'V') {
+                        arabic += 4;
+                        i++;
+                    } 
+                    else if (roman[i] == 'I' && roman[i+1] == 'X') {
+                        arabic +=9;
+                        i++;
+                    }
+                    else {
+                        arabic += 1;
+                    }
+                }
+                else {
+                    arabic += 1;
+                }
+            }
+            else if (roman[i] == 'X') {
+                if(i != roman.length - 1) {
+                    if (roman[i] == 'X' && roman[i+1] == 'L') {
+                        arabic += 40;
+                        i++;
+                    } 
+                    else if (roman[i] == 'X' && roman[i+1] == 'C') {
+                        arabic +=90;
+                        i++;
+                    }
+                    else {
+                        arabic += 10;
+                    }
+                }
+                else {
+                    arabic += 10;
+                }
+            }  
+            else if (roman[i] == 'C') {
+                if(i != roman.length - 1) {
+                    if (roman[i] == 'C' && roman[i+1] == 'D') {
+                        arabic += 400;
+                        i++;
+                    } 
+                    else if (roman[i] == 'C' && roman[i+1] == 'M') {
+                        arabic +=900;
+                        i++;
+                    }
+                    else {
+                        arabic += 100;
+                    }
+                }
+                else {
+                    arabic += 100;
+                }
+            }
+        }
+        return arabic;
+    }
+}
