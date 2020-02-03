@@ -1,0 +1,24 @@
+class Solution {
+    public int firstUniqChar(String s) {
+        if (s.length() == 0)
+            return -1;
+        if (s.length() == 1)
+            return 0;
+        char[] input = s.toCharArray();
+        int i = 0;
+        while (i < input.length) {
+            int j = 0;
+            while (j < input.length) {
+                if (input[i] == input[j] && i != j ) {
+                    i++;
+                    break;
+                }
+                j++;
+            }
+            if (j == input.length) {
+                return i;
+            }
+        }
+        return -1;
+    }
+}
