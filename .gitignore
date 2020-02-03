@@ -1,0 +1,13 @@
+/target/
+/target/
+/nbproject/private/
+/build/
+/nbproject/private/
+/build/
+/nbproject/private/
+/nbproject/project.properties
+/nbproject/project.xml
+/nbproject/genfiles.properties
+/nbproject/build-impl.xml
+/manifest.mf
+/build.xml
