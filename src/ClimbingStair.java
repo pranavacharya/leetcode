@@ -1,24 +1,21 @@
 
 public class ClimbingStair {
 
-    public static int count = 0;
-
-    public static void stair(int totalSoFar, int[] steps, int target) {
+    public static int stair(int count, int totalSoFar, int[] steps, int target) {
+        if (totalSoFar > target) {
+            return 0;
+        }
         if (totalSoFar == target) {
-            count++;
+            return 1;
         } else {
-            for (int i : steps) {
-                if (!(totalSoFar + i > target)) {
-                    stair(totalSoFar + i, steps, target);
-                }
-            }
+            count = stair(count, totalSoFar + 1, steps, target) + stair(count, totalSoFar + 2, steps, target);
+            return count;
         }
     }
 
     public int climbStairs(int n) {
         int[] steps = {1, 2};
-        stair(0, steps, n);
-        return count;
+        return stair(0, 0, steps, n);
     }
 
     public static void main(String args[]) {
