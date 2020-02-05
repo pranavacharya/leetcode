@@ -1,25 +1,30 @@
 
 public class ClimbingStair {
 
-    public static int stair(int count, int totalSoFar, int[] steps, int target) {
-        if (totalSoFar > target) {
+    public static int stair(int soFar, int target, int[] memory) {
+        if (soFar == target) {
+            return 1;
+        }
+        if (soFar > target) {
             return 0;
         }
-        if (totalSoFar == target) {
-            return 1;
-        } else {
-            count = stair(count, totalSoFar + 1, steps, target) + stair(count, totalSoFar + 2, steps, target);
-            return count;
+        if (memory[soFar] > 0) {
+            return memory[soFar];
         }
+        
+        memory[soFar] = stair(soFar + 1, target, memory) + stair(soFar + 2, target, memory);
+        
+        return memory[soFar];
     }
 
     public int climbStairs(int n) {
-        int[] steps = {1, 2};
-        return stair(0, 0, steps, n);
+        int[] memory = new int[n];
+        int count = stair(0, n, memory);
+        return count;
     }
 
     public static void main(String args[]) {
         ClimbingStair cs = new ClimbingStair();
-        System.out.println(cs.climbStairs(3));
+        System.out.println(cs.climbStairs(44));
     }
 }
