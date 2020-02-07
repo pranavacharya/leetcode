@@ -2,17 +2,9 @@
 public class ClimbingStair {
 
     public int climbStairs(int n) {
-        if (n == 1) {
-            return 1;
-        }
-        int first = 1;
-        int second = 2;
-        for (int i = 3; i <= n; i++) {
-            int third = first + second;
-            first = second;
-            second = third;
-        }
-        return second;
+        double sqrt5=Math.sqrt(5);
+        double fibn=Math.pow((1+sqrt5)/2,n+1)-Math.pow((1-sqrt5)/2,n+1);
+        return (int)(fibn/sqrt5);
     }
 
     public static void main(String args[]) {
