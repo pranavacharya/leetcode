@@ -1,6 +1,7 @@
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Collections;
 
 public class ThreeSum {
 
@@ -17,7 +18,10 @@ public class ThreeSum {
                 sum += (int) i;
             }
             if (sum == 0) {
-                output.add(soFar);
+                Collections.sort(soFar);
+                if (!output.contains(soFar)) {
+                    output.add(soFar);
+                }
             }
         } else if (!rem.isEmpty()) {
             ArrayList<Integer> leftwith;
