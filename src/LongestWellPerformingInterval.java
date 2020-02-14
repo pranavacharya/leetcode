@@ -1,7 +1,7 @@
 
 public class LongestWellPerformingInterval {
 
-    public int longestWPI(int[] hours) {
+    public int dynamicPrograming(int[] hours, int[][] dp) {
         for (int i = 0; i < hours.length; i++) {
             if (hours[i] > 8) {
                 hours[i] = 1;
@@ -13,7 +13,12 @@ public class LongestWellPerformingInterval {
         int max = 0;
         while (i < hours.length) {
             for (int j = i; j < hours.length; j++) {
-                if (sum(i, j, hours) > 0) {
+                if (i == j) {
+                    dp[i][j] = hours[i];
+                } else {
+                    dp[i][j] = dp[i][j - 1] + hours[j];
+                }
+                if (dp[i][j] > 0) {
                     max = (max > (j - i + 1)) ? max : (j - i + 1);
                 }
             }
@@ -22,12 +27,8 @@ public class LongestWellPerformingInterval {
         return max;
     }
 
-    public int sum(int start, int end, int[] arr) {
-        int sum = 0;
-        for (int i = start; i <= end; i++) {
-            sum = sum + arr[i];
-        }
-        return sum;
+    public int longestWPI(int[] hours) {
+        return dynamicPrograming(hours, new int[hours.length][hours.length]);
     }
 
     public static void main(String args[]) {
