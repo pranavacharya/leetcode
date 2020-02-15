@@ -1,27 +1,63 @@
 
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Stack;
 
 public class DailyTemperature {
 
+    public class obj {
+
+        private int data;
+        private int index;
+
+        public obj(int data, int index) {
+            this.data = data;
+            this.index = index;
+        }
+
+        public int getData() {
+            return data;
+        }
+
+        public void setData(int data) {
+            this.data = data;
+        }
+
+        public int getIndex() {
+            return index;
+        }
+
+        public void setIndex(int index) {
+            this.index = index;
+        }
+    }
+
     public int[] dailyTemperatures(int[] T) {
-        if (T.length == 0) {
-            return new int[]{};
-        }
-        if (T.length == 1) {
-            return new int[]{0};
-        }
+        Stack<obj> stk = new Stack<>();
+        HashMap<Integer, Integer> map = new HashMap<>();
         int[] res = new int[T.length];
-        for (int i = 0; i < res.length; i++) {
-            res[i] = 0;
-        }
-        {
-            for (int i = 0; i < T.length - 1; i++) {
-                for (int j = i + 1; j < T.length; j++) {
-                    if (T[j] > T[i]) {
-                        res[i] = j - i;
+        for (int i = 0; i < T.length; i++) {
+            if (stk.empty() || T[i] < stk.peek().getData()) {
+                stk.push(new obj(T[i], i));
+            } else {
+                obj top = stk.peek();
+                while (top.getData() < T[i]) {
+                    map.put(top.getIndex(), i);
+                    stk.pop();
+                    if (!stk.empty()) {
+                        top = stk.peek();
+                    } else {
                         break;
                     }
                 }
+                stk.push(new obj(T[i], i));
+            }
+        }
+        for (int i = 0; i < T.length; i++) {
+            if (map.containsKey(i)) {
+                res[i] = map.get(i) - i;
+            } else {
+                res[i] = 0;
             }
         }
         return res;
