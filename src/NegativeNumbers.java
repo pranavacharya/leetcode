@@ -3,10 +3,11 @@ public class NegativeNumbers {
 
     public int countNegatives(int[][] grid) {
         int count = 0;
-        for (int i = 0; i < grid.length; i++) {
-            for (int j = 0; j < grid[0].length; j++) {
+        for (int i = 0, end = grid[0].length; i < grid.length; i++) {
+            for (int j = 0; j < end; j++) {
                 if (grid[i][j] < 0) {
-                    count++;
+                    count = count + ((grid.length - i) * (end - j));
+                    end = j;
                 }
             }
         }
