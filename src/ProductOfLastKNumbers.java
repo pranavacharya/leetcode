@@ -4,22 +4,33 @@ import java.util.ArrayList;
 public class ProductOfLastKNumbers {
 
     private ArrayList<Integer> list;
+    private int count;
+    private int zeropos;
 
     public ProductOfLastKNumbers() {
         this.list = new ArrayList<>();
+        this.count = 0;
+        this.zeropos = 0;
+        this.add(0);
     }
 
     public void add(int num) {
-        this.list.add(num);
+        if (num == 0) {
+            zeropos = count;
+            list.add(1);
+        } else {
+            list.add(list.get(count - 1) * num);
+        }
+        count++;
     }
 
     public int getProduct(int k) {
-        int size = this.list.size();
-        int output = 1;
-        for (int i = size - 1; i >= 0 && k > 0; k--, i--) {
-            output = output * this.list.get(i);
+        if (zeropos >= list.size() - k) {
+            return 0;
+        } else {
+            int len = list.size();
+            return (list.get(len - 1) / list.get(len - k - 1));
         }
-        return output;
     }
 
     public static void main(String args[]) {
