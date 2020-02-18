@@ -1,30 +1,29 @@
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 public class RelativeSortArray {
 
-    public int[] relativeSortArray(int[] arr1, int[] arr2) {
-        int[] res = new int[arr1.length];
-        ArrayList<Integer> list = new ArrayList<>();
-        for (int i : arr1) {
-            list.add(i);
-        }
-        int index = 0;
-        for (int i = 0; i < arr2.length; i++) {
-            while (list.contains(arr2[i])) {
-                list.remove(new Integer(arr2[i]));
-                res[index] = arr2[i];
-                index++;
+    public int[] relativeSortArray(int[] arr1, int[] arr2){
+        Map<Integer,Integer> map = new HashMap<>();
+        int counter = 0;
+        for(int num: arr2) map.put(num,0);
+        for(int i = 0;i<arr1.length;i++){
+            if(map.containsKey(arr1[i])){
+                map.put(arr1[i],map.get(arr1[i])+1);
+                arr1[i] = -1;
             }
         }
-        Collections.sort(list);
-        for (int i : list) {
-            res[index] = i;
-            index++;
+        Arrays.sort(arr1);
+        for(int num: arr2){
+            int size = map.remove(num);
+            while (size > 0){
+                arr1[counter++] = num;
+                size--;
+            }
         }
-        return res;
+        return arr1;
     }
 
     public static void main(String args[]) {
