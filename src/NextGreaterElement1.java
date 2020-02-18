@@ -9,16 +9,14 @@ public class NextGreaterElement1 {
         HashMap<Integer, Integer> map = new HashMap<>();
         Stack<Integer> stack = new Stack<>();
         int[] ans = new int[nums1.length];
-        for (int i = 0; i < nums2.length; i++) {
-            if (stack.isEmpty() || stack.peek() > nums2[i]) {
-                stack.add(nums2[i]);
-            } else {
-                while (!stack.isEmpty() && stack.peek() < nums2[i]) {
-                    int top = stack.pop();
-                    map.put(top, nums2[i]);
-                }
-                stack.add(nums2[i]);
+        for (int i = nums2.length - 1; i >= 0; i--) {
+            while (!stack.empty() && stack.peek() < nums2[i]) {
+                stack.pop();
             }
+            if (!stack.isEmpty()) {
+                map.put(nums2[i], stack.peek());
+            }
+            stack.add(nums2[i]);
         }
         for (int i = 0; i < nums1.length; i++) {
             if (map.containsKey(nums1[i])) {
