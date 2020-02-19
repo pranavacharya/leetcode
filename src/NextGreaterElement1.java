@@ -6,26 +6,23 @@ import java.util.Stack;
 public class NextGreaterElement1 {
 
     public int[] nextGreaterElement(int[] nums1, int[] nums2) {
-        HashMap<Integer, Integer> map = new HashMap<>();
-        Stack<Integer> stack = new Stack<>();
-        int[] ans = new int[nums1.length];
-        for (int i = nums2.length - 1; i >= 0; i--) {
-            while (!stack.empty() && stack.peek() < nums2[i]) {
-                stack.pop();
-            }
-            if (!stack.isEmpty()) {
-                map.put(nums2[i], stack.peek());
-            }
-            stack.add(nums2[i]);
+        int[] map = new int[10001];
+        int[] res = new int[nums1.length];
+
+        for (int i = 0; i < nums2.length; i++) {
+            map[nums2[i]] = i;
         }
+
         for (int i = 0; i < nums1.length; i++) {
-            if (map.containsKey(nums1[i])) {
-                ans[i] = map.get(nums1[i]);
-            } else {
-                ans[i] = -1;
+            res[i] = -1;
+            for (int j = map[nums1[i]] + 1; j < nums2.length; j++) {
+                if (nums2[j] > nums1[i]) {
+                    res[i] = nums2[j];
+                    break;
+                }
             }
         }
-        return ans;
+        return res;
     }
 
     public static void main(String args[]) {
