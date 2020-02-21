@@ -5,14 +5,7 @@ public class CheckIfDoubleExist {
 
     public boolean checkIfExist(int[] arr) {
         HashSet<Integer> set = new HashSet<>();
-        int countzero = 0;
         for (int i = 0; i < arr.length; i++) {
-            if (arr[i] == 0) {
-                countzero++;
-                if (countzero > 2) {
-                    return true;
-                }
-            }
             if (set.contains(arr[i])) {
                 return true;
             } else {
