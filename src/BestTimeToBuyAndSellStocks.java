@@ -2,16 +2,21 @@
 public class BestTimeToBuyAndSellStocks {
 
     public int maxProfit(int[] prices) {
-        int max = 0;
-        for (int i = 0; i < prices.length; i++) {
-            for (int j = i + 1; j < prices.length; j++) {
-                if (i == j) {
-                    continue;
-                }
-                max = max < prices[j] - prices[i] ? prices[j] - prices[i] : max;
+        if(prices.length == 0){
+            return 0;
+        }
+        int min = prices[0];
+        int maxprofit = 0;
+
+        for (int i = 1; i < prices.length; i++) {
+            if (prices[i] - min > maxprofit) {
+                maxprofit = prices[i] - min;
+            }
+            if (prices[i] < min) {
+                min = prices[i];
             }
         }
-        return max;
+        return maxprofit;
     }
 
     public static void main(String args[]) {
