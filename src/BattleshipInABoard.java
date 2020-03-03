@@ -3,27 +3,22 @@ public class BattleshipInABoard {
 
     public int countBattleships(char[][] board) {
         int count = 0;
-
+        
         for (int i = 0; i < board.length; i++) {
             for (int j = 0; j < board[i].length; j++) {
-                if (board[i][j] == 'X') {
-                    count++;
-                    dfs(i, j, board);
+                if (board[i][j] == '.') {
+                    continue;
                 }
+                if (i > 0 && board[i - 1][j] == 'X') {
+                    continue;
+                }
+                if (j > 0 && board[i][j - 1] == 'X') {
+                    continue;
+                }
+                count++;
             }
         }
         return count;
-    }
-
-    public void dfs(int i, int j, char[][] board) {
-        if (i < 0 || j < 0 || i > board.length - 1 || j > board[i].length - 1) {
-            return;
-        }
-        if (board[i][j] == 'X') {
-            board[i][j] = '.';
-            dfs(i + 1, j, board);
-            dfs(i, j + 1, board);
-        }
     }
 
     public static void main(String args[]) {
