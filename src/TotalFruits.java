@@ -1,33 +1,28 @@
 
-import java.util.HashSet;
+import java.util.HashMap;
 
 public class TotalFruits {
 
     public int totalFruit(int[] tree) {
-        HashSet<Integer> set = new HashSet<>();
-        int max = 0;
+        HashMap<Integer, Integer> map = new HashMap<>();
+        int max = 1;
         int i = 0;
         int j = 0;
-        int local;
         while (j < tree.length) {
-            if (!set.contains(tree[j])) {
-                if (set.size() >= 2) {
-                    local = j - i;
-                    max = max > local ? max : local;
-                    i++;
-                    j = i;
-                    set.clear();
-                    set.add(tree[i]);
-                } else {
-                    set.add(tree[j]);
-                    j++;
-                }
-            } else {
-                j++;
+            if (map.size() <= 2) {
+                map.put(tree[j], j++);
             }
+
+            if (map.size() > 2) {
+                int min = tree.length - 1;
+                for (int value : map.values()) {
+                    min = Math.min(min, value);
+                }
+                i = min + 1;
+                map.remove(tree[min]);
+            }
+            max = Math.max(max, j - i);
         }
-        local = j - i;
-        max = max > local ? max : local;
         return max;
     }
 
