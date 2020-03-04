@@ -1,10 +1,17 @@
-import java.util.Arrays;
+
+import java.util.PriorityQueue;
 
 public class KthLargestElement {
 
     public static int findKthLargest(int[] nums, int k) {
-        Arrays.sort(nums);
-        return nums[nums.length - k];
+        PriorityQueue<Integer> heap = new PriorityQueue<>();
+        for (int i = 0; i < nums.length; i++) {
+            heap.add(nums[i]);
+            if (heap.size() > k) {
+                heap.remove();
+            }
+        }
+        return heap.remove();
     }
 
     public static void main(String args[]) {
