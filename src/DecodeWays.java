@@ -2,22 +2,34 @@
 public class DecodeWays {
 
     public int numDecodings(String s) {
-        int[] dp = new int[s.length() + 1];
-        dp[0] = 1;
-        dp[1] = s.charAt(0) == '0' ? 0 : 1;
-        for (int i = 2; i <= s.length(); i++) {
-            if (Integer.valueOf(s.substring(i - 1, i)) >= 1) {
-                dp[i] += dp[i - 1];
-            }
-            if (Integer.valueOf(s.substring(i - 2, i)) <= 26 && Integer.valueOf(s.substring(i - 2, i)) >= 10) {
-                dp[i] += dp[i - 2];
-            }
+        int res = 0;
+        int[] mem = new int[s.length() + 1];
+        res = decode(s, s.length(), mem);
+        return res;
+    }
+
+    public int decode(String ip, int k, int[] mem) {
+        if (k == 0) {
+            return 1;
         }
-        return dp[s.length()];
+        int l = ip.length() - k;
+        if (ip.charAt(l) == '0') {
+            return 0;
+        }
+        int ans = 0;
+        if (mem[k] != 0) {
+            return mem[k];
+        }
+        ans = decode(ip, k - 1, mem);
+        if (k >= 2 && Integer.valueOf(ip.substring(l, l + 2)) <= 26) {
+            ans = ans + decode(ip, k - 2, mem);
+        }
+        mem[k] = ans;
+        return ans;
     }
 
     public static void main(String args[]) {
         DecodeWays dw = new DecodeWays();
-        System.out.println(dw.numDecodings("226"));
+        System.out.println(dw.numDecodings("22"));
     }
 }
