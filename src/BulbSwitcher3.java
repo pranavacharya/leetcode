@@ -1,22 +1,19 @@
 
 import java.util.HashSet;
+import java.util.PriorityQueue;
 
 public class BulbSwitcher3 {
 
     public int numTimesAllBlue(int[] light) {
         int count = 0;
         HashSet<Integer> set = new HashSet<>();
+        PriorityQueue<Integer> minheap = new PriorityQueue<>();
+        PriorityQueue<Integer> maxheap = new PriorityQueue<>((a, b) -> (b - a));
         for (int k = 0; k < light.length; k++) {
             set.add(light[k]);
-            int i = k + 1;
-            while (i > 0) {
-                if (set.contains(i)) {
-                    i--;
-                } else {
-                    break;
-                }
-            }
-            if (i == 0) {
+            minheap.add(light[k]);
+            maxheap.add(light[k]);
+            if (set.size() == k + 1 && minheap.peek() == 1 && maxheap.peek() == k + 1) {
                 count++;
             }
         }
