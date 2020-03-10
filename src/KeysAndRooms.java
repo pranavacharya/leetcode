@@ -1,8 +1,8 @@
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.PriorityQueue;
 import java.util.Queue;
 
 public class KeysAndRooms {
@@ -11,27 +11,20 @@ public class KeysAndRooms {
         if (rooms.isEmpty()) {
             return true;
         }
-        PriorityQueue<Integer> maxqueue = new PriorityQueue<>((a, b) -> (b - a));
-        PriorityQueue<Integer> minqueue = new PriorityQueue<>();
+        HashSet<Integer> visited = new HashSet<>();
         Queue<Integer> queue = new LinkedList<>();
-        for (Integer num : rooms.get(0)) {
-            if (!queue.contains(num)) {
-                queue.add(num);
-            }
-        }
-        minqueue.add(0);
-        maxqueue.add(0);
+        queue.add(0);
+        visited.add(0);
         while (!queue.isEmpty()) {
-            int temp = queue.remove();
-            maxqueue.add(temp);
-            minqueue.add(temp);
-            for (Integer num : rooms.get(temp)) {
-                if (!minqueue.contains(num) && !queue.contains(num) && num != 0) {
+            List<Integer> list = rooms.get(queue.remove());
+            for (Integer num : list) {
+                if (!visited.contains(num)) {
+                    visited.add(num);
                     queue.add(num);
                 }
             }
         }
-        return (rooms.size() == minqueue.size() && minqueue.remove() == 0 && maxqueue.remove() == rooms.size() - 1);
+        return (rooms.size() == visited.size());
     }
 
     public static void main(String args[]) {
@@ -42,7 +35,7 @@ public class KeysAndRooms {
         list1.add(3);
         ArrayList<Integer> list2 = new ArrayList<>();
         list2.add(3);
-        list2.add(0);
+        list2.add(2);
         list2.add(1);
         ArrayList<Integer> list3 = new ArrayList<>();
         list3.add(2);
