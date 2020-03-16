@@ -31,9 +31,25 @@ public class WordSearch {
             boolean right, left, top, bottom;
             board[i][j] = '0';
             right = dfs(board, i + 1, j, word, index + 1);
+            if (right) {
+                board[i][j] = character;
+                return right;
+            }
             bottom = dfs(board, i, j + 1, word, index + 1);
+            if (bottom) {
+                board[i][j] = character;
+                return bottom;
+            }
             left = dfs(board, i - 1, j, word, index + 1);
+            if (left) {
+                board[i][j] = character;
+                return left;
+            }
             top = dfs(board, i, j - 1, word, index + 1);
+            if (top) {
+                board[i][j] = character;
+                return top;
+            }
             board[i][j] = character;
             return (right || left || top || bottom);
         } else {
