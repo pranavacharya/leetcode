@@ -4,23 +4,22 @@ import java.util.List;
 
 public class Subsets {
 
-    private List<List<Integer>> result = new ArrayList<>();
-
     public List<List<Integer>> subsets(int[] nums) {
-        recursion(new ArrayList(), nums, 0);
-        return this.result;
+        List<List<Integer>> result = recursion(new ArrayList(), nums, 0, new ArrayList());
+        return result;
     }
 
-    public void recursion(ArrayList soFar, int[] nums, int index) {
+    public ArrayList recursion(ArrayList soFar, int[] nums, int index, ArrayList result) {
         if (index == nums.length) {
-            this.result.add(soFar);
+            result.add(soFar);
         } else {
             ArrayList left = new ArrayList(soFar);
             left.add(nums[index]);
             ArrayList right = new ArrayList(soFar);
-            recursion(left, nums, index + 1);
-            recursion(right, nums, index + 1);
+            recursion(left, nums, index + 1, result);
+            recursion(right, nums, index + 1, result);
         }
+        return result;
     }
 
     public static void main(String args[]) {
