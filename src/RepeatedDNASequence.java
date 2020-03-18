@@ -9,10 +9,11 @@ public class RepeatedDNASequence {
         List<String> result = new ArrayList<>();
         HashSet<String> set = new HashSet<>();
         for (int i = 0; i < s.length() - 9; i++) {
-            if (set.contains(s.substring(i, i + 10)) && !result.contains(s.substring(i, i + 10))) {
-                result.add(s.substring(i, i + 10));
+            String temp = s.substring(i, i + 10);
+            if (set.contains(temp) && !result.contains(temp)) {
+                result.add(temp);
             } else {
-                set.add(s.substring(i, i + 10));
+                set.add(temp);
             }
         }
         return result;
