@@ -1,28 +1,33 @@
 
+import java.util.Arrays;
+
 public class CinemaSeatAllocation {
 
     public int maxNumberOfFamilies(int n, int[][] reservedSeats) {
         int max = 0;
-        int[][] seats = new int[n + 1][11];
-        for (int[] i : reservedSeats) {
-            seats[i[0]][i[1]] = 1;
-        }
+        int[] row = new int[11];
         for (int i = 1; i <= n; i++) {
+            Arrays.fill(row, 0);
+            for (int[] j : reservedSeats) {
+                if (j[0] == i) {
+                    row[j[1]] = 1;
+                }
+            }
             boolean status25 = true;
             for (int j = 2; j <= 5; j++) {
-                if (seats[i][j] == 1) {
+                if (row[j] == 1) {
                     status25 = false;
                 }
             }
             boolean status47 = true;
             for (int j = 4; j <= 7; j++) {
-                if (seats[i][j] == 1) {
+                if (row[j] == 1) {
                     status47 = false;
                 }
             }
             boolean status69 = true;
             for (int j = 6; j <= 9; j++) {
-                if (seats[i][j] == 1) {
+                if (row[j] == 1) {
                     status69 = false;
                 }
             }
