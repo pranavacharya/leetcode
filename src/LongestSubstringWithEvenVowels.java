@@ -25,19 +25,17 @@ public class LongestSubstringWithEvenVowels {
     }
 
     public int findTheLongestSubstring(String s) {
-        int max = 0;
-        for (int i = 0; i <= s.length(); i++) {
-            for (int j = i + 1; j <= s.length(); j++) {
-                String temp = s.substring(i, j);
-                if(hasEvenVowels(temp)) {
-                    max = (max > temp.length()) ? max : temp.length();
-                }
+        int[] dp = new int[s.length() + 1];
+        dp[0] = 0;
+        for(int i = 1; i <= s.length(); i++){
+            for (int j = 0; j < i; j ++){
+                dp[i] = Math.max(dp[i],Math.max(dp[j], LengthStringWithEvenVowels(s.substring(j, i))));
             }
         }
-        return max;
+        return dp[s.length()];
     }
 
-    public boolean hasEvenVowels(String ip) {
+    public int LengthStringWithEvenVowels(String ip) {
         char[] charArr = ip.toCharArray();
         for (int i = 0; i < charArr.length; i++) {
             if (this.set.contains(charArr[i])) {
@@ -62,15 +60,22 @@ public class LongestSubstringWithEvenVowels {
                 }
             }
         }
-        boolean ans = this.a % 2 == 0 && this.e % 2 == 0 && this.i % 2 == 0 && this.o % 2 == 0 && this.u % 2 == 0;
-        this.a = 0;
-        this.e = 0;
-        this.i = 0;
-        this.o = 0;
-        this.u = 0;
-        return ans;
+        if(this.a % 2 == 0 && this.e % 2 == 0 && this.i % 2 == 0 && this.o % 2 == 0 && this.u % 2 == 0){
+            this.a = 0;
+            this.e = 0;
+            this.i = 0;
+            this.o = 0;
+            this.u = 0;
+            return ip.length();
+        } else{
+            this.a = 0;
+            this.e = 0;
+            this.i = 0;
+            this.o = 0;
+            this.u = 0;
+            return 0;
+        }
     }
-
     public static void main(String args[]) {
         LongestSubstringWithEvenVowels lswev = new LongestSubstringWithEvenVowels();
         String input = "eleetminicoworoep";
