@@ -1,11 +1,20 @@
 
+import java.util.HashMap;
+
 public class FourDivisors {
+
+    HashMap<Integer, Integer> map = new HashMap<>();
 
     public int sumFourDivisors(int[] nums) {
         int sum = 0;
         for (int num : nums) {
-
-            sum += countDivisor(num);
+            if (map.containsKey(num)) {
+                sum += map.get(num);
+            } else {
+                int sumLocal = countDivisor(num);
+                map.put(num, sumLocal);
+                sum += sumLocal;
+            }
         }
         return sum;
     }
