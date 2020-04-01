@@ -1,22 +1,19 @@
 
-import java.util.HashSet;
+import java.util.HashMap;
 
 public class SingleNumber {
 
     public int singleNumber(int[] nums) {
-        int res = 0;
-        HashSet<Integer> set = new HashSet<>();
+        HashMap<Integer, Integer> map = new HashMap<>();
         for (int i = 0; i < nums.length; i++) {
-            if (set.contains(nums[i])) {
-                set.remove(nums[i]);
-            } else {
-                set.add(nums[i]);
+            map.put(nums[i], map.getOrDefault(nums[i], 0) + 1);
+        }
+        for (int key : map.keySet()) {
+            if (map.get(key) == 1) {
+                return key;
             }
         }
-        for (Object object : set) {
-            res = (int) object;
-        }
-        return res;
+        return -1;
     }
 
     public static void main(String args[]) {
