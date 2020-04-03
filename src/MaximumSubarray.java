@@ -2,21 +2,13 @@
 public class MaximumSubarray {
 
     public int maxSubArray(int[] nums) {
-        int max = Integer.MIN_VALUE;
-        for (int i = 0; i < nums.length; i++) {
-            for (int j = i; j < nums.length; j++) {
-                max = Math.max(max, calculateSum(i, j, nums));
-            }
+        int cur_max = nums[0];
+        int max = nums[0];
+        for (int i = 1; i < nums.length; i++) {
+            cur_max = Math.max(nums[i], cur_max + nums[i]);
+            max = Math.max(max, cur_max);
         }
         return max;
-    }
-
-    public int calculateSum(int i, int j, int[] arr) {
-        int sum = 0;
-        for (int k = i; k <= j; k++) {
-            sum += arr[k];
-        }
-        return sum;
     }
 
     public static void main(String args[]) {
