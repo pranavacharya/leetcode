@@ -4,19 +4,15 @@ import java.util.Arrays;
 public class SortArrayByParity {
 
     public int[] sortArrayByParity(int[] A) {
-        int[] ans = new int[A.length];
         int index = 0;
-        for (int a : A) {
-            if (a % 2 == 0) {
-                ans[index++] = a;
+        for (int i = 0; i < A.length; i++) {
+            if (A[i] % 2 == 0) {
+                int temp = A[index];
+                A[index++] = A[i];
+                A[i] = temp;
             }
         }
-        for (int a : A) {
-            if (a % 2 != 0) {
-                ans[index++] = a;
-            }
-        }
-        return ans;
+        return A;
     }
 
     public static void main(String args[]) {
