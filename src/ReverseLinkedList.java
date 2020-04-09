@@ -2,16 +2,12 @@
 public class ReverseLinkedList {
 
     public ListNode reverseList(ListNode head) {
-        if (head == null) {
-            return null;
-        }
-        ListNode reverse = new ListNode(head.val);
-        reverse.next = null;
-        while (head.next != null) {
-            head = head.next;
+        ListNode reverse = null;
+        while (head != null) {
             ListNode temp = new ListNode(head.val);
             temp.next = reverse;
             reverse = temp;
+            head = head.next;
         }
         return reverse;
     }
@@ -27,10 +23,9 @@ public class ReverseLinkedList {
     }
 
     public void printList(ListNode head) {
-        System.out.println(head.val);
-        while (head.next != null) {
-            head = head.next;
+        while (head != null) {
             System.out.println(head.val);
+            head = head.next;
         }
     }
 
