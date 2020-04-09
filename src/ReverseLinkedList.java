@@ -2,14 +2,13 @@
 public class ReverseLinkedList {
 
     public ListNode reverseList(ListNode head) {
-        ListNode reverse = null;
-        while (head != null) {
-            ListNode temp = new ListNode(head.val);
-            temp.next = reverse;
-            reverse = temp;
-            head = head.next;
+        if (head == null || head.next == null) {
+            return head;
         }
-        return reverse;
+        ListNode p = reverseList(head.next);
+        head.next.next = head;
+        head.next = null;
+        return p;
     }
 
     private static class ListNode {
