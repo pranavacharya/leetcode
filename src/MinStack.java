@@ -5,20 +5,31 @@ public class MinStack {
 
     private ArrayList<Integer> stack;
     private int top;
+    private int min;
 
     public MinStack() {
         this.stack = new ArrayList();
         this.top = -1;
+        this.min = Integer.MAX_VALUE;
     }
 
     public void push(int x) {
         this.stack.add(x);
         this.top++;
+        this.min = Math.min(this.min, x);
     }
 
     public void pop() {
+        int val = this.stack.get(top);
         this.stack.remove(top);
         this.top--;
+        if (this.min == val) {
+            int newmin = Integer.MAX_VALUE;
+            for (int i = 0; i < this.stack.size(); i++) {
+                newmin = Math.min(this.stack.get(i), newmin);
+            }
+            this.min = newmin;
+        }
     }
 
     public int top() {
@@ -26,11 +37,7 @@ public class MinStack {
     }
 
     public int getMin() {
-        int min = Integer.MAX_VALUE;
-        for (int i = 0; i < this.stack.size(); i++) {
-            min = Math.min(this.stack.get(i), min);
-        }
-        return min;
+        return this.min;
     }
 
     public static void main(String args[]) {
