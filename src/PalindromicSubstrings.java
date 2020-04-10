@@ -2,28 +2,44 @@
 public class PalindromicSubstrings {
 
     public int countSubstrings(String s) {
-        int max = 0;
+        int count = 0;
         for (int i = 0; i < s.length(); i++) {
-            for (int j = i + 1; j <= s.length(); j++) {
-                if (isPalindrome(s.substring(i, j))) {
-                    max++;
-                }
-            }
+            count += expandFromCenter(s, i);
+            count += expandFromCenterEven(s, i);
         }
-        return max;
+        return count;
     }
 
-    public boolean isPalindrome(String s) {
-        for (int i = 0; i < s.length() / 2; i++) {
-            if (s.charAt(i) != s.charAt(s.length() - 1 - i)) {
-                return false;
+    public int expandFromCenter(String s, int index) {
+        int count = 1;
+        int i = 1;
+        while (index - i >= 0 && index + i < s.length()) {
+            if (s.charAt(index - i) == s.charAt(index + i)) {
+                count++;
+            } else {
+                return count;
             }
+            i++;
         }
-        return true;
+        return count;
+    }
+
+    public int expandFromCenterEven(String s, int index) {
+        int count = 0;
+        int i = 0;
+        while (index - 1 - i >= 0 && index + i < s.length()) {
+            if (s.charAt(index - 1 - i) == s.charAt(index + i)) {
+                count++;
+            } else {
+                return count;
+            }
+            i++;
+        }
+        return count;
     }
 
     public static void main(String args[]) {
         PalindromicSubstrings ps = new PalindromicSubstrings();
-        System.out.println(ps.countSubstrings("aaa"));
+        System.out.println(ps.countSubstrings("abc"));
     }
 }
