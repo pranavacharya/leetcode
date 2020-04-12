@@ -1,23 +1,22 @@
 
 public class RangeSumQuery {
 
-    private int[][] dp;
+    private int[] dp;
 
     public RangeSumQuery(int[] nums) {
-        this.dp = new int[nums.length][nums.length];
+        this.dp = new int[nums.length];
         for (int i = 0; i < this.dp.length; i++) {
-            for (int j = i; j < this.dp.length; j++) {
-                if (i == j) {
-                    this.dp[i][j] = nums[j];
-                } else {
-                    dp[i][j] = dp[i][j - 1] + nums[j];
-                }
+            if (i == 0) {
+                this.dp[i] = nums[i];
+            } else {
+                dp[i] = dp[i - 1] + nums[i];
             }
         }
     }
 
     public int sumRange(int i, int j) {
-        return this.dp[i][j];
+        int min = i == 0 ? 0 : dp[i - 1];
+        return this.dp[j] - min;
     }
 
     public static void main(String args[]) {
