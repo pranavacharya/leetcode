@@ -1,24 +1,22 @@
 
+import java.util.Arrays;
+
 public class LongestIncreasingSubsequence {
 
     public int lengthOfLIS(int[] nums) {
-        if (nums.length == 0) {
-            return 0;
-        }
         int[] dp = new int[nums.length];
-        dp[0] = 1;
-        int max = 1;
-        for (int i = 1; i < nums.length; i++) {
-            for (int j = 0; j < i; j++) {
-                if (nums[j] < nums[i]) {
-                    dp[i] = Math.max(dp[i], dp[j] + 1);
-                } else {
-                    dp[i] = Math.max(dp[i], 1);
-                }
+        int len = 0;
+        for (int num : nums) {
+            int i = Arrays.binarySearch(dp, 0, len, num);
+            if (i < 0) {
+                i = -(i + 1);
             }
-            max = Math.max(max, dp[i]);
+            dp[i] = num;
+            if (i == len) {
+                len++;
+            }
         }
-        return max;
+        return len;
     }
 
     public static void main(String args[]) {
