@@ -1,30 +1,22 @@
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class ContiguousArray {
 
     public int findMaxLength(int[] nums) {
-        int[] dp = new int[nums.length];
-        int max = 0;
+        Map<Integer, Integer> map = new HashMap<>();
+        map.put(0, -1);
+        int maxlen = 0, count = 0;
         for (int i = 0; i < nums.length; i++) {
-            if (i == 0) {
-                dp[i] = (nums[i] == 0) ? -1 : 1;
+            count = count + (nums[i] == 1 ? 1 : -1);
+            if (map.containsKey(count)) {
+                maxlen = Math.max(maxlen, i - map.get(count));
             } else {
-                int val = (nums[i] == 0) ? -1 : 1;
-                dp[i] = dp[i - 1] + val;
-            }
-            if (dp[i] == 0) {
-                max = Math.max(max, i - 0 + 1);
+                map.put(count, i);
             }
         }
-        for (int i = 1; i < nums.length; i++) {
-            int val = dp[i - 1];
-            for (int j = i; j < nums.length; j++) {
-                dp[j] = dp[j] - val;
-                if (dp[j] == 0) {
-                    max = Math.max(max, j - i + 1);
-                }
-            }
-        }
-        return max;
+        return maxlen;
     }
 
     public static void main(String args[]) {
