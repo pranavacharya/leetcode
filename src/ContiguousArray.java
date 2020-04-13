@@ -2,25 +2,29 @@
 public class ContiguousArray {
 
     public int findMaxLength(int[] nums) {
+        int[] dp = new int[nums.length];
         int max = 0;
         for (int i = 0; i < nums.length; i++) {
-            for (int j = i + 1; j < nums.length; j++) {
-                if (isEqualOnesAndZeros(nums, i, j)) {
+            if (i == 0) {
+                dp[i] = (nums[i] == 0) ? -1 : 1;
+            } else {
+                int val = (nums[i] == 0) ? -1 : 1;
+                dp[i] = dp[i - 1] + val;
+            }
+            if (dp[i] == 0) {
+                max = Math.max(max, i - 0 + 1);
+            }
+        }
+        for (int i = 1; i < nums.length; i++) {
+            int val = dp[i - 1];
+            for (int j = i; j < nums.length; j++) {
+                dp[j] = dp[j] - val;
+                if (dp[j] == 0) {
                     max = Math.max(max, j - i + 1);
                 }
             }
         }
         return max;
-    }
-
-    public boolean isEqualOnesAndZeros(int[] nums, int i, int j) {
-        int ones = 0;
-        for (int start = i; start <= j; start++) {
-            if (nums[start] == 1) {
-                ones++;
-            }
-        }
-        return (j - i + 1) == (ones * 2);
     }
 
     public static void main(String args[]) {
