@@ -2,20 +2,27 @@
 public class ValidParenthesisString {
 
     public boolean checkValidString(String s) {
-        int lo = 0, hi = 0;
-        for (char c : s.toCharArray()) {
-            lo += c == '(' ? 1 : -1;
-            hi += c != ')' ? 1 : -1;
-            if (hi < 0) {
-                break;
+        int balance = 0;
+        for (int i = 0; i < s.length(); i++) {
+            if (s.charAt(i) == '(' || s.charAt(i) == '*') {
+                balance++;
+            } else if (--balance == -1) {
+                return false;
             }
-            lo = Math.max(lo, 0);
         }
-        return lo == 0;
+        balance = 0;
+        for (int i = s.length() - 1; i >= 0; i--) {
+            if (s.charAt(i) == ')' || s.charAt(i) == '*') {
+                balance++;
+            } else if (--balance == -1) {
+                return false;
+            }
+        }
+        return true;
     }
 
     public static void main(String args[]) {
         ValidParenthesisString vps = new ValidParenthesisString();
-        System.out.println(vps.checkValidString("(*)"));
+        System.out.println(vps.checkValidString("(*))"));
     }
 }
