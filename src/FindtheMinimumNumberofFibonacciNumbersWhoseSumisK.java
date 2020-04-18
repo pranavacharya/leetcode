@@ -9,22 +9,24 @@ public class FindtheMinimumNumberofFibonacciNumbersWhoseSumisK {
     public int findMinFibonacciNumbers(int k) {
         System.out.println(Arrays.toString(fibonacciNumbers(k)));
         int[] fibo = fibonacciNumbers(k);
-        combination(fibo, 0, 0, new ArrayList<>(), k);
+        combination(new ArrayList<>(), fibo, k, 0);
         return this.min;
     }
 
-    public void combination(int[] candidates, int pos, int sum, ArrayList paths, int target) {
-        if (sum == target) {
-            min = Math.min(min, paths.size());
-        } else if (sum > target) {
+    public void combination(ArrayList<Integer> path, int[] nums, int remain, int start) {
+        if (remain < 0) {
             return;
-        } else if (candidates.length == pos) {
-            return;
-        } else {
-            paths.add(candidates[pos]);
-            combination(candidates, pos + 1, sum + candidates[pos], new ArrayList(paths), target);
-            paths.remove(paths.size() - 1);
-            combination(candidates, pos + 1, sum, new ArrayList(paths), target);
+        }
+        if (remain == 0) {
+            this.min = Math.min(this.min, path.size());
+        }
+        for (int i = start; i < nums.length; i++) {
+            if (i > start && nums[i] == nums[i - 1]) {
+                continue;
+            }
+            path.add(nums[i]);
+            combination(path, nums, remain - nums[i], i + 1);
+            path.remove(path.size() - 1);
         }
     }
 
