@@ -18,6 +18,8 @@ public class CombinationSum2 {
             if (!result.contains(paths)) {
                 this.result.add(paths);
             }
+        } else if (sum > target) {
+            return;
         } else if (candidates.length == pos) {
             return;
         } else {
