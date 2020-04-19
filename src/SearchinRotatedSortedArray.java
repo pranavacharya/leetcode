@@ -1,27 +1,34 @@
 
-import java.util.ArrayList;
-
 public class SearchinRotatedSortedArray {
 
     public int search(int[] nums, int target) {
-        ArrayList<Integer> list = new ArrayList<>();
+        if (nums == null || nums.length == 0) {
+            return -1;
+        }
         int pivot = 0;
-        while (pivot < nums.length - 1 && nums[pivot] < nums[pivot + 1]) {
-            pivot++;
+        int left = 0;
+        int right = nums.length - 1;
+        while (left < right) {
+            int mid = left + (right - left) / 2;
+            if (nums[mid] > nums[right]) {
+                left = mid + 1;
+            } else {
+                right = mid;
+            }
         }
-        for (int i = pivot + 1; i < nums.length; i++) {
-            list.add(nums[i]);
-        }
-        for (int i = 0; i <= pivot && i < nums.length; i++) {
-            list.add(nums[i]);
-        }
+        pivot = left;
         int low = 0;
-        int high = list.size() - 1;
+        int high = nums.length - 1;
+        if (target >= nums[pivot] && target <= nums[high]) {
+            low = pivot;
+        } else {
+            high = pivot - 1;
+        }
         while (low <= high) {
             int mid = low + (high - low) / 2;
-            if (list.get(mid) == target) {
-                return (mid + pivot + 1) % nums.length;
-            } else if (list.get(mid) < target) {
+            if (nums[mid] == target) {
+                return mid;
+            } else if (nums[mid] < target) {
                 low = mid + 1;
             } else {
                 high = mid - 1;
