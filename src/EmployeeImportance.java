@@ -1,5 +1,6 @@
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Stack;
 
@@ -13,27 +14,21 @@ public class EmployeeImportance {
     }
 
     public int getImportance(List<Employee> employees, int id) {
+        HashMap<Integer, Integer> map = new HashMap<>();
+        for (int i = 0; i < employees.size(); i++) {
+            map.put(employees.get(i).id, i);
+        }
         Stack<Employee> stack = new Stack();
         int importance = 0;
-        stack.push(employees.get(getEmployee(employees, id)));
+        stack.push(employees.get(map.get(id)));
         while (!stack.isEmpty()) {
             Employee current = stack.pop();
             importance += current.importance;
             for (int i = 0; i < current.subordinates.size(); i++) {
-                stack.push(employees.get(getEmployee(employees, current.subordinates.get(i))));
+                stack.push(employees.get(map.get(current.subordinates.get(i))));
             }
         }
         return importance;
-    }
-
-    public int getEmployee(List<Employee> employees, int id) {
-        int index = -1;
-        for (int i = 0; i < employees.size(); i++) {
-            if (employees.get(i).id == id) {
-                return i;
-            }
-        }
-        return index;
     }
 
     public static void main(String args[]) {
