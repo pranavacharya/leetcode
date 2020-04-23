@@ -40,35 +40,42 @@ public class Minesweeper {
                     //right
                     if (current.x + 1 < board.length && board[current.x + 1][current.y] == 'E') {
                         queue.add(new Point(current.x + 1, current.y));
+                        board[current.x + 1][current.y] = 'B';
                     }
                     //left
                     if (current.x - 1 >= 0 && board[current.x - 1][current.y] == 'E') {
                         queue.add(new Point(current.x - 1, current.y));
+                        board[current.x - 1][current.y] = 'B';
                     }
                     //bottom
                     if (current.y + 1 < board[current.x].length && board[current.x][current.y + 1] == 'E') {
                         queue.add(new Point(current.x, current.y + 1));
+                        board[current.x][current.y + 1] = 'B';
                     }
                     //top
                     if (current.y - 1 >= 0 && board[current.x][current.y - 1] == 'E') {
                         queue.add(new Point(current.x, current.y - 1));
+                        board[current.x][current.y - 1] = 'B';
                     }
                     //rightbottom
                     if (current.y + 1 < board[current.x].length && current.x + 1 < board.length && board[current.x + 1][current.y + 1] == 'E') {
                         queue.add(new Point(current.x + 1, current.y + 1));
+                        board[current.x + 1][current.y + 1] = 'B';
                     }
                     //righttop
                     if (current.y - 1 >= 0 && current.x + 1 < board.length && board[current.x + 1][current.y - 1] == 'E') {
                         queue.add(new Point(current.x + 1, current.y - 1));
+                        board[current.x + 1][current.y - 1] = 'B';
                     }
                     //leftbottom
                     if (current.y + 1 < board[current.x].length && current.x - 1 >= 0 && board[current.x - 1][current.y + 1] == 'E') {
                         queue.add(new Point(current.x - 1, current.y + 1));
+                        board[current.x - 1][current.y + 1] = 'B';
                     }
                     //lefttop
                     if (current.y - 1 >= 0 && current.x - 1 >= 0 && board[current.x - 1][current.y - 1] == 'E') {
                         queue.add(new Point(current.x - 1, current.y - 1));
-
+                        board[current.x - 1][current.y - 1] = 'B';
                     }
                 } else {
                     board[current.x][current.y] = Character.forDigit(bombCount, 10);
