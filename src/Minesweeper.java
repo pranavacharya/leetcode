@@ -1,5 +1,6 @@
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Queue;
 
@@ -15,6 +16,8 @@ public class Minesweeper {
             this.y = y;
         }
     }
+
+    private HashMap<String, Integer> bcount = new HashMap<>();
 
     public char[][] updateBoard(char[][] board, int[] click) {
         if (board[click[0]][click[1]] == 'M') {
@@ -71,12 +74,14 @@ public class Minesweeper {
                     board[current.x][current.y] = Character.forDigit(bombCount, 10);
                 }
             }
-        } else {
-            return;
         }
     }
 
     public int countAdjacentMines(char[][] board, int x, int y) {
+
+        if (bcount.containsKey("" + x + "_" + y)) {
+            return bcount.get("" + x + "_" + y);
+        }
         int count = 0;
         //right
         if (x + 1 < board.length) {
@@ -126,16 +131,17 @@ public class Minesweeper {
                 count++;
             }
         }
+        bcount.put("" + x + "_" + y, count);
         return count;
     }
 
     public static void main(String args[]) {
         Minesweeper m = new Minesweeper();
-//        char[][] board = new char[][]{{'E', 'E', 'E', 'E', 'E'}, {'E', 'E', 'M', 'E', 'E'},
-//        {'E', 'E', 'E', 'E', 'E'}, {'E', 'E', 'E', 'E', 'E'}};
-        char[][] board = new char[][]{{'B', '1', 'E', '1', 'B'}, {'B', '1', 'M', '1', 'B'},
-        {'B', '1', '1', '1', 'B'}, {'B', 'B', 'B', 'B', 'B'}};
-        int[] click = new int[]{1, 2};
+        char[][] board = new char[][]{{'E', 'E', 'E', 'E', 'E'}, {'E', 'E', 'M', 'E', 'E'},
+        {'E', 'E', 'E', 'E', 'E'}, {'E', 'E', 'E', 'E', 'E'}};
+//        char[][] board = new char[][]{{'B', '1', 'E', '1', 'B'}, {'B', '1', 'M', '1', 'B'},
+//        {'B', '1', '1', '1', 'B'}, {'B', 'B', 'B', 'B', 'B'}};
+        int[] click = new int[]{3, 0};
         System.out.println(Arrays.deepToString(m.updateBoard(board, click)));
     }
 }
