@@ -11,9 +11,11 @@ public class TopKFrequentElements {
         for (int num : nums) {
             frequency.put(num, frequency.getOrDefault(num, 0) + 1);
         }
-        minHeap.addAll(frequency.keySet());
-        while (minHeap.size() > k) {
-            minHeap.remove();
+        for (int key : frequency.keySet()) {
+            minHeap.add(key);
+            if (minHeap.size() > k) {
+                minHeap.remove();
+            }
         }
         int[] ans = new int[k];
         for (int i = 0; i < k; i++) {
