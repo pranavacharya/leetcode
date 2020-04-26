@@ -24,7 +24,6 @@ public class CombinationSum {
                 path.add(arr[i]);
                 subset(arr, i, new ArrayList(path), result, target - arr[i]);
                 path.remove(path.size() - 1);
-                subset(arr, index + 1, new ArrayList(path), result, target);
             }
         }
     }
