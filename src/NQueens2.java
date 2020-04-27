@@ -3,32 +3,28 @@ import java.util.Arrays;
 
 public class NQueens2 {
 
-    private int count;
-
-    public NQueens2() {
-        this.count = 0;
-    }
-
     public int totalNQueens(int n) {
         int[][] board = new int[n][n];
-        permutations(board, n, 0);
-        return this.count;
+        int count = permutations(board, n, 0);
+        return count;
     }
 
-    public void permutations(int[][] board, int n, int row) {
+    public int permutations(int[][] board, int n, int row) {
         if (n == 0) {
             System.out.println(Arrays.deepToString(board));
-            this.count++;
+            return 1;
         } else {
+            int count = 0;
             for (int i = row; i < board.length && board.length - i == n; i++) {
                 for (int j = 0; j < board.length; j++) {
                     if (isSafe(board, i, j)) {
                         board[i][j] = 1;
-                        permutations(board, n - 1, i + 1);
+                        count += permutations(board, n - 1, i + 1);
                         board[i][j] = 0;
                     }
                 }
             }
+            return count;
         }
     }
 
