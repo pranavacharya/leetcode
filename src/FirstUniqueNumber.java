@@ -1,41 +1,44 @@
 
-import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.Queue;
 
 public class FirstUniqueNumber {
 
-    private ArrayList<Integer> nums;
+    private Queue<Integer> nums;
     private HashMap<Integer, Integer> map;
     private int fu;
 
     public FirstUniqueNumber(int[] nums) {
-        this.nums = new ArrayList();
+        this.nums = new LinkedList();
         this.fu = -1;
         map = new HashMap();
         for (int num : nums) {
             this.nums.add(num);
             map.put(num, map.getOrDefault(num, 0) + 1);
         }
-        for (int i = this.nums.size() - 1; i >= 0; i--) {
-            if (map.get(this.nums.get(i)) == 1) {
-                this.fu = this.nums.get(i);
-            }
-        }
     }
 
     public int showFirstUnique() {
-        System.out.println(this.fu);
-        return this.fu;
+        while (!this.nums.isEmpty()) {
+            int current = this.nums.peek();
+            if (this.map.get(current) > 1) {
+                this.nums.remove();
+            } else {
+                System.out.println(current);
+                return current;
+            }
+        }
+        System.out.println(-1);
+        return -1;
     }
 
     public void add(int value) {
-        map.put(value, map.getOrDefault(value, 0) + 1);
-        this.nums.add(value);
-        this.fu = -1;
-        for (int i = this.nums.size() - 1; i >= 0; i--) {
-            if (map.get(this.nums.get(i)) == 1) {
-                this.fu = this.nums.get(i);
-            }
+        if (this.map.containsKey(value)) {
+            this.map.put(value, this.map.get(value) + 1);
+        } else {
+            this.map.put(value, 1);
+            this.nums.add(value);
         }
     }
 
