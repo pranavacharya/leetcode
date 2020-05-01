@@ -1,46 +1,67 @@
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Queue;
 
 public class WordLadder {
 
-    private int count;
+    public class Pair {
 
-    public WordLadder() {
-        this.count = Integer.MAX_VALUE;
+        String word;
+        int level;
+
+        public Pair(String word, int level) {
+            this.word = word;
+            this.level = level;
+        }
     }
 
     public int ladderLength(String beginWord, String endWord, List<String> wordList) {
-        ArrayList<String> path = new ArrayList();
-        path.add(beginWord);
-        backtracking(wordList, path, beginWord, endWord);
-        return this.count == Integer.MAX_VALUE ? 0 : this.count;
-    }
 
-    public void backtracking(List<String> wordList,
-            ArrayList<String> path, String current, String endString) {
-        if (current.equals(endString)) {
-            if (path.size() < this.count) {
-                this.count = path.size();
+        HashMap<String, ArrayList<String>> generic = new HashMap();
+        for (String word : wordList) {
+            for (int i = 0; i < word.length(); i++) {
+                String before = word.substring(0, i);
+                String after = word.substring(i + 1);
+                String newString = before.concat("*").concat(after);
+                ArrayList<String> combo = generic.getOrDefault(newString, new ArrayList());
+                combo.add(word);
+                generic.put(newString, combo);
             }
-        } else if (wordList.isEmpty()) {
-            return;
-        } else {
-            for (int i = 0; i < current.length(); i++) {
-                for (char j = 'a'; j <= 'z'; j++) {
-                    String before = current.substring(0, i);
-                    String after = current.substring(i + 1);
-                    String newCurrent = before.concat("" + j).concat(after);
-                    if (wordList.contains(newCurrent)) {
-                        wordList.remove(newCurrent);
-                        path.add(newCurrent);
-                        backtracking(wordList, path, newCurrent, endString);
-                        path.remove(path.size() - 1);
-                        wordList.add(newCurrent);
+        }
+
+        HashMap<String, Boolean> visited = new HashMap();
+        for (String word : wordList) {
+            visited.put(word, false);
+        }
+        Queue<Pair> bfs = new LinkedList<>();
+        bfs.add(new Pair(beginWord, 1));
+        visited.put(beginWord, true);
+        while (!bfs.isEmpty()) {
+            Pair current = bfs.remove();
+            String currentWord = current.word;
+            int currentLevel = current.level;
+            visited.put(currentWord, true);
+            for (int i = 0; i < currentWord.length(); i++) {
+                String before = currentWord.substring(0, i);
+                String after = currentWord.substring(i + 1);
+                String newString = before.concat("*").concat(after);
+                if (generic.containsKey(newString)) {
+                    ArrayList<String> nextList = generic.get(newString);
+                    for (String nxt : nextList) {
+                        if (nxt.equals(endWord)) {
+                            return currentLevel + 1;
+                        }
+                        if (!visited.get(nxt)) {
+                            bfs.add(new Pair(nxt, currentLevel + 1));
+                        }
                     }
                 }
             }
         }
+        return 0;
     }
 
     public static void main(String args[]) {
