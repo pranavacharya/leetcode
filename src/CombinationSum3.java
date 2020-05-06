@@ -16,7 +16,7 @@ public class CombinationSum3 {
         } else if (target < 0 || k < 0) {
             return;
         } else {
-            for (int i = index; i <= target; i++) {
+            for (int i = index; i <= target && i <= 9; i++) {
                 path.add(i);
                 backtracking(result, path, k - 1, target - i, i + 1);
                 path.remove(path.size() - 1);
@@ -27,5 +27,6 @@ public class CombinationSum3 {
     public static void main(String args[]) {
         CombinationSum3 cs3 = new CombinationSum3();
         System.out.println(cs3.combinationSum3(3, 9));
+        System.out.println(cs3.combinationSum3(2, 18));
     }
 }
