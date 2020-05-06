@@ -1,28 +1,24 @@
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class CombinationSum {
 
     public List<List<Integer>> combinationSum(int[] candidates, int target) {
-        List<List<Integer>> result = new ArrayList<>();
-        subset(candidates, 0, new ArrayList(), result, target);
+        List<List<Integer>> result = new ArrayList();
+        backtrack(result, new ArrayList(), candidates, target, 0);
         return result;
     }
 
-    public void subset(int[] arr, int index, ArrayList<Integer> path, List<List<Integer>> result, int target) {
+    public void backtrack(List<List<Integer>> result, ArrayList<Integer> path, int[] candidates, int target, int index) {
         if (target == 0) {
-            Collections.sort(path);
-            if (!result.contains(path)) {
-                result.add(path);
-            }
-        } else if (index == arr.length || target < 0) {
+            result.add(new ArrayList(path));
+        } else if (target < 0) {
             return;
         } else {
-            for (int i = index; i < arr.length; i++) {
-                path.add(arr[i]);
-                subset(arr, i, new ArrayList(path), result, target - arr[i]);
+            for (int i = index; i < candidates.length; i++) {
+                path.add(candidates[i]);
+                backtrack(result, path, candidates, target - candidates[i], i);
                 path.remove(path.size() - 1);
             }
         }
