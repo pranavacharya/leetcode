@@ -1,32 +1,31 @@
 
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.Arrays;
 import java.util.List;
 
 public class CombinationSum2 {
 
-    private List<List<Integer>> result = new ArrayList<>();
-
     public List<List<Integer>> combinationSum2(int[] candidates, int target) {
-        combination(candidates, 0, 0, new ArrayList<>(), target);
-        return this.result;
+        List<List<Integer>> result = new ArrayList();
+        Arrays.sort(candidates);
+        backtracking(result, new ArrayList(), candidates, target, 0);
+        return result;
     }
 
-    public void combination(int[] candidates, int pos, int sum, ArrayList paths, int target) {
-        if (sum == target) {
-            Collections.sort(paths);
-            if (!result.contains(paths)) {
-                this.result.add(paths);
-            }
-        } else if (sum > target) {
-            return;
-        } else if (candidates.length == pos) {
+    public void backtracking(List<List<Integer>> result, ArrayList<Integer> path, int[] candidates, int target, int index) {
+        if (target == 0) {
+            result.add(new ArrayList(path));
+        } else if (target < 0) {
             return;
         } else {
-            paths.add(candidates[pos]);
-            combination(candidates, pos + 1, sum + candidates[pos], new ArrayList(paths), target);
-            paths.remove(paths.size() - 1);
-            combination(candidates, pos + 1, sum, new ArrayList(paths), target);
+            for (int i = index; i < candidates.length; i++) {
+                if (i != index && candidates[i] == candidates[i - 1]) {
+                    continue;
+                }
+                path.add(candidates[i]);
+                backtracking(result, path, candidates, target - candidates[i], i + 1);
+                path.remove(path.size() - 1);
+            }
         }
     }
 
