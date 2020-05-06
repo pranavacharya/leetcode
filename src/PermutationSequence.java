@@ -18,7 +18,7 @@ public class PermutationSequence {
         return this.ans;
     }
 
-    public void backtracking(ArrayList<Integer> path, int n, boolean[] visited) {
+    public boolean backtracking(ArrayList<Integer> path, int n, boolean[] visited) {
         if (path.size() == n) {
             this.count--;
             if (this.count == 0) {
@@ -27,7 +27,9 @@ public class PermutationSequence {
                     sb = sb.append(element);
                 }
                 this.ans = sb.toString();
+                return true;
             }
+            return false;
         } else {
             for (int i = 1; i <= n; i++) {
                 if (visited[i]) {
@@ -35,10 +37,13 @@ public class PermutationSequence {
                 }
                 path.add(i);
                 visited[i] = true;
-                backtracking(path, n, visited);
+                if (backtracking(path, n, visited)) {
+                    return true;
+                }
                 path.remove(path.size() - 1);
                 visited[i] = false;
             }
+            return false;
         }
     }
 
