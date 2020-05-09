@@ -6,7 +6,7 @@ public class NumberofClosedIslands {
         for (int i = 0; i < grid.length; i++) {
             for (int j = 0; j < grid[i].length; j++) {
                 if (grid[i][j] == 0) {
-                    if (dfs(grid, i, j, grid.length, 0, grid[i].length, 0)) {
+                    if (dfs(grid, i, j)) {
                         count++;
                     }
                 }
@@ -15,25 +15,21 @@ public class NumberofClosedIslands {
         return count;
     }
 
-    public boolean dfs(int[][] grid, int i, int j, int t, int b, int l, int r) {
+    public boolean dfs(int[][] grid, int i, int j) {
         if (i < 0 || i >= grid.length || j < 0 || j >= grid[i].length) {
             return false;
         } else if (grid[i][j] == 1) {
             return true;
         } else {
             grid[i][j] = 1;
-            t = Math.min(t, i);
-            b = Math.max(b, i);
-            l = Math.min(l, j);
-            r = Math.max(r, j);
             //top
-            boolean top = dfs(grid, i - 1, j, t, b, l, r);
+            boolean top = dfs(grid, i - 1, j);
             //bottom
-            boolean bottom = dfs(grid, i + 1, j, t, b, l, r);
+            boolean bottom = dfs(grid, i + 1, j);
             //left
-            boolean left = dfs(grid, i, j - 1, t, b, l, r);
+            boolean left = dfs(grid, i, j - 1);
             //right
-            boolean right = dfs(grid, i, j + 1, t, b, l, r);
+            boolean right = dfs(grid, i, j + 1);
             return top && bottom && left && right;
         }
     }
