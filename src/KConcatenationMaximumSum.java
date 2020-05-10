@@ -2,14 +2,10 @@
 public class KConcatenationMaximumSum {
 
     public int kConcatenationMaxSum(int[] arr, int k) {
-        int[] mod = new int[arr.length * k];
-        for (int i = 0; i < arr.length * k; i++) {
-            mod[i] = arr[i % arr.length];
-        }
         int sum = 0;
         int max = 0;
-        for (int i = 0; i < mod.length; i++) {
-            sum += mod[i];
+        for (int i = 0; i < arr.length * k; i++) {
+            sum += arr[i % arr.length];
             if (sum < 0) {
                 sum = 0;
             }
