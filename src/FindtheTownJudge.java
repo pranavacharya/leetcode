@@ -1,29 +1,17 @@
 
-import java.util.HashMap;
-import java.util.HashSet;
-
 public class FindtheTownJudge {
 
     public int findJudge(int N, int[][] trust) {
-        HashMap<Integer, Integer> map = new HashMap();
-        HashSet<Integer> set = new HashSet();
-        for (int i = 1; i <= N; i++) {
-            map.put(i, 0);
-            set.add(i);
-        }
+        int[] trustedBy = new int[N];
+        int[] trusts = new int[N];
         for (int[] t : trust) {
-            if (set.contains(t[0])) {
-                set.remove(t[0]);
-            }
-            map.put(t[1], map.get(t[1]) + 1);
+            trustedBy[t[1] - 1]++;
+            trusts[t[0] - 1]++;
         }
-        if (set.isEmpty()) {
-            return -1;
-        } else {
-            for (int s : set) {
-                if (map.get(s) == N - 1) {
-                    return s;
-                }
+
+        for (int i = 0; i < N; i++) {
+            if (trustedBy[i] == N - 1 && trusts[i] == 0) {
+                return i + 1;
             }
         }
         return -1;
