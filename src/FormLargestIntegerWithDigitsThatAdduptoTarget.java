@@ -1,55 +1,33 @@
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-
 public class FormLargestIntegerWithDigitsThatAdduptoTarget {
 
     public String largestNumber(int[] cost, int target) {
-        HashMap<Integer, Integer> map = new HashMap();
-        for (int i = 1; i <= 9; i++) {
-            map.put(cost[i - 1], Math.max(map.getOrDefault(cost[i - 1], 0), i));
-        }
-        Arrays.sort(cost);
-        List<List<String>> result = new ArrayList();
-        permutation(result, new ArrayList(), cost, target, map);
-        //System.out.println(result);
-        Long max = Long.MIN_VALUE;
-        for (List<String> l : result) {
-            int size = l.size();
-            long local = 0;
-            for (int i = size - 1; i >= 0; i--) {
-                local = local * 10 + Long.parseLong(l.get(i));
-            }
-            max = Math.max(max, local);
-        }
-        if (max == Long.MIN_VALUE) {
-            return "0";
-        }
-        return "" + max;
+        String[] dp = new String[target + 1];
+        return dfs(cost, target, dp);
     }
 
-    public void permutation(List<List<String>> result, ArrayList<String> path, int[] cost, int target, HashMap<Integer, Integer> map) {
+    String dfs(int[] cost, int target, String[] dp) {
+        if (target < 0) {
+            return "0";
+        }
         if (target == 0) {
-            ArrayList<String> temp = new ArrayList(path);
-            Collections.sort(temp);
-            if (!result.contains(temp)) {
-                result.add(temp);
+            return "";
+        }
+        if (dp[target] != null) {
+            return dp[target];
+        }
+        String ans = "0";
+        for (int d = 9; d >= 1; d--) {
+            String curr = dfs(cost, target - cost[d - 1], dp);
+            if (curr.equals("0")) {
+                continue;
             }
-        } else if (target < 0) {
-            return;
-        } else {
-            for (int i = 0; i < cost.length; i++) {
-                if (i != 0 && cost[i] == cost[i - 1]) {
-                    continue;
-                }
-                path.add("" + (map.get(cost[i])));
-                permutation(result, path, cost, target - cost[i], map);
-                path.remove(path.size() - 1);
+            curr = d + curr;
+            if (ans.equals("0") || curr.length() > ans.length()) {
+                ans = curr;
             }
         }
+        return dp[target] = ans;
     }
 
     public static void main(String args[]) {
