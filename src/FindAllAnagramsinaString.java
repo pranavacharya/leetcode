@@ -1,40 +1,36 @@
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class FindAllAnagramsinaString {
 
     public List<Integer> findAnagrams(String s, String p) {
         List<Integer> result = new ArrayList();
-        char[] ar = p.toCharArray();
-        Arrays.sort(ar);
-        String sorted = String.valueOf(ar);
-        permutation(result, s, "", new boolean[p.length()], sorted);
-        return result;
-    }
-
-    public void permutation(List<Integer> result, String s, String soFar, boolean[] visited, String p) {
-        if (soFar.length() == p.length()) {
-            if (s.contains(soFar)) {
-                for (int i = 0; i < s.length(); i++) {
-                    if (s.substring(i).startsWith(soFar) && !result.contains(i)) {
-                        result.add(i);
-                    }
-                }
+        int[] frequency = new int[26];
+        for (char c : p.toCharArray()) {
+            frequency[c - 'a']++;
+        }
+        int left = 0;
+        int right = 0;
+        int count = p.length();
+        while (right < s.length()) {
+            if (frequency[s.charAt(right) - 'a'] > 0) {
+                count--;
             }
-        } else {
-            for (int i = 0; i < p.length(); i++) {
-                if (visited[i] || (i != 0 && p.charAt(i) == p.charAt(i - 1) && !visited[i - 1])) {
-                    continue;
+            frequency[s.charAt(right) - 'a']--;
+            right++;
+            if (count == 0) {
+                result.add(left);
+            }
+            if (right - left == p.length()) {
+                if (frequency[s.charAt(left) - 'a'] >= 0) {
+                    count++;
                 }
-                visited[i] = true;
-                soFar = soFar.concat("" + p.charAt(i));
-                permutation(result, s, new String(soFar), visited, p);
-                soFar = soFar.substring(0, soFar.length() - 1);
-                visited[i] = false;
+                frequency[s.charAt(left) - 'a']++;
+                left++;
             }
         }
+        return result;
     }
 
     public static void main(String args[]) {
