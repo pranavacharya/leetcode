@@ -4,20 +4,21 @@ import java.util.Stack;
 public class OnlineStockSpan {
 
     Stack<Integer> stack;
+    Stack<Integer> state;
 
     public OnlineStockSpan() {
         this.stack = new Stack();
+        this.state = new Stack();
     }
 
     public int next(int price) {
         int count = 1;
-        Stack<Integer> temp = new Stack();
-        temp.addAll(this.stack);
-        while (!temp.isEmpty() && temp.peek() <= price) {
-            count++;
-            temp.pop();
+        while (!stack.isEmpty() && stack.peek() <= price) {
+            stack.pop();
+            count = count + state.pop();
         }
         stack.add(price);
+        state.add(count);
         return count;
     }
 
