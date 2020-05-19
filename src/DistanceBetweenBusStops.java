@@ -2,25 +2,17 @@
 public class DistanceBetweenBusStops {
 
     public int distanceBetweenBusStops(int[] distance, int start, int destination) {
-        if (start > destination) {
-            int tmp = start;
-            start = destination;
-            destination = tmp;
+        int smaller = Math.min(start, destination);
+        int larger = Math.max(start, destination);
+        int a = 0;
+        for (int i = smaller; i < larger; i++) {
+            a += distance[i];
         }
-
-        int sum_clockwise = 0;
-        for (int i = start; i < destination; i++) {
-            sum_clockwise += distance[i];
+        int b = 0;
+        for (int i = larger; i != smaller; i = (i + 1) % distance.length) {
+            b += distance[i % distance.length];
         }
-        int sum_anticlockwise = 0;
-        for (int i = destination; i < distance.length; i++) {
-            sum_anticlockwise += distance[i];
-        }
-        for (int i = 0; i < start; i++) {
-            sum_anticlockwise += distance[i];
-        }
-
-        return Math.min(sum_clockwise, sum_anticlockwise);
+        return Math.min(a, b);
     }
 
     public static void main(String args[]) {
