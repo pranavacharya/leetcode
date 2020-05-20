@@ -4,48 +4,28 @@ import java.util.Stack;
 public class BaseballGame {
 
     public int calPoints(String[] ops) {
-        Stack<int[]> stack = new Stack();
+        Stack<Integer> stack = new Stack();
         for (String operation : ops) {
             if (operation.equals("C") && !stack.isEmpty()) {
                 stack.pop();
             } else if (operation.equals("D")) {
-                if (!stack.isEmpty()) {
-                    int point = stack.peek()[0] * 2;
-                    int sum = stack.peek()[1] + point;
-                    stack.add(new int[]{point, sum});
-                }
+                int point = stack.peek() * 2;
+                stack.add(point);
             } else if (operation.equals("+")) {
-                int point;
-                int[] last = new int[]{0, 0};
-                int[] secondLast = new int[]{0, 0};
-                if (!stack.isEmpty()) {
-                    last = stack.pop();
-                    if (!stack.isEmpty()) {
-                        secondLast = stack.pop();
-                        stack.push(secondLast);
-                    }
-                    stack.push(last);
-                }
-                point = last[0] + secondLast[0];
-                int sum = point;
-                if (!stack.isEmpty()) {
-                    sum += stack.peek()[1];
-                }
-                stack.push(new int[]{point, sum});
+                int last = stack.pop();
+                int secondLast = stack.peek();
+                stack.push(last);
+                stack.push(last + secondLast);
             } else {
                 int point = Integer.parseInt(operation);
-                int sum = point;
-                if (!stack.isEmpty()) {
-                    sum += stack.peek()[1];
-                }
-                stack.add(new int[]{point, sum});
+                stack.push(point);
             }
         }
-        if (!stack.isEmpty()) {
-            return stack.peek()[1];
-        } else {
-            return 0;
+        int ans = 0;
+        while (!stack.isEmpty()) {
+            ans += stack.pop();
         }
+        return ans;
     }
 
     public static void main(String args[]) {
