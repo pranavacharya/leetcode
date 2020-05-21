@@ -9,19 +9,11 @@ public class CountSquareSubmatriceswithAllOnes {
                 if (matrix[i][j] == 0) {
                     dp[i][j] = 0;
                 } else {
-                    int top = 0;
-                    int left = 0;
-                    int topleft = 0;
-                    if (i > 0) {
-                        top = dp[i - 1][j];
+                    if (i == 0 || j == 0) {
+                        dp[i][j] = 1;
+                    } else {
+                        dp[i][j] = Math.min(Math.min(dp[i - 1][j], dp[i][j - 1]), dp[i - 1][j - 1]) + 1;
                     }
-                    if (j > 0) {
-                        left = dp[i][j - 1];
-                    }
-                    if (i > 0 && j > 0) {
-                        topleft = dp[i - 1][j - 1];
-                    }
-                    dp[i][j] = Math.min(Math.min(top, left), topleft) + 1;
                     ans += dp[i][j];
                 }
             }
