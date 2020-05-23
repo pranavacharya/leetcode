@@ -3,27 +3,15 @@ import java.util.Stack;
 
 public class ScoreofParentheses {
 
-    public class State {
-
-        char b;
-        int score;
-
-        public State(char b, int score) {
-            this.b = b;
-            this.score = score;
-        }
-    }
-
     public int scoreOfParentheses(String S) {
-        Stack<State> stack = new Stack();
+        Stack<Integer> stack = new Stack();
         int score = 0;
         int index = 0;
         while (index < S.length()) {
             if (S.charAt(index) == '(') {
-                stack.push(new State('(', 0));
+                stack.push(0);
             } else {
-                State current = stack.pop();
-                int localsrc = current.score;
+                int localsrc = stack.pop();
                 localsrc *= 2;
                 if (localsrc == 0) {
                     localsrc++;
@@ -31,8 +19,8 @@ public class ScoreofParentheses {
                 if (stack.isEmpty()) {
                     score += localsrc;
                 } else {
-                    State lastState = stack.pop();
-                    stack.push(new State(lastState.b, lastState.score + localsrc));
+                    int lastState = stack.pop();
+                    stack.push(lastState + localsrc);
                 }
             }
             index++;
