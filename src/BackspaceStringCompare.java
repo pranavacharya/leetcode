@@ -1,28 +1,30 @@
 
+import java.util.Stack;
+
 public class BackspaceStringCompare {
 
     public boolean backspaceCompare(String S, String T) {
-        String s = formText(S);
-        String t = formText(T);
-        return s.equals(t);
+        return formText(S).equals(formText(T));
     }
 
-    public String formText(String s) {
-        StringBuilder sb = new StringBuilder();
-        for (char c : s.toCharArray()) {
-            if (c != '#') {
-                sb.append(c);
-            } else {
-                if (sb.length() > 0) {
-                    sb.delete(sb.length() - 1, sb.length());
-                }
+    public String formText(String S) {
+        Stack<Character> stack = new Stack();
+        for (char c : S.toCharArray()) {
+            if (c == '#' && !stack.isEmpty()) {
+                stack.pop();
+            } else if (c != '#') {
+                stack.push(c);
             }
+        }
+        StringBuilder sb = new StringBuilder();
+        for (char s : stack) {
+            sb.append(s);
         }
         return sb.toString();
     }
 
     public static void main(String args[]) {
         BackspaceStringCompare bsc = new BackspaceStringCompare();
-        System.out.println(bsc.backspaceCompare("ab#c", "ad#c"));
+        System.out.println(bsc.backspaceCompare("y#fo##f", "y#f#o##f"));
     }
 }
