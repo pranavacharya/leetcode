@@ -1,5 +1,6 @@
 
 import java.util.ArrayList;
+import java.util.HashSet;
 
 public class CourseSchedule {
 
@@ -12,9 +13,10 @@ public class CourseSchedule {
             ArrayList<Integer> temp = adj.get(pre[0]);
             temp.add(pre[1]);
         }
+        HashSet<Integer> visited = new HashSet();
         for (int i = 0; i < adj.size(); i++) {
-            if (!adj.get(i).isEmpty()) {
-                if (!dfs(adj, i, new ArrayList())) {
+            if (!adj.get(i).isEmpty() && !visited.contains(i)) {
+                if (!dfs(adj, i, new ArrayList(), visited)) {
                     return false;
                 }
             }
@@ -22,20 +24,24 @@ public class CourseSchedule {
         return true;
     }
 
-    public boolean dfs(ArrayList<ArrayList<Integer>> adj, int index, ArrayList<Integer> path) {
+    public boolean dfs(ArrayList<ArrayList<Integer>> adj, int index, ArrayList<Integer> path, HashSet<Integer> visited) {
         if (path.contains(index)) {
             return false;
         } else if (adj.get(index).isEmpty()) {
             return true;
         } else {
+            path.add(index);
             ArrayList<Integer> options = adj.get(index);
             for (int i : options) {
-                path.add(index);
-                if (!dfs(adj, i, path)) {
+                if (visited.contains(i)) {
+                    continue;
+                }
+                if (!dfs(adj, i, path, visited)) {
                     return false;
                 }
-                path.remove(path.size() - 1);
             }
+            path.remove(path.size() - 1);
+            visited.add(index);
             return true;
         }
     }
