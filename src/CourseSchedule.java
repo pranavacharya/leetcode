@@ -1,49 +1,41 @@
 
 import java.util.ArrayList;
-import java.util.HashSet;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.Queue;
 
 public class CourseSchedule {
 
     public boolean canFinish(int numCourses, int[][] prerequisites) {
-        ArrayList<ArrayList<Integer>> adj = new ArrayList();
-        for (int i = 0; i < numCourses; i++) {
-            adj.add(new ArrayList());
-        }
+        HashMap<Integer, ArrayList<Integer>> adj = new HashMap();
+        int[] indegree = new int[numCourses];
         for (int[] pre : prerequisites) {
-            ArrayList<Integer> temp = adj.get(pre[0]);
-            temp.add(pre[1]);
+            ArrayList<Integer> list = adj.getOrDefault(pre[0], new ArrayList());
+            list.add(pre[1]);
+            adj.put(pre[0], list);
+            indegree[pre[1]]++;
         }
-        HashSet<Integer> visited = new HashSet();
-        for (int i = 0; i < adj.size(); i++) {
-            if (!adj.get(i).isEmpty() && !visited.contains(i)) {
-                if (!dfs(adj, i, new ArrayList(), visited)) {
-                    return false;
+        Queue<Integer> queue = new LinkedList();
+        for (int i = 0; i < indegree.length; i++) {
+            if (indegree[i] == 0) {
+                queue.add(i);
+            }
+        }
+        int count = 0;
+        while (!queue.isEmpty()) {
+            int current = queue.poll();
+            count++;
+            if (!adj.containsKey(current)) {
+                continue;
+            }
+            for (int nei : adj.get(current)) {
+                indegree[nei]--;
+                if (indegree[nei] == 0) {
+                    queue.add(nei);
                 }
             }
         }
-        return true;
-    }
-
-    public boolean dfs(ArrayList<ArrayList<Integer>> adj, int index, ArrayList<Integer> path, HashSet<Integer> visited) {
-        if (path.contains(index)) {
-            return false;
-        } else if (adj.get(index).isEmpty()) {
-            return true;
-        } else {
-            path.add(index);
-            ArrayList<Integer> options = adj.get(index);
-            for (int i : options) {
-                if (visited.contains(i)) {
-                    continue;
-                }
-                if (!dfs(adj, i, path, visited)) {
-                    return false;
-                }
-            }
-            path.remove(path.size() - 1);
-            visited.add(index);
-            return true;
-        }
+        return count == numCourses;
     }
 
     public static void main(String args[]) {
