@@ -5,61 +5,36 @@ import java.util.Queue;
 public class AsFarfromLandasPossible {
 
     public int maxDistance(int[][] grid) {
-        int max = -1;
-        Queue<int[]> queue = new LinkedList();
-        for (int i = 0; i < grid.length; i++) {
-            for (int j = 0; j < grid[i].length; j++) {
+        int m = grid.length, n = grid[0].length;
+        Queue<int[]> queue = new LinkedList<>();
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
                 if (grid[i][j] == 1) {
-                    continue;
-                }
-                queue.clear();
-                int[][] visited = new int[grid.length][grid[i].length];
-                queue.add(new int[]{i, j, 0});
-                visited[i][j] = 1;
-                while (!queue.isEmpty()) {
-                    int[] current = queue.poll();
-                    int curx = current[0];
-                    int cury = current[1];
-                    if (curx - 1 >= 0 && visited[curx - 1][cury] == 0) {
-                        if (grid[curx - 1][cury] == 1) {
-                            max = Math.max(max, calDistance(i, j, curx - 1, cury));
-                            break;
-                        }
-                        visited[curx - 1][cury] = 1;
-                        queue.add(new int[]{curx - 1, cury});
-                    }
-                    if (cury - 1 >= 0 && visited[curx][cury - 1] == 0) {
-                        if (grid[curx][cury - 1] == 1) {
-                            max = Math.max(max, calDistance(i, j, curx, cury - 1));
-                            break;
-                        }
-                        visited[curx][cury - 1] = 1;
-                        queue.add(new int[]{curx, cury - 1});
-                    }
-                    if (curx + 1 < grid.length && visited[curx + 1][cury] == 0) {
-                        if (grid[curx + 1][cury] == 1) {
-                            max = Math.max(max, calDistance(i, j, curx + 1, cury));
-                            break;
-                        }
-                        visited[curx + 1][cury] = 1;
-                        queue.add(new int[]{curx + 1, cury});
-                    }
-                    if (cury + 1 < grid[curx].length && visited[curx][cury + 1] == 0) {
-                        if (grid[curx][cury + 1] == 1) {
-                            max = Math.max(max, calDistance(i, j, curx, cury + 1));
-                            break;
-                        }
-                        visited[curx][cury + 1] = 1;
-                        queue.add(new int[]{curx, cury + 1});
-                    }
+                    queue.offer(new int[]{i, j});
                 }
             }
         }
-        return max;
-    }
-
-    private int calDistance(int x1, int y1, int x2, int y2) {
-        return Math.abs(x1 - x2) + Math.abs(y1 - y2);
+        if (queue.size() == 0 || queue.size() == m * n) {
+            return -1;
+        }
+        int[][] dirs = {{0, 1}, {0, -1}, {1, 0}, {-1, 0}};
+        int max = 0;
+        while (!queue.isEmpty()) {
+            int size = queue.size();
+            for (int i = 0; i < size; i++) {
+                int[] point = queue.poll();
+                for (int[] dir : dirs) {
+                    int x = point[0] + dir[0];
+                    int y = point[1] + dir[1];
+                    if (x >= 0 && y >= 0 && x < m && y < n && grid[x][y] == 0) {
+                        grid[x][y] = 1;
+                        queue.offer(new int[]{x, y});
+                    }
+                }
+            }
+            max++;
+        }
+        return max - 1;
     }
 
     public static void main(String args[]) {
