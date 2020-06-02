@@ -2,15 +2,8 @@
 public class DeleteNodeinaLinkedList {
 
     public void deleteNode(ListNode node) {
-        while (node.next != null) {
-            int temp = node.next.val;
-            node.val = temp;
-            if (node.next.next != null) {
-                node = node.next;
-            } else {
-                node.next = null;
-            }
-        }
+        node.val = node.next.val;
+        node.next = node.next.next;
     }
 
     public static void main(String args[]) {
