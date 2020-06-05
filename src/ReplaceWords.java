@@ -13,26 +13,26 @@ public class ReplaceWords {
             this.links = new TrieNode[26];
         }
 
+        public boolean isEnd(TrieNode node) {
+            return node.isEnd;
+        }
+
+        public boolean contains(TrieNode node, char c) {
+            return node.links[c - 'a'] != null;
+        }
+
     }
 
-    TrieNode root;
+    private TrieNode root;
 
     public ReplaceWords() {
         this.root = new TrieNode();
     }
 
-    public boolean isEnd(TrieNode node) {
-        return node.isEnd;
-    }
-
-    public boolean contains(TrieNode node, char c) {
-        return node.links[c - 'a'] != null;
-    }
-
     public void addWord(String word) {
         TrieNode head = root;
         int i = 0;
-        while (i < word.length() && contains(head, word.charAt(i))) {
+        while (i < word.length() && head.contains(head, word.charAt(i))) {
             head = head.links[word.charAt(i) - 'a'];
             i++;
         }
@@ -49,10 +49,10 @@ public class ReplaceWords {
         TrieNode head = root;
         int i = 0;
         StringBuilder prefix = new StringBuilder();
-        while (i < word.length() && contains(head, word.charAt(i))) {
+        while (i < word.length() && head.contains(head, word.charAt(i))) {
             prefix.append(word.charAt(i));
             head = head.links[word.charAt(i) - 'a'];
-            if (isEnd(head)) {
+            if (head.isEnd(head)) {
                 return prefix.toString();
             }
             i++;
