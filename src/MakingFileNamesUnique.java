@@ -10,12 +10,21 @@ public class MakingFileNamesUnique {
         int i = 0;
         for (String name : names) {
             if (map.containsKey(name)) {
-                int j = 1;
-                while (map.containsKey(name + "(" + j + ")")) {
-                    j++;
+                StringBuilder sb = new StringBuilder(name);
+                int val = map.get(name);
+                sb.append("(");
+                sb.append(val);
+                sb.append(")");
+                while (map.containsKey(sb.toString())) {
+                    val++;
+                    sb = new StringBuilder(name);
+                    sb.append("(");
+                    sb.append(val);
+                    sb.append(")");
                 }
-                map.put(name + "(" + j + ")", j);
-                result[i] = name + "(" + j + ")";
+                map.put(sb.toString(), 1);
+                map.put(name, val + 1);
+                result[i] = sb.toString();
             } else {
                 map.put(name, 1);
                 result[i] = name;
