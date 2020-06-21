@@ -1,34 +1,32 @@
 
-import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.TreeSet;
 
 public class AvoidFloodinTheCity {
 
     public int[] avoidFlood(int[] rains) {
         int[] ans = new int[rains.length];
-        ArrayList<String> list = new ArrayList();
+        HashMap<Integer, Integer> map = new HashMap();
+        TreeSet<Integer> zero = new TreeSet();
         for (int i = 0; i < rains.length; i++) {
-            if (rains[i] != 0) {
-                if (list.contains("" + rains[i])) {
-                    return new int[]{};
-                } else {
-                    list.add("" + rains[i]);
-                    ans[i] = -1;
-                }
+            if (rains[i] == 0) {
+                zero.add(i);
             } else {
-                boolean status = true;
-                for (int j = i + 1; j < rains.length; j++) {
-                    if (list.contains("" + rains[j])) {
-                        list.remove("" + rains[j]);
-                        ans[i] = rains[j];
-                        status = false;
-                        break;
+                if (map.containsKey(rains[i])) {
+                    Integer nextZero = zero.ceiling(map.get(rains[i]));
+                    if (nextZero == null) {
+                        return new int[]{};
                     }
+                    ans[nextZero] = rains[i];
+                    zero.remove(nextZero);
                 }
-                if (status) {
-                    ans[i] = 1;
-                }
+                map.put(rains[i], i);
+                ans[i] = -1;
             }
+        }
+        for (int i : zero) {
+            ans[i] = 1;
         }
         return ans;
     }
