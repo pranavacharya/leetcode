@@ -8,29 +8,31 @@ public class ThreeSum {
     public List<List<Integer>> threeSum(int[] nums) {
         Arrays.sort(nums);
         List<List<Integer>> result = new ArrayList();
-        backtrack(result, new ArrayList(), nums, 0, 0);
-        return result;
-    }
-
-    public void backtrack(List<List<Integer>> result, ArrayList<Integer> path, int[] nums, int index, int target) {
-        if (path.size() == 3) {
-            if (target == 0 && !result.contains(path)) {
-                result.add(new ArrayList(path));
+        for (int i = 0; i < nums.length; i++) {
+            if (i != 0 && nums[i] == nums[i - 1]) {
+                continue;
             }
-        } else {
-            for (int i = index; i < nums.length; i++) {
-                if (i != index && nums[i] == nums[i - 1]) {
-                    continue;
-                }
-                if (nums[i] <= target) {
-                    path.add(nums[i]);
-                    backtrack(result, path, nums, i + 1, target - nums[i]);
-                    path.remove(path.size() - 1);
+            int j = i + 1;
+            int k = nums.length - 1;
+            while (j < k) {
+                if (nums[i] + nums[j] + nums[k] == 0) {
+                    List<Integer> temp = new ArrayList();
+                    temp.add(nums[i]);
+                    temp.add(nums[j]);
+                    temp.add(nums[k]);
+                    result.add(temp);
+                    j++;
+                    while (j < k && nums[j] == nums[j - 1]) {
+                        j++;
+                    }
+                } else if (nums[i] + nums[j] + nums[k] < 0) {
+                    j++;
                 } else {
-                    break;
+                    k--;
                 }
             }
         }
+        return result;
     }
 
     public static void main(String args[]) {
