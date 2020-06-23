@@ -1,20 +1,25 @@
 
 public class CountCompleteTreeNodes {
 
-    private int count = 0;
-
-    public int countNodes(TreeNode root) {
-        dfs(root);
-        return this.count;
-    }
-
-    public void dfs(TreeNode root) {
+    public int height(TreeNode root) {
         if (root == null) {
-            return;
+            return -1;
         } else {
-            this.count++;
-            dfs(root.left);
-            dfs(root.right);
+            return 1 + height(root.left);
         }
     }
+
+    public int countNodes(TreeNode root) {
+        int h = height(root);
+        if (h < 0) {
+            return 0;
+        }
+        int rightHeight = height(root.right);
+        if (rightHeight == h - 1) {
+            return (1 << h) + countNodes(root.right);
+        } else {
+            return (1 << (h - 1)) + countNodes(root.left);
+        }
+    }
+
 }
