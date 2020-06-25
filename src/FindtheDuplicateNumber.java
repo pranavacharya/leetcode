@@ -1,17 +1,20 @@
 
-import java.util.HashSet;
-
 public class FindtheDuplicateNumber {
 
     public int findDuplicate(int[] nums) {
-        HashSet<Integer> set = new HashSet();
-        for (int num : nums) {
-            if (set.contains(num)) {
-                return num;
-            }
-            set.add(num);
+        int tortoise = nums[0];
+        int hare = nums[0];
+
+        do {
+            hare = nums[nums[hare]];
+            tortoise = nums[tortoise];
+        } while (tortoise != hare);
+        tortoise = nums[0];
+        while (tortoise != hare) {
+            hare = nums[hare];
+            tortoise = nums[tortoise];
         }
-        return -1;
+        return hare;
     }
 
     public static void main(String args[]) {
