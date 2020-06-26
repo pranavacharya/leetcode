@@ -1,34 +1,26 @@
 
-import java.util.ArrayList;
-
 public class SumRoottoLeafNumbers {
 
     public int sumNumbers(TreeNode root) {
-        ArrayList<String> result = new ArrayList();
         if (root == null) {
             return 0;
         }
-        dfs(result, "", root);
-        int sum = 0;
-        for (String num : result) {
-            sum += Integer.parseInt(num);
-        }
-        return sum;
+        return dfs(root, 0);
     }
 
-    public void dfs(ArrayList<String> result, String path, TreeNode root) {
+    public int dfs(TreeNode root, int sum) {
         if (root.left == null && root.right == null) {
-            result.add(path.concat(Integer.toString(root.val)));
-            return;
+            return sum * 10 + root.val;
         } else {
-            path = path.concat(Integer.toString(root.val));
+            sum = sum * 10 + root.val;
+            int ans = 0;
             if (root.left != null) {
-                dfs(result, path, root.left);
+                ans += dfs(root.left, sum);
             }
             if (root.right != null) {
-                dfs(result, path, root.right);
+                ans += dfs(root.right, sum);
             }
-            path = path.substring(0, path.length() - 1);
+            return ans;
         }
     }
 
