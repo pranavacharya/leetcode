@@ -1,32 +1,24 @@
 
-import java.util.ArrayList;
+import java.util.Arrays;
 
 public class PerfectSquares {
 
-    private int min = Integer.MAX_VALUE;
-
     public int numSquares(int n) {
-        ArrayList<Integer> ps = new ArrayList();
-        for (int i = 1; i * i <= n; i++) {
-            ps.add(i * i);
+        if (n < 4) {
+            return n;
         }
-        backtracking(new ArrayList(), ps, n, ps.size() - 1);
-        return this.min == Integer.MAX_VALUE ? -1 : this.min;
-    }
-
-    public void backtracking(
-            ArrayList<Integer> path, ArrayList<Integer> nums, int target, int index) {
-        if (target == 0) {
-            this.min = Math.min(this.min, path.size());
-        } else if (target < 0) {
-            return;
-        } else {
-            for (int i = index; i >= 0; i--) {
-                path.add(nums.get(i));
-                backtracking(path, nums, target - nums.get(i), i);
-                path.remove(path.size() - 1);
+        int[] dp = new int[n + 1];
+        Arrays.fill(dp, Integer.MAX_VALUE);
+        dp[0] = 0;
+        dp[1] = 1;
+        dp[2] = 2;
+        dp[3] = 3;
+        for (int i = 4; i <= n; i++) {
+            for (int j = 1; j * j <= i; j++) {
+                dp[i] = Math.min(dp[i], dp[i - j * j] + 1);
             }
         }
+        return dp[n];
     }
 
     public static void main(String args[]) {
