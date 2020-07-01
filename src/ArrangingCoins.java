@@ -2,12 +2,20 @@
 public class ArrangingCoins {
 
     public int arrangeCoins(int n) {
-        int count = 0;
-        while (n >= count + 1) {
-            n = n - (count + 1);
-            count++;
+        long left = 0;
+        long right = n;
+        while (left <= right) {
+            long mid = left + (right - left) / 2;
+            long count = (mid * (mid + 1)) / 2;
+            if (count == n) {
+                return (int) mid;
+            } else if (n < count) {
+                right = mid - 1;
+            } else {
+                left = mid + 1;
+            }
         }
-        return count;
+        return (int) right;
     }
 
     public static void main(String args[]) {
