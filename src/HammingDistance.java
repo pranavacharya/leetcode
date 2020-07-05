@@ -5,8 +5,8 @@ public class HammingDistance {
         int res = x ^ y;
         int count = 0;
         while (res > 0) {
-            res &= (res - 1);
-            count++;
+            count = count + (res & 1);
+            res = res >> 1;
         }
         return count;
     }
