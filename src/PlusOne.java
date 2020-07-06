@@ -4,34 +4,31 @@ import java.util.Arrays;
 public class PlusOne {
 
     public int[] plusOne(int[] digits) {
-        digits = reverse(digits);
-        boolean added = false;
-        for (int i = 0; i < digits.length; i++) {
-            if (!added) {
-                if (digits[i] < 9) {
-                    digits[i]++;
-                    added = true;
-                } else {
-                    digits[i] = 0;
-                }
+        int carry = 0;
+        for (int i = digits.length - 1; i >= 0; i--) {
+            if (i == digits.length - 1) {
+                digits[i]++;
+            }
+            digits[i] += carry;
+            carry = 0;
+            if (digits[i] > 9) {
+                digits[i] = digits[i] % 10;
+                carry = 1;
+            }
+            if (carry == 0) {
+                break;
             }
         }
-        if (!added) {
-            int[] res = new int[digits.length + 1];
-            res[0] = 1;
-            return res;
-        } else {
-            return reverse(digits);
+        if (carry == 1) {
+            int[] ans = new int[digits.length + 1];
+            ans[0] = 1;
+            int index = 1;
+            for (int d : digits) {
+                ans[index++] = d;
+            }
+            return ans;
         }
-    }
-
-    public int[] reverse(int[] nums) {
-        for (int i = 0; i < nums.length / 2; i++) {
-            int temp = nums[i];
-            nums[i] = nums[nums.length - 1 - i];
-            nums[nums.length - 1 - i] = temp;
-        }
-        return nums;
+        return digits;
     }
 
     public static void main(String args[]) {
