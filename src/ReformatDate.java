@@ -1,11 +1,11 @@
 
 import java.util.HashMap;
 
-public class ReformaDate {
+public class ReformatDate {
 
     HashMap<String, String> month = new HashMap();
 
-    public ReformaDate() {
+    public ReformatDate() {
         this.month.put("Jan", "01");
         this.month.put("Feb", "02");
         this.month.put("Mar", "03");
@@ -31,7 +31,7 @@ public class ReformaDate {
     }
 
     public static void main(String args[]) {
-        ReformaDate rd = new ReformaDate();
+        ReformatDate rd = new ReformatDate();
         System.out.println(rd.reformatDate("6th Oct 2052"));
     }
 }
