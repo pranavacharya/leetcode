@@ -1,49 +1,49 @@
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Queue;
 
 public class CourseScheduleII {
 
     public int[] findOrder(int numCourses, int[][] prerequisites) {
-        ArrayList<Integer>[] adj = new ArrayList[numCourses];
+        HashMap<Integer, ArrayList<Integer>> adj = new HashMap();
+        for (int i = 0; i < numCourses; i++) {
+            adj.put(i, new ArrayList());
+        }
         int[] indegree = new int[numCourses];
-        for (int i = 0; i < adj.length; i++) {
-            adj[i] = new ArrayList();
+        for (int[] edge : prerequisites) {
+            ArrayList<Integer> list = adj.get(edge[1]);
+            list.add(edge[0]);
+            adj.put(edge[1], list);
+            indegree[edge[0]]++;
         }
-        for (int[] e : prerequisites) {
-            adj[e[1]].add(e[0]);
-            indegree[e[0]]++;
-        }
-
         Queue<Integer> queue = new LinkedList();
         for (int i = 0; i < indegree.length; i++) {
             if (indegree[i] == 0) {
                 queue.add(i);
             }
         }
-        int count = 0;
-        ArrayList<Integer> sorted = new ArrayList();
+        ArrayList<Integer> result = new ArrayList();
+        int nodesDone = 0;
         while (!queue.isEmpty()) {
-            int current = queue.poll();
-            count++;
-            sorted.add(current);
-            for (int nei : adj[current]) {
-                indegree[nei]--;
-                if (indegree[nei] == 0) {
-                    queue.add(nei);
+            int curr = queue.poll();
+            result.add(curr);
+            nodesDone++;
+            ArrayList<Integer> neighbours = adj.get(curr);
+            for (int neighbour : neighbours) {
+                indegree[neighbour]--;
+                if (indegree[neighbour] == 0) {
+                    queue.add(neighbour);
                 }
             }
         }
-        if (count != numCourses) {
-            return new int[]{};
+        int[] ans = new int[result.size()];
+        for (int i = 0; i < result.size(); i++) {
+            ans[i] = result.get(i);
         }
-        int[] result = new int[sorted.size()];
-        for (int i = 0; i < result.length; i++) {
-            result[i] = sorted.get(i);
-        }
-        return result;
+        return nodesDone == numCourses ? ans : new int[]{};
     }
 
     public static void main(String args[]) {
