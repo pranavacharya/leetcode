@@ -1,57 +1,38 @@
 
 public class WordSearch {
 
+    private int[][] dir = new int[][]{{1, 0}, {-1, 0}, {0, 1}, {0, -1}};
+
     public boolean exist(char[][] board, String word) {
-        if (word.length() == 0) {
-            return true;
-        } else {
-            for (int i = 0; i < board.length; i++) {
-                for (int j = 0; j < board[i].length; j++) {
-                    if (word.charAt(0) == board[i][j]) {
-                        if (dfs(board, i, j, word, 0)) {
-                            return true;
-                        }
+        for (int i = 0; i < board.length; i++) {
+            for (int j = 0; j < board[i].length; j++) {
+                if (board[i][j] == word.charAt(0)) {
+                    if (dfs(board, word, 0, i, j)) {
+                        return true;
                     }
                 }
             }
-            return false;
         }
+        return false;
     }
 
-    public boolean dfs(char[][] board, int i, int j, String word, int index) {
-        if (i < 0 || i >= board.length || j < 0 || j >= board[i].length) {
+    public boolean dfs(char[][] board, String word, int index, int row, int col) {
+        if (index == word.length()) {
+            return true;
+        } else if (row < 0 || col < 0
+                || row >= board.length || col >= board[row].length) {
             return false;
-        }
-        if (index >= word.length()) {
+        } else if (board[row][col] == word.charAt(index)) {
+            for (int[] d : dir) {
+                char temp = board[row][col];
+                board[row][col] = '1';
+                if (dfs(board, word, index + 1, row + d[0], col + d[1])) {
+                    return true;
+                } else {
+                    board[row][col] = temp;
+                }
+            }
             return false;
-        } else if (index == word.length() - 1) {
-            return word.charAt(index) == board[i][j];
-        } else if (word.charAt(index) == board[i][j]) {
-            char character = board[i][j];
-            boolean right, left, top, bottom;
-            board[i][j] = '0';
-            right = dfs(board, i + 1, j, word, index + 1);
-            if (right) {
-                board[i][j] = character;
-                return right;
-            }
-            bottom = dfs(board, i, j + 1, word, index + 1);
-            if (bottom) {
-                board[i][j] = character;
-                return bottom;
-            }
-            left = dfs(board, i - 1, j, word, index + 1);
-            if (left) {
-                board[i][j] = character;
-                return left;
-            }
-            top = dfs(board, i, j - 1, word, index + 1);
-            if (top) {
-                board[i][j] = character;
-                return top;
-            }
-            board[i][j] = character;
-            return (right || left || top || bottom);
         } else {
             return false;
         }
@@ -60,6 +41,7 @@ public class WordSearch {
     public static void main(String args[]) {
         WordSearch ws = new WordSearch();
         char[][] board = new char[][]{{'A', 'B', 'C', 'E'}, {'S', 'F', 'C', 'S'}, {'A', 'D', 'E', 'E'}};
+        System.out.println(ws.exist(board, "ABCCED"));
         System.out.println(ws.exist(board, "FCEDASD"));
     }
 }
