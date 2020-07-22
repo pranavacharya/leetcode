@@ -1,9 +1,7 @@
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.Queue;
+import java.util.Stack;
 
 public class BinaryTreeZigzagLevelOrderTraversal {
 
@@ -12,28 +10,38 @@ public class BinaryTreeZigzagLevelOrderTraversal {
             return new ArrayList();
         }
         List<List<Integer>> result = new ArrayList();
-        Queue<TreeNode> queue = new LinkedList();
-        queue.add(root);
-        boolean asc = true;
-        while (!queue.isEmpty()) {
-            int size = queue.size();
-            ArrayList<Integer> row = new ArrayList();
-            while (size > 0) {
-                TreeNode curr = queue.poll();
-                row.add(curr.val);
+        Stack<TreeNode> stack1 = new Stack();
+        Stack<TreeNode> stack2 = new Stack();
+        stack1.add(root);
+        while (!stack1.isEmpty() || !stack2.isEmpty()) {
+            ArrayList<Integer> temp = new ArrayList();
+            while (!stack1.isEmpty()) {
+                TreeNode curr = stack1.pop();
+                temp.add(curr.val);
                 if (curr.left != null) {
-                    queue.add(curr.left);
+                    stack2.push(curr.left);
                 }
                 if (curr.right != null) {
-                    queue.add(curr.right);
+                    stack2.push(curr.right);
                 }
-                size--;
             }
-            if (!asc) {
-                Collections.reverse(row);
+            if (!temp.isEmpty()) {
+                result.add(temp);
             }
-            asc = !asc;
-            result.add(row);
+            temp = new ArrayList();
+            while (!stack2.isEmpty()) {
+                TreeNode curr = stack2.pop();
+                temp.add(curr.val);
+                if (curr.right != null) {
+                    stack1.push(curr.right);
+                }
+                if (curr.left != null) {
+                    stack1.push(curr.left);
+                }
+            }
+            if (!temp.isEmpty()) {
+                result.add(temp);
+            }
         }
         return result;
     }
