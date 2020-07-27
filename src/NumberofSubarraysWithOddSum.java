@@ -4,24 +4,18 @@ public class NumberofSubarraysWithOddSum {
     private long mod = 1000000007;
 
     public int numOfSubarrays(int[] arr) {
-        int[] suffix = new int[arr.length];
+        int evenSum = 1;
+        int oddSum = 0;
         int sum = 0;
-        for (int i = 0; i < arr.length; i++) {
-            sum += arr[i];
-            suffix[i] = sum;
-        }
         int ans = 0;
         for (int i = 0; i < arr.length; i++) {
-            for (int j = i; j < arr.length; j++) {
-                int local = 0;
-                if (i == 0) {
-                    local = suffix[j] - 0;
-                } else {
-                    local = suffix[j] - suffix[i - 1];
-                }
-                if (local % 2 != 0) {
-                    ans = (int) (((ans % mod) + 1) % mod);
-                }
+            sum += arr[i];
+            if (sum % 2 == 0) {
+                ans = (int) (((ans % mod) + (oddSum % mod)) % mod);
+                evenSum++;
+            } else {
+                ans = (int) (((ans % mod) + (evenSum % mod)) % mod);
+                oddSum++;
             }
         }
         return ans;
