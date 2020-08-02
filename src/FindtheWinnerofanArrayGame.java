@@ -1,29 +1,29 @@
 
-import java.util.ArrayList;
-
 public class FindtheWinnerofanArrayGame {
 
     public int getWinner(int[] arr, int k) {
-        ArrayList<Integer> list = new ArrayList();
-        for (int i : arr) {
-            list.add(i);
-        }
-        int n = k;
-        int winner = list.get(0);
-        while (n > 0) {
-            int first = list.get(0);
-            int second = list.get(1);
-            if (first > second) {
-                winner = first;
-                list.add(list.remove(1));
-                n--;
-            } else {
-                winner = second;
-                list.add(list.remove(0));
-                n = k - 1;
+        for (int i = 0; i < arr.length; i++) {
+            int count = 0;
+            if (i != 0 && arr[i] > arr[i - 1]) {
+                count++;
+            }
+            boolean flag = true;
+            for (int j = i + 1; j < arr.length; j++) {
+                if (arr[i] > arr[j]) {
+                    count++;
+                    if (count >= k) {
+                        return arr[i];
+                    }
+                } else {
+                    flag = false;
+                    break;
+                }
+            }
+            if (flag || count >= k) {
+                return arr[i];
             }
         }
-        return winner;
+        return -1;
     }
 
     public static void main(String args[]) {
