@@ -3,32 +3,28 @@ public class AddandSearchWordDatastructuredesign {
 
     public class TrieNode {
 
-        private TrieNode[] links;
-        private int L = 26;
+        private TrieNode[] next;
         private boolean isEnd;
 
         public TrieNode() {
-            links = new TrieNode[L];
-        }
-
-        public void setEnd() {
-            this.isEnd = true;
+            this.next = new TrieNode[26];
+            this.isEnd = false;
         }
 
         public boolean isEnd() {
             return this.isEnd;
         }
 
-        public TrieNode getLink(char c) {
-            return this.links[c - 'a'];
+        public boolean hasChar(char value) {
+            return this.next[value - 'a'] != null;
         }
 
-        public void putLink(char c, TrieNode node) {
-            this.links[c - 'a'] = node;
+        public void add(char value) {
+            this.next[value - 'a'] = new TrieNode();
         }
 
-        public boolean containsKet(char c) {
-            return links[c - 'a'] != null;
+        public void setEnd() {
+            this.isEnd = true;
         }
 
     }
@@ -40,54 +36,53 @@ public class AddandSearchWordDatastructuredesign {
     }
 
     public void addWord(String word) {
-        TrieNode head = root;
-        char[] arr = word.toCharArray();
         int index = 0;
-        while (index < arr.length && head.containsKet(arr[index])) {
-            head = head.getLink(arr[index]);
+        TrieNode head = root;
+        while (index < word.length() && head.hasChar(word.charAt(index))) {
+            head = head.next[word.charAt(index) - 'a'];
             index++;
         }
-        while (index < arr.length) {
-            head.putLink(arr[index], new TrieNode());
-            head = head.getLink(arr[index]);
-            index++;
+        if (index == word.length()) {
+            head.setEnd();
+        } else {
+            for (int i = index; i < word.length(); i++) {
+                head.add(word.charAt(i));
+                head = head.next[word.charAt(i) - 'a'];
+            }
+            head.setEnd();
         }
-        head.setEnd();
     }
 
-    private boolean backtrack(TrieNode head, String word, int index) {
+    private boolean backtrack(TrieNode head, int index, String word) {
         if (index == word.length()) {
-            return head != null && head.isEnd();
+            return head != null && head.isEnd;
         } else if (head == null) {
             return false;
         } else {
-            for (int i = index; i < word.length(); i++) {
-                if (word.charAt(i) != '.') {
-                    if (head.containsKet(word.charAt(i))) {
-                        if (backtrack(head.getLink(word.charAt(i)), word, index + 1)) {
-                            return true;
-                        } else {
-                            return false;
-                        }
+            if (word.charAt(index) == '.') {
+                for (char i = 'a'; i <= 'z'; i++) {
+                    if (backtrack(head.next[i - 'a'], index + 1, word)) {
+                        return true;
+                    }
+                }
+                return false;
+            } else {
+                if (head.hasChar(word.charAt(index))) {
+                    if (backtrack(head.next[word.charAt(index) - 'a'], index + 1, word)) {
+                        return true;
                     } else {
                         return false;
                     }
                 } else {
-                    for (char j = 'a'; j <= 'z'; j++) {
-                        if (backtrack(head.getLink(j), word, index + 1)) {
-                            return true;
-                        }
-                    }
                     return false;
                 }
             }
-            return false;
         }
     }
 
     public boolean search(String word) {
         TrieNode head = root;
-        return backtrack(head, word, 0);
+        return backtrack(head, 0, word);
     }
 
     public static void main(String args[]) {
