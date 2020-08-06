@@ -1,35 +1,23 @@
 
-import java.util.HashMap;
-
 public class PartitionEqualSubsetSum {
 
-    private HashMap<String, Boolean> map = new HashMap<>();
-
     public boolean canPartition(int[] nums) {
-        int total = 0;
-        for (int i : nums) {
-            total += i;
+        int sum = 0;
+        for (int num : nums) {
+            sum += num;
         }
-        if (total % 2 != 0) {
+        if (sum % 2 != 0) {
             return false;
         }
-        return subset(nums, 0, 0, total);
-    }
-
-    public boolean subset(int[] nums, int index, int sum, int total) {
-        String state = index + "-" + sum;
-        if (this.map.containsKey(state)) {
-            return this.map.get(state);
+        sum = sum / 2;
+        boolean[] dp = new boolean[sum + 1];
+        dp[0] = true;
+        for (int num : nums) {
+            for (int i = dp.length - 1; i >= num; i--) {
+                dp[i] = dp[i] || dp[i - num];
+            }
         }
-        if (sum == total / 2) {
-            return true;
-        }
-        if (sum > total / 2 || index >= nums.length) {
-            return false;
-        }
-        boolean status = subset(nums, index + 1, sum, total) || subset(nums, index + 1, sum + nums[index], total);
-        this.map.put(state, status);
-        return status;
+        return dp[sum];
     }
 
     public static void main(String args[]) {
