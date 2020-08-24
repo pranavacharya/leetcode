@@ -2,24 +2,22 @@
 public class SumofLeftLeaves {
 
     public int sumOfLeftLeaves(TreeNode root) {
-        if (root == null) {
-            return 0;
+        int sum = 0;
+        if (root != null) {
+            sum += dfs(root);
         }
-        return dfs(root, 0);
+        return sum;
     }
 
-    public int dfs(TreeNode root, int sum) {
-        if (root.left == null && root.right == null) {
-            return sum;
-        }
+    public int dfs(TreeNode root) {
+        int sum = 0;
         if (root.left != null && root.left.left == null && root.left.right == null) {
             sum += root.left.val;
-        }
-        if (root.left != null) {
-            sum = dfs(root.left, sum);
+        } else if (root.left != null) {
+            sum += dfs(root.left);
         }
         if (root.right != null) {
-            sum = dfs(root.right, sum);
+            sum += dfs(root.right);
         }
         return sum;
     }
