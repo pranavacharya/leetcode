@@ -2,26 +2,35 @@
 public class KthSymbolinGrammar {
 
     public int kthGrammar(int N, int K) {
-        return generateString("0", N - 1, K);
+        if (N == 1) {
+            return 0;
+        }
+        return generateString(N, K);
     }
 
-    public int generateString(String str, int N, int K) {
-        if (N == 0) {
-            return Integer.parseInt("" + str.charAt(K - 1));
-        }
-        StringBuilder sb = new StringBuilder();
-        for (char c : str.toCharArray()) {
-            if (c == '0') {
-                sb.append("01");
+    public int generateString(int N, int K) {
+        if (N == 2) {
+            if (K == 1) {
+                return 0;
             } else {
-                sb.append("10");
+                return 1;
             }
         }
-        return generateString(sb.toString(), N - 1, K);
+        boolean odd = false;
+        if (K % 2 == 1) {
+            K++;
+            odd = true;
+        }
+        int val = generateString(N - 1, K / 2);
+        if (odd && val == 0 || !odd && val == 1) {
+            return 0;
+        } else {
+            return 1;
+        }
     }
 
     public static void main(String args[]) {
         KthSymbolinGrammar ksg = new KthSymbolinGrammar();
-        System.out.println(ksg.kthGrammar(4, 5));
+        System.out.println(ksg.kthGrammar(4, 3));
     }
 }
