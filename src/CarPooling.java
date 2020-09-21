@@ -1,19 +1,16 @@
 
-import java.util.Arrays;
-
 public class CarPooling {
 
     public boolean carPooling(int[][] trips, int capacity) {
-        Arrays.sort(trips, (a, b) -> Double.compare(a[1], b[1]));
-        for (int i = 0; i < trips.length; i++) {
-            int seatsreq = trips[i][0];
-            int start = trips[i][1];
-            for (int j = i - 1; j >= 0; j--) {
-                if (trips[j][2] > start) {
-                    seatsreq += trips[j][0];
-                }
-            }
-            if (seatsreq > capacity) {
+        int[] timestamp = new int[1001];
+        for (int[] trip : trips) {
+            timestamp[trip[1]] += trip[0];
+            timestamp[trip[2]] -= trip[0];
+        }
+        int capacityAtMoment = 0;
+        for (int i = 0; i < timestamp.length; i++) {
+            capacityAtMoment += timestamp[i];
+            if (capacityAtMoment > capacity) {
                 return false;
             }
         }
