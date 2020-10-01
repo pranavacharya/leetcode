@@ -1,36 +1,25 @@
 
-import java.util.TreeMap;
+import java.util.ArrayDeque;
+import java.util.Deque;
 
 public class NumberofRecentCalls {
 
-    private TreeMap<Integer, Integer> map;
-    private int lastKey;
+    private Deque<Integer> deque;
 
     public NumberofRecentCalls() {
-        this.map = new TreeMap();
-        this.lastKey = -1;
+        this.deque = new ArrayDeque();
     }
 
     public int ping(int t) {
-        if (this.lastKey == -1) {
-            map.put(t, 1);
-            this.lastKey = t;
-            return 1;
+        this.deque.addLast(t);
+        while (!this.deque.isEmpty()) {
+            if (this.deque.peekFirst() < t - 3000) {
+                this.deque.removeFirst();
+            } else {
+                break;
+            }
         }
-        int begin = t - 3000;
-        Integer key = this.map.ceilingKey(begin);
-        int minus = 0;
-        if (key != null) {
-            minus = this.map.get(key) - 1;
-            int total = this.map.get(this.lastKey);
-            this.map.put(t, total + 1);
-            this.lastKey = t;
-            return total + 1 - minus;
-        } else {
-            this.lastKey = t;
-            this.map.put(t, 1);
-            return 1;
-        }
+        return this.deque.size();
     }
 
     public static void main(String args[]) {
