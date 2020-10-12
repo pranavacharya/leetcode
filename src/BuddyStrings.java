@@ -20,7 +20,7 @@ public class BuddyStrings {
             }
         }
         int count = 2;
-        int same = 1;
+        int same = 0;
         for (int i = 0; i < A.length(); i++) {
             if (A.charAt(i) != B.charAt(i)) {
                 count--;
@@ -37,7 +37,7 @@ public class BuddyStrings {
         if (count == 0) {
             return true;
         } else {
-            if (same > 1) {
+            if (same > 0) {
                 return true;
             } else {
                 return false;
