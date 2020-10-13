@@ -2,12 +2,12 @@
 public class ConvertBinaryNumberinaLinkedListtoInteger {
 
     public int getDecimalValue(ListNode head) {
-        StringBuilder sb = new StringBuilder();
-        while (head != null) {
-            sb.append(head.val);
+        int ans = head.val;
+        while (head.next != null) {
+            ans = ans * 2 + head.next.val;
             head = head.next;
         }
-        return Integer.parseInt(sb.toString(), 2);
+        return ans;
     }
 
     public static void main(String args[]) {
