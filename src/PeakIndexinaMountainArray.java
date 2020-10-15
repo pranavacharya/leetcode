@@ -2,18 +2,17 @@
 public class PeakIndexinaMountainArray {
 
     public int peakIndexInMountainArray(int[] arr) {
-        if (arr.length == 0) {
-            return 0;
-        }
-        int maxIndex = 0;
-        int max = arr[0];
-        for (int i = 1; i < arr.length; i++) {
-            if (arr[i] > max) {
-                maxIndex = i;
-                max = arr[i];
+        int low = 0;
+        int high = arr.length - 1;
+        while (low < high) {
+            int mid = low + (high - low) / 2;
+            if (arr[mid] < arr[mid + 1]) {
+                low = mid + 1;
+            } else {
+                high = mid;
             }
         }
-        return maxIndex;
+        return low;
     }
 
     public static void main(String args[]) {
