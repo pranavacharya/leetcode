@@ -6,44 +6,48 @@ import java.util.Stack;
 public class AsteroidCollision {
 
     public int[] asteroidCollision(int[] asteroids) {
-        ArrayList<Integer> list = new ArrayList<>();
-        Stack<Integer> stack = new Stack<>();
+        ArrayList<Integer> list = new ArrayList();
+        Stack<Integer> stack = new Stack();
         for (int i = 0; i < asteroids.length; i++) {
             if (stack.isEmpty()) {
-                stack.add(asteroids[i]);
-                continue;
-            }
-            if (asteroids[i] < 0 && stack.peek() > 0) {
-                boolean status = false;
-                while (!stack.isEmpty() && stack.peek() > 0 && (stack.peek() <= Math.abs(asteroids[i]))) {
-                    int lastrem = stack.pop();
-                    status = lastrem == Math.abs(asteroids[i]);
-                    if (status) {
-                        break;
+                stack.push(asteroids[i]);
+            } else {
+                int current = asteroids[i];
+                if (current < 0 && stack.peek() < 0 || current > 0 && stack.peek() > 0
+                        || current > 0 && stack.peek() < 0) {
+                    stack.add(current);
+                } else {
+                    boolean destroyed = false;
+                    while (!stack.isEmpty() && current < 0 && stack.peek() > 0) {
+                        if (Math.abs(current) >= Math.abs(stack.peek())) {
+                            int last = stack.pop();
+                            if (Math.abs(last) == Math.abs(current)) {
+                                destroyed = true;
+                                break;
+                            }
+                        } else {
+                            destroyed = true;
+                            break;
+                        }
+                    }
+                    if (!destroyed) {
+                        stack.add(current);
                     }
                 }
-                if ((stack.isEmpty() && !status) || (!stack.isEmpty() && stack.peek() < 0 && !status)) {
-                    stack.push(asteroids[i]);
-                }
-            } else {
-                stack.push(asteroids[i]);
             }
         }
-        while (!stack.isEmpty()) {
-            list.add(stack.pop());
+        list.addAll(stack);
+        int[] ans = new int[list.size()];
+        for (int i = 0; i < ans.length; i++) {
+            ans[i] = list.get(i);
         }
-        int[] res = new int[list.size()];
-        int index = list.size() - 1;
-        for (int i : list) {
-            res[index] = i;
-            index--;
-        }
-        return res;
+        return ans;
     }
 
     public static void main(String args[]) {
         AsteroidCollision ac = new AsteroidCollision();
-        int[] asteroids = new int[]{-2, -1, 1, -1};
+//        int[] asteroids = new int[]{-2, -2, 1, -2};
+        int[] asteroids = new int[]{10, 2, -5};
         System.out.println(Arrays.toString(ac.asteroidCollision(asteroids)));
     }
 }
