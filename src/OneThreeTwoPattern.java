@@ -2,14 +2,12 @@
 public class OneThreeTwoPattern {
 
     public boolean find132pattern(int[] nums) {
+        int min = Integer.MAX_VALUE;
         for (int i = 0; i < nums.length; i++) {
+            min = Math.min(nums[i], min);
             for (int j = i + 1; j < nums.length; j++) {
-                if (nums[i] < nums[j]) {
-                    for (int k = j + 1; k < nums.length; k++) {
-                        if (nums[k] < nums[j] && nums[i] < nums[k]) {
-                            return true;
-                        }
-                    }
+                if (nums[j] > min && nums[i] > nums[j]) {
+                    return true;
                 }
             }
         }
