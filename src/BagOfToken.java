@@ -7,36 +7,26 @@ public class BagOfToken {
         if (tokens.length == 0) {
             return 0;
         }
-        int max = 0;
-        int points = 0;
+        int maxScore = 0;
+        int score = 0;
         Arrays.sort(tokens);
         int i = 0;
         int j = tokens.length - 1;
-        main:
-        while (true) {
-            boolean status = true;
-            while (P < tokens[i] && points > 0) {
-                points--;
-                P += tokens[j--];
-                if (j < i) {
-                    break main;
-                }
-                status = false;
-            }
-            while (tokens[i] <= P) {
-                P -= tokens[i++];
-                points++;
-                max = Math.max(max, points);
-                if (j < i) {
-                    break main;
-                }
-                status = false;
-            }
-            if (status) {
+        while (i <= j) {
+            if (tokens[i] <= P) {
+                P -= tokens[i];
+                score++;
+                i++;
+            } else if (score > 0) {
+                P += tokens[j];
+                score--;
+                j--;
+            } else {
                 break;
             }
+            maxScore = Math.max(maxScore, score);
         }
-        return max;
+        return maxScore;
     }
 
     public static void main(String args[]) {
