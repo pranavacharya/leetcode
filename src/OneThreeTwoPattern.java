@@ -1,12 +1,32 @@
 
+import java.util.Stack;
+
 public class OneThreeTwoPattern {
 
     public boolean find132pattern(int[] nums) {
-        int min = Integer.MAX_VALUE;
-        for (int i = 0; i < nums.length; i++) {
-            min = Math.min(nums[i], min);
-            for (int j = i + 1; j < nums.length; j++) {
-                if (nums[j] > min && nums[i] > nums[j]) {
+        if (nums.length < 3) {
+            return false;
+        }
+        int[] min = new int[nums.length];
+        min[0] = nums[0];
+        for (int i = 1; i < min.length; i++) {
+            min[i] = Math.min(nums[i], min[i - 1]);
+        }
+        Stack<Integer> stack = new Stack();
+        for (int i = nums.length - 1; i >= 0; i--) {
+            if (nums[i] == min[i]) {
+                continue;
+            } else if (stack.isEmpty()) {
+                stack.push(nums[i]);
+            } else if (stack.peek() > nums[i]) {
+                stack.push(nums[i]);
+            } else if (nums[i] > stack.peek()) {
+                while (!stack.isEmpty() && stack.peek() <= min[i]) {
+                    stack.pop();
+                }
+                if (stack.isEmpty()) {
+                    stack.push(nums[i]);
+                } else {
                     return true;
                 }
             }
