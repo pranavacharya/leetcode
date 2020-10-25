@@ -3,24 +3,13 @@ public class StoneGameIV {
 
     public boolean winnerSquareGame(int n) {
         boolean[] dp = new boolean[n + 1];
-        dp[0] = false;
-        dp[1] = true;
-        for (int i = 2; i < dp.length; i++) {
-            boolean flag = true;
-            for (int j = 1; j < 100000; j++) {
+        for (int i = 0; i < dp.length; i++) {
+            for (int j = 1; j * j <= i; j++) {
                 int val = j * j;
-                if (i - val < 0) {
+                if (!dp[i - val]) {
+                    dp[i] = true;
                     break;
-                } else {
-                    if (!dp[i - val]) {
-                        flag = false;
-                        dp[i] = true;
-                        break;
-                    }
                 }
-            }
-            if (flag) {
-                dp[i] = false;
             }
         }
         return dp[dp.length - 1];
