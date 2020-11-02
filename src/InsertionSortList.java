@@ -5,33 +5,24 @@ public class InsertionSortList {
         if (head == null) {
             return null;
         }
-        ListNode root = new ListNode(head.val);
-        head = head.next;
+        ListNode root = new ListNode();
         while (head != null) {
-            int val = head.val;
-            ListNode temp = root;
-            while (temp.next != null && temp.next.val < val) {
-                temp = temp.next;
-            }
-            if (temp.next == null || temp.val > val) {
-                if (temp.val > val) {
-                    ListNode node = new ListNode(val);
-                    node.next = temp;
-                    if (temp == root) {
-                        root = node;
-                    }
-                } else {
-                    temp.next = new ListNode(val);
+            ListNode temp = head.next;
+            ListNode prev = root;
+            ListNode next = root.next;
+            while (next != null) {
+                if (next.val > head.val) {
+                    break;
                 }
-            } else {
-                ListNode node = new ListNode(val);
-                node.next = temp.next;
-                temp.next = node;
+                prev = next;
+                next = next.next;
             }
-            head = head.next;
-        }
 
-        return root;
+            head.next = next;
+            prev.next = head;
+            head = temp;
+        }
+        return root.next;
     }
 
     public static void main(String args[]) {
