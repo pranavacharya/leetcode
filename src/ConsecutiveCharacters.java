@@ -2,19 +2,17 @@
 public class ConsecutiveCharacters {
 
     public int maxPower(String s) {
-        char[] arr = s.toCharArray();
-        int count = 0;
-        int i = 0;
-        int j = 0;
-        while (j < arr.length) {
-            j = i;
-            while (j < arr.length && arr[i] == arr[j]) {
-                j++;
+        int max = 1;
+        int count = 1;
+        for (int i = 1; i < s.length(); i++) {
+            if (s.charAt(i) == s.charAt(i - 1)) {
+                count++;
+            } else {
+                count = 1;
             }
-            count = Math.max(count, j - i);
-            i++;
+            max = Math.max(max, count);
         }
-        return count;
+        return max;
     }
 
     public static void main(String args[]) {
