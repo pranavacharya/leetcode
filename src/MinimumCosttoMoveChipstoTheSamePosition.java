@@ -1,27 +1,17 @@
 
-import java.util.HashMap;
-
 public class MinimumCosttoMoveChipstoTheSamePosition {
 
     public int minCostToMoveChips(int[] position) {
-        HashMap<Integer, Integer> freq = new HashMap();
+        int odd = 0;
+        int even = 0;
         for (int i = 0; i < position.length; i++) {
-            freq.put(position[i], freq.getOrDefault(position[i], 0) + 1);
-        }
-        int minCost = Integer.MAX_VALUE;
-        for (int i : freq.keySet()) {
-            int cost = 0;
-            for (int j : freq.keySet()) {
-                if (i == j) {
-                    continue;
-                }
-                if (i % 2 != j % 2) {
-                    cost += freq.get(j);
-                }
+            if (position[i] % 2 == 0) {
+                even++;
+            } else {
+                odd++;
             }
-            minCost = Math.min(minCost, cost);
         }
-        return minCost;
+        return Math.min(odd, even);
     }
 
     public static void main(String args[]) {
