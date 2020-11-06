@@ -2,20 +2,25 @@
 public class FindtheSmallestDivisorGivenaThreshold {
 
     public int smallestDivisor(int[] nums, int threshold) {
-        for (int i = 1; i < 1000000; i++) {
+        int low = 1;
+        int high = 1000000;
+        while (low < high) {
+            int mid = low + (high - low) / 2;
             int result = 0;
-            for (int j = 0; j < nums.length; j++) {
-                if (nums[j] % i == 0) {
-                    result += nums[j] / i;
+            for (int i = 0; i < nums.length; i++) {
+                if (nums[i] % mid == 0) {
+                    result += nums[i] / mid;
                 } else {
-                    result += (nums[j] / i + 1);
+                    result += (nums[i] / mid + 1);
                 }
             }
-            if (result <= threshold) {
-                return i;
+            if (result > threshold) {
+                low = mid + 1;
+            } else {
+                high = mid;
             }
         }
-        return 0;
+        return low;
     }
 
     public static void main(String args[]) {
