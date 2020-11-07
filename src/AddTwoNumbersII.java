@@ -2,27 +2,66 @@
 public class AddTwoNumbersII {
 
     public ListNode addTwoNumbers(ListNode l1, ListNode l2) {
-        long first = 0;
-        while (l1 != null) {
-            first = first * 10 + l1.val;
-            l1 = l1.next;
-        }
-        long second = 0;
-        while (l2 != null) {
-            second = second * 10 + l2.val;
-            l2 = l2.next;
-        }
-        long ans = first + second;
-        if (ans == 0) {
-            return new ListNode(0);
-        }
+        ListNode l1r = reverseLinkedList(l1);
+        ListNode l2r = reverseLinkedList(l2);
         ListNode result = null;
-        while (ans > 0) {
-            long digit = ans % 10;
-            ListNode node = new ListNode((int) digit);
+        int carry = 0;
+        while (l1r != null && l2r != null) {
+            int l1val = l1r.val;
+            int l2val = l2r.val;
+            int ans = l1val + l2val + carry;
+            carry = 0;
+            if (ans > 9) {
+                carry = 1;
+            }
+            ans = ans % 10;
+            ListNode node = new ListNode(ans);
             node.next = result;
             result = node;
-            ans /= 10;
+            l1r = l1r.next;
+            l2r = l2r.next;
+        }
+        while (l1r != null) {
+            int l1val = l1r.val;
+            int ans = l1val + carry;
+            carry = 0;
+            if (ans > 9) {
+                carry = 1;
+            }
+            ans = ans % 10;
+            ListNode node = new ListNode(ans);
+            node.next = result;
+            result = node;
+            l1r = l1r.next;
+        }
+        while (l2r != null) {
+            int l2val = l2r.val;
+            int ans = l2val + carry;
+            carry = 0;
+            if (ans > 9) {
+                carry = 1;
+            }
+            ans = ans % 10;
+            ListNode node = new ListNode(ans);
+            node.next = result;
+            result = node;
+            l2r = l2r.next;
+        }
+        if (carry != 0) {
+            ListNode node = new ListNode(1);
+            node.next = result;
+            result = node;
+        }
+        return result;
+    }
+
+    private ListNode reverseLinkedList(ListNode head) {
+        ListNode result = null;
+        while (head != null) {
+            ListNode node = new ListNode(head.val);
+            node.next = result;
+            result = node;
+            head = head.next;
         }
         return result;
     }
