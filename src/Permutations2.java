@@ -5,25 +5,27 @@ import java.util.List;
 public class Permutations2 {
 
     public List<List<Integer>> permuteUnique(int[] nums) {
-        List<List<Integer>> result = new ArrayList<>();
-        permulations(nums, result, 0, new ArrayList<>(), new boolean[nums.length]);
+        List<List<Integer>> result = new ArrayList();
+        permute(result, nums, new ArrayList(), new boolean[nums.length]);
         return result;
     }
 
-    public void permulations(int[] nums, List<List<Integer>> result, int index, ArrayList<Integer> path, boolean[] used) {
-        if (path.size() == nums.length && !result.contains(path)) {
-            result.add(new ArrayList(path));
-        } else {
-            for (int i = 0; i < nums.length; i++) {
-                if (used[i]) {
-                    continue;
-                }
-                path.add(nums[i]);
-                used[i] = true;
-                permulations(nums, result, index + 1, path, used);
-                used[i] = false;
-                path.remove(path.size() - 1);
+    private void permute(List<List<Integer>> result, int[] nums, List<Integer> path, boolean[] visited) {
+        if (path.size() == nums.length) {
+            if (!result.contains(path)) {
+                result.add(new ArrayList(path));
             }
+            return;
+        }
+        for (int i = 0; i < nums.length; i++) {
+            if (visited[i]) {
+                continue;
+            }
+            path.add(nums[i]);
+            visited[i] = true;
+            permute(result, nums, path, visited);
+            path.remove(path.size() - 1);
+            visited[i] = false;
         }
     }
 
