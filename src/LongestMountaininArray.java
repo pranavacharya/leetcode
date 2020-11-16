@@ -4,28 +4,23 @@ public class LongestMountaininArray {
     public int longestMountain(int[] A) {
         int max = 0;
         for (int i = 1; i < A.length - 1; i++) {
-            if (A[i] > A[i - 1] && A[i] > A[i + 1]) {
-                max = Math.max(max, calculateWidth(A, i));
-            }
+            max = Math.max(max, expandFromCenter(i, A));
         }
         return max;
     }
 
-    private int calculateWidth(int[] A, int index) {
-        int width = 1;
-        for (int i = index - 1; i >= 0; i--) {
-            if (A[i] >= A[i + 1]) {
-                break;
-            }
-            width++;
+    private int expandFromCenter(int index, int[] A) {
+        int i = index, j = index;
+        while (i - 1 >= 0 && A[i] > A[i - 1]) {
+            i--;
         }
-        for (int i = index + 1; i < A.length; i++) {
-            if (A[i] >= A[i - 1]) {
-                break;
-            }
-            width++;
+        while (j + 1 < A.length && A[j] > A[j + 1]) {
+            j++;
         }
-        return width;
+        if (i == index || j == index) {
+            return 0;
+        }
+        return i != j ? j - i + 1 : 0;
     }
 
     public static void main(String args[]) {
