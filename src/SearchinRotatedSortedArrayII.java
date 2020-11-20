@@ -2,34 +2,27 @@
 public class SearchinRotatedSortedArrayII {
 
     public boolean search(int[] nums, int target) {
-        if (nums.length == 0) {
-            return false;
-        }
-        int pivot = findPivot(nums);
-        if (target == nums[pivot]) {
-            return true;
-        }
-        return binarySearch(nums, target, pivot, nums.length - 1) || binarySearch(nums, target, 0, pivot - 1);
-    }
-
-    private int findPivot(int[] nums) {
-        for (int i = 1; i < nums.length; i++) {
-            if (nums[i] < nums[i - 1]) {
-                return i;
-            }
-        }
-        return nums.length - 1;
-    }
-
-    private boolean binarySearch(int[] nums, int target, int low, int high) {
+        int low = 0;
+        int high = nums.length - 1;
         while (low <= high) {
             int mid = low + (high - low) / 2;
-            if (target == nums[mid]) {
+            if (nums[mid] == target) {
                 return true;
-            } else if (target < nums[mid]) {
-                high = mid - 1;
+            }
+            if (nums[mid] < nums[high] || nums[mid] < nums[low]) {
+                if (target > nums[mid] && target <= nums[high]) {
+                    low = mid + 1;
+                } else {
+                    high = mid - 1;
+                }
+            } else if (nums[mid] > nums[low] || nums[mid] > nums[high]) {
+                if (target < nums[mid] && target >= nums[low]) {
+                    high = mid - 1;
+                } else {
+                    low = low + 1;
+                }
             } else {
-                low = mid + 1;
+                low++;
             }
         }
         return false;
