@@ -1,26 +1,27 @@
 
 public class NumbersAtMostNGivenDigitSet {
 
-    private int count = 0;
-
     public int atMostNGivenDigitSet(String[] digits, int n) {
-        int[] nums = new int[digits.length];
-        for (int i = 0; i < digits.length; i++) {
-            nums[i] = Integer.parseInt(digits[i]);
-        }
-        dfs(0, n, nums);
-        return this.count;
-    }
+        String nString = String.valueOf(n);
+        int nLength = nString.length();
+        int[] dp = new int[nLength + 1];
+        dp[nLength] = 1;
 
-    private void dfs(long path, long n, int[] digits) {
-        if (path <= n) {
-            if (path != 0) {
-                this.count++;
-            }
-            for (int i = 0; i < digits.length; i++) {
-                dfs(path * 10 + digits[i], n, digits);
+        for (int i = nLength - 1; i >= 0; --i) {
+            int Si = nString.charAt(i) - '0';
+            for (String digit : digits) {
+                if (Integer.valueOf(digit) < Si) {
+                    dp[i] += Math.pow(digits.length, nLength - i - 1);
+                } else if (Integer.valueOf(digit) == Si) {
+                    dp[i] += dp[i + 1];
+                }
             }
         }
+
+        for (int i = 1; i < nLength; ++i) {
+            dp[0] += Math.pow(digits.length, i);
+        }
+        return dp[0];
     }
 
     public static void main(String args[]) {
