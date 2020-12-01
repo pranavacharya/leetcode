@@ -1,19 +1,33 @@
 
-import java.util.ArrayList;
+import java.util.ArrayDeque;
 import java.util.Arrays;
+import java.util.Deque;
 
 public class SlidingWindowMaximum {
 
-    public int[] maxSlidingWindow(int[] nums, int k) {
-        ArrayList<Integer> list = new ArrayList();
-        for (int i = 0; i + k <= nums.length; i++) {
-            int max = Integer.MIN_VALUE;
-            for (int j = i; j < i + k; j++) {
-                max = Math.max(max, nums[j]);
-            }
-            list.add(max);
+    public int[] maxSlidingWindow(int[] a, int k) {
+        if (a == null || k <= 0) {
+            return new int[0];
         }
-        return list.stream().mapToInt(i -> i).toArray();
+        int n = a.length;
+        int[] r = new int[n - k + 1];
+        int ri = 0;
+        Deque<Integer> q = new ArrayDeque<>();
+        for (int i = 0; i < a.length; i++) {
+            while (!q.isEmpty() && q.peek() < i - k + 1) {
+                q.poll();
+            }
+
+            while (!q.isEmpty() && a[q.peekLast()] < a[i]) {
+                q.pollLast();
+            }
+
+            q.offer(i);
+            if (i >= k - 1) {
+                r[ri++] = a[q.peek()];
+            }
+        }
+        return r;
     }
 
     public static void main(String args[]) {
