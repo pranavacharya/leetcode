@@ -1,9 +1,6 @@
 
-import java.util.Random;
-
 public class LinkedListRandomNode {
 
-    private int length;
     private ListNode root;
 
     /**
@@ -12,28 +9,23 @@ public class LinkedListRandomNode {
      */
     public LinkedListRandomNode(ListNode head) {
         this.root = head;
-        this.length = 0;
-        while (head != null) {
-            this.length++;
-            head = head.next;
-        }
     }
 
     /**
      * Returns a random node's value.
      */
     public int getRandom() {
-        Random rand = new Random();
-        int number = rand.nextInt(this.length);
+        int scope = 1;
+        int chosenVal = 0;
         ListNode head = this.root;
         while (head != null) {
-            if (number == 0) {
-                return head.val;
+            if (Math.random() < 1.0 / scope) {
+                chosenVal = head.val;
             }
-            number--;
+            scope += 1;
             head = head.next;
         }
-        return head.val;
+        return chosenVal;
     }
 
     public static void main(String args[]) {
