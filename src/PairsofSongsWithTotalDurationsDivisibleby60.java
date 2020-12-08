@@ -2,13 +2,15 @@
 public class PairsofSongsWithTotalDurationsDivisibleby60 {
 
     public int numPairsDivisibleBy60(int[] time) {
+        int[] remainder = new int[60];
         int count = 0;
         for (int i = 0; i < time.length; i++) {
-            for (int j = i + 1; j < time.length; j++) {
-                if ((time[i] + time[j]) % 60 == 0) {
-                    count++;
-                }
+            if (time[i] % 60 == 0) {
+                count += remainder[0];
+            } else {
+                count += remainder[60 - time[i] % 60];
             }
+            remainder[time[i] % 60]++;
         }
         return count;
     }
