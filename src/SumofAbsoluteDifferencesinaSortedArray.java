@@ -4,19 +4,18 @@ import java.util.Arrays;
 public class SumofAbsoluteDifferencesinaSortedArray {
 
     public int[] getSumAbsoluteDifferences(int[] nums) {
-
-        int[] diff = new int[nums.length];
-        for (int i = 1; i < nums.length; i++) {
-            diff[i] = diff[i - 1] + nums[i] - nums[i - 1];
+        int n = nums.length;
+        int total = 0;
+        int[] suff = new int[n];
+        for (int i = 0; i < n; i++) {
+            total += nums[i];
+            suff[i] = total;
         }
 
-        int[] result = new int[nums.length];
-        for (int i = 0; i < nums.length; i++) {
-            int total = 0;
-            for (int j = 0; j < nums.length; j++) {
-                total += Math.abs(diff[i] - diff[j]);
-            }
-            result[i] = total;
+        int[] result = new int[n];
+        for (int i = 0; i < n; i++) {
+            int num = nums[i];
+            result[i] = total - 2 * suff[i] + num * (i + 1) - (n - i - 1) * num;
         }
         return result;
     }
