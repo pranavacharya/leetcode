@@ -1,16 +1,24 @@
 
+import java.util.ArrayDeque;
+import java.util.Deque;
+
 public class JumpGameVI {
 
     public int maxResult(int[] nums, int k) {
         int n = nums.length;
+        Deque<Integer> deque = new ArrayDeque();
         int[] dp = new int[n];
         dp[0] = nums[0];
+        deque.addLast(0);
         for (int i = 1; i < dp.length; i++) {
-            int max = Integer.MIN_VALUE;
-            for (int j = i - 1, c = k; j >= 0 && c > 0; j--, c--) {
-                max = Math.max(max, nums[i] + dp[j]);
+            while (!deque.isEmpty() && deque.peekFirst() < i - k) {
+                deque.removeFirst();
             }
-            dp[i] = max;
+            dp[i] = nums[i] + dp[deque.peekFirst()];
+            while (!deque.isEmpty() && dp[deque.peekLast()] < dp[i]) {
+                deque.pollLast();
+            }
+            deque.addLast(i);
         }
         return dp[n - 1];
     }
