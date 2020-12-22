@@ -1,43 +1,50 @@
 
+import java.util.LinkedList;
+import java.util.Queue;
+
 public class CousinsinBinaryTree {
 
-    private Integer parent;
-    private int depth;
-
-    public CousinsinBinaryTree() {
-        this.parent = null;
-        this.depth = 0;
-    }
-
     public boolean isCousins(TreeNode root, int x, int y) {
-        int parentx, parenty;
-        int depthx, depthy;
-        findDepthAndParent(root, x, null, 0);
-        parentx = this.parent;
-        depthx = this.depth;
-        findDepthAndParent(root, y, null, 0);
-        parenty = this.parent;
-        depthy = this.depth;
-        return ((depthx == depthy) && (parentx != parenty));
-    }
+        if (root == null) {
+            return false;
+        }
+        Queue<TreeNode> queue = new LinkedList();
+        queue.add(root);
+        while (!queue.isEmpty()) {
+            int size = queue.size();
+            boolean xFound = false;
+            boolean yFound = false;
+            while (size > 0) {
+                TreeNode curr = queue.poll();
+                if (curr.val == x) {
+                    xFound = true;
+                }
+                if (curr.val == y) {
+                    yFound = true;
+                }
 
-    public void findDepthAndParent(TreeNode root, int key, Integer parent, int depth) {
-        if (root.val == key) {
-            this.depth = depth;
-            if (parent == null) {
-                this.parent = 0;
-            } else {
-                this.parent = parent;
-            }
+                if (curr.left != null) {
+                    queue.add(curr.left);
+                }
 
-        } else {
-            if (root.left != null) {
-                findDepthAndParent(root.left, key, root.val, depth + 1);
+                if (curr.right != null) {
+                    queue.add(curr.right);
+                }
+
+                if (curr.left != null && curr.right != null) {
+                    if ((curr.left.val == x && curr.right.val == y) || (curr.left.val == y && curr.right.val == x)) {
+                        return false;
+                    }
+                }
+                size--;
             }
-            if (root.right != null) {
-                findDepthAndParent(root.right, key, root.val, depth + 1);
+            if (xFound && yFound) {
+                return true;
+            } else if ((xFound && !yFound) || (!xFound && yFound)) {
+                return false;
             }
         }
+        return false;
     }
 
     public static void main(String args[]) {
