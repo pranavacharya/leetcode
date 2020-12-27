@@ -9,6 +9,7 @@ public class JumpGameIV {
 
     public int minJumps(int[] arr) {
         HashMap<Integer, ArrayList<Integer>> adj = new HashMap();
+        HashMap<Integer, ArrayList<Integer>> map = new HashMap();
         for (int i = 0; i < arr.length; i++) {
             adj.put(i, new ArrayList());
         }
@@ -19,9 +20,18 @@ public class JumpGameIV {
             if (i - 1 >= 0) {
                 adj.get(i).add(i - 1);
             }
-            for (int j = 0; j < arr.length; j++) {
-                if (i != j && arr[i] == arr[j]) {
-                    adj.get(i).add(j);
+            ArrayList<Integer> list = map.getOrDefault(arr[i], new ArrayList());
+            list.add(i);
+            map.put(arr[i], list);
+        }
+
+        for (int key : map.keySet()) {
+            ArrayList<Integer> list = map.get(key);
+            for (int i = 0; i < list.size(); i++) {
+                for (int j = 0; j < list.size(); j++) {
+                    if (i != j) {
+                        adj.get(list.get(i)).add(list.get(j));
+                    }
                 }
             }
         }
