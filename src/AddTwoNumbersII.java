@@ -2,68 +2,72 @@
 public class AddTwoNumbersII {
 
     public ListNode addTwoNumbers(ListNode l1, ListNode l2) {
-        ListNode l1r = reverseLinkedList(l1);
-        ListNode l2r = reverseLinkedList(l2);
-        ListNode result = null;
+
+        int sizel1 = 0;
+        ListNode temp = l1;
+        while (temp != null) {
+            temp = temp.next;
+            sizel1++;
+        }
+
+        int sizel2 = 0;
+        temp = l2;
+        while (temp != null) {
+            temp = temp.next;
+            sizel2++;
+        }
+
+        int size = Math.max(sizel1, sizel2);
         int carry = 0;
-        while (l1r != null && l2r != null) {
-            int l1val = l1r.val;
-            int l2val = l2r.val;
-            int ans = l1val + l2val + carry;
-            carry = 0;
-            if (ans > 9) {
+
+        ListNode ans = null;
+
+        while (size > 0) {
+
+            int sum = 0;
+
+            sum += findNthNode(l1, sizel1);
+
+            sum += findNthNode(l2, sizel2);
+
+            sum += carry;
+
+            if (sum > 9) {
                 carry = 1;
+            } else {
+                carry = 0;
             }
-            ans = ans % 10;
-            ListNode node = new ListNode(ans);
-            node.next = result;
-            result = node;
-            l1r = l1r.next;
-            l2r = l2r.next;
+
+            // System.out.println(sum);
+            ListNode node = new ListNode(sum % 10);
+
+            node.next = ans;
+            ans = node;
+
+            size--;
+            sizel1--;
+            sizel2--;
         }
-        while (l1r != null) {
-            int l1val = l1r.val;
-            int ans = l1val + carry;
-            carry = 0;
-            if (ans > 9) {
-                carry = 1;
-            }
-            ans = ans % 10;
-            ListNode node = new ListNode(ans);
-            node.next = result;
-            result = node;
-            l1r = l1r.next;
-        }
-        while (l2r != null) {
-            int l2val = l2r.val;
-            int ans = l2val + carry;
-            carry = 0;
-            if (ans > 9) {
-                carry = 1;
-            }
-            ans = ans % 10;
-            ListNode node = new ListNode(ans);
-            node.next = result;
-            result = node;
-            l2r = l2r.next;
-        }
+
         if (carry != 0) {
             ListNode node = new ListNode(1);
-            node.next = result;
-            result = node;
+            node.next = ans;
+            ans = node;
         }
-        return result;
+
+        return ans;
     }
 
-    private ListNode reverseLinkedList(ListNode head) {
-        ListNode result = null;
-        while (head != null) {
-            ListNode node = new ListNode(head.val);
-            node.next = result;
-            result = node;
-            head = head.next;
+    private int findNthNode(ListNode l, int n) {
+        int count = 1;
+        while (l != null && count != n) {
+            l = l.next;
+            count++;
         }
-        return result;
+        if (l != null) {
+            return l.val;
+        }
+        return 0;
     }
 
     public static void main(String args[]) {
