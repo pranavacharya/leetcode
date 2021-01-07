@@ -4,44 +4,47 @@ import java.util.Queue;
 
 public class RottingOranges {
 
-    private int[][] dirs = new int[][]{{1, 0}, {-1, 0}, {0, 1}, {0, -1}};
+    private int[][] dirs = new int[][]{{0, 1}, {0, -1}, {1, 0}, {-1, 0}};
 
     public int orangesRotting(int[][] grid) {
+        int m = grid.length;
+        int n = grid[0].length;
+
         Queue<int[]> queue = new LinkedList();
-        int total = 0;
-        for (int i = 0; i < grid.length; i++) {
-            for (int j = 0; j < grid[i].length; j++) {
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
                 if (grid[i][j] == 2) {
                     queue.add(new int[]{i, j});
-                } else if (grid[i][j] == 1) {
-                    total++;
                 }
             }
         }
-        if (total == 0) {
-            return 0;
-        }
-        int min = 0;
+        int seconds = 0;
         while (!queue.isEmpty()) {
             int size = queue.size();
-            min++;
             while (size > 0) {
-                int[] point = queue.poll();
-                int x = point[0];
-                int y = point[1];
+                int[] curr = queue.poll();
                 for (int[] dir : dirs) {
-                    if (x + dir[0] >= 0 && x + dir[0] < grid.length
-                            && y + dir[1] >= 0 && y + dir[1] < grid[x + dir[0]].length
-                            && grid[x + dir[0]][y + dir[1]] == 1) {
-                        grid[x + dir[0]][y + dir[1]] = 2;
-                        queue.add(new int[]{x + dir[0], y + dir[1]});
-                        total--;
+                    if (curr[0] + dir[0] < m && curr[0] + dir[0] >= 0
+                            && curr[1] + dir[1] < n && curr[1] + dir[1] >= 0
+                            && grid[curr[0] + dir[0]][curr[1] + dir[1]] == 1) {
+                        queue.add(new int[]{curr[0] + dir[0], curr[1] + dir[1]});
+                        grid[curr[0] + dir[0]][curr[1] + dir[1]] = 2;
                     }
                 }
                 size--;
             }
+            seconds++;
         }
-        return total == 0 ? min - 1 : -1;
+
+        for (int i = 0; i < grid.length; i++) {
+            for (int j = 0; j < grid[i].length; j++) {
+                if (grid[i][j] == 1) {
+                    return -1;
+                }
+            }
+        }
+
+        return seconds > 0 ? seconds - 1 : 0;
     }
 
     public static void main(String args[]) {
