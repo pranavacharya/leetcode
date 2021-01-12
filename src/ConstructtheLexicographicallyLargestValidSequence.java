@@ -4,66 +4,46 @@ import java.util.HashSet;
 
 public class ConstructtheLexicographicallyLargestValidSequence {
 
-    private int[] res;
-
     public int[] constructDistancedSequence(int n) {
         int[] ans = new int[2 * n - 1];
-        this.res = new int[2 * n - 1];
-        backtrack(ans, n, new HashSet());
-        return this.res;
+        backtrack(ans, n, 0, new HashSet());
+        return ans;
     }
 
-    private void backtrack(int[] ans, int n, HashSet<Integer> visited) {
-        if (visited.size() == n) {
-            if (isGreater(this.res, ans)) {
-                for (int i = 0; i < ans.length; i++) {
-                    this.res[i] = ans[i];
-                }
-            }
+    private boolean backtrack(int[] ans, int n, int index, HashSet<Integer> visited) {
+        if (index == ans.length) {
+            return true;
         }
-
-        for (int i = 1; i <= n; i++) {
+        if (ans[index] != 0) {
+            return backtrack(ans, n, index + 1, visited);
+        }
+        for (int i = n; i >= 1; i--) {
             if (visited.contains(i)) {
                 continue;
             }
-            for (int j = 0; j < ans.length; j++) {
-                if (ans[j] != 0) {
-                    continue;
+            if (i == 1) {
+                if (ans[index] == 0) {
+                    ans[index] = i;
+                    visited.add(i);
+                    if (backtrack(ans, n, index + 1, visited)) {
+                        return true;
+                    }
+                    ans[index] = 0;
+                    visited.remove(i);
                 }
-                if (i == 1) {
-                    if (ans[j] == 0) {
-                        ans[j] = i;
+            } else {
+                if (index + i < ans.length) {
+                    if (ans[index] == 0 && ans[index + i] == 0) {
+                        ans[index] = i;
+                        ans[index + i] = i;
                         visited.add(i);
-                        backtrack(ans, n, visited);
-                        ans[j] = 0;
+                        if (backtrack(ans, n, index + 1, visited)) {
+                            return true;
+                        }
+                        ans[index] = 0;
+                        ans[index + i] = 0;
                         visited.remove(i);
                     }
-                } else {
-                    if (j + i < ans.length) {
-                        if (ans[j] == 0 && ans[j + i] == 0) {
-                            ans[j] = i;
-                            ans[j + i] = i;
-                            visited.add(i);
-                            backtrack(ans, n, visited);
-                            ans[j] = 0;
-                            ans[j + i] = 0;
-                            visited.remove(i);
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    private boolean isGreater(int[] arr1, int[] arr2) {
-        for (int i = 0; i < arr1.length; i++) {
-            if (arr1[i] == arr2[i]) {
-                continue;
-            } else {
-                if (arr1[i] > arr2[i]) {
-                    return false;
-                } else {
-                    return true;
                 }
             }
         }
