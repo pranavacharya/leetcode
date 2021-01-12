@@ -15,10 +15,11 @@ public class ConstructtheLexicographicallyLargestValidSequence {
 
     private void backtrack(int[] ans, int n, HashSet<Integer> visited) {
         if (visited.size() == n) {
-            for (int i = 0; i < this.res.length; i++) {
-                res[i] = ans[i];
+            if (isGreater(this.res, ans)) {
+                for (int i = 0; i < ans.length; i++) {
+                    this.res[i] = ans[i];
+                }
             }
-            return;
         }
 
         for (int i = 1; i <= n; i++) {
@@ -54,8 +55,23 @@ public class ConstructtheLexicographicallyLargestValidSequence {
         }
     }
 
+    private boolean isGreater(int[] arr1, int[] arr2) {
+        for (int i = 0; i < arr1.length; i++) {
+            if (arr1[i] == arr2[i]) {
+                continue;
+            } else {
+                if (arr1[i] > arr2[i]) {
+                    return false;
+                } else {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
     public static void main(String args[]) {
         ConstructtheLexicographicallyLargestValidSequence cllvs = new ConstructtheLexicographicallyLargestValidSequence();
-        System.out.println(Arrays.toString(cllvs.constructDistancedSequence(5)));
+        System.out.println(Arrays.toString(cllvs.constructDistancedSequence(7)));
     }
 }
