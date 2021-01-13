@@ -2,24 +2,20 @@
 public class TwoKeysKeyboard {
 
     public int minSteps(int n) {
-        if (n == 0) {
+        if (n == 1) {
             return 0;
+        }
+        if (n == 2) {
+            return 2;
         }
         int[] dp = new int[n + 1];
         dp[1] = 0;
-        for (int i = 2; i <= n; i++) {
-            if (i % 2 == 0) {
-                dp[i] = dp[i / 2] + 2;
-            } else {
-                boolean prime = true;
-                for (int j = 2; j < i; j++) {
-                    if (i % j == 0) {
-                        dp[i] = dp[j] + (i / j);
-                        prime = false;
-                    }
-                }
-                if (prime) {
-                    dp[i] = i;
+        dp[2] = 2;
+        for (int i = 3; i < dp.length; i++) {
+            dp[i] = i;
+            for (int j = 1; j <= i; j++) {
+                if (i % j == 0) {
+                    dp[i] = Math.min(dp[i], dp[j] + i / j);
                 }
             }
         }
