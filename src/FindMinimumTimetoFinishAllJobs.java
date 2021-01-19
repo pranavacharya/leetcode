@@ -1,5 +1,6 @@
 
 import java.util.Arrays;
+import java.util.HashSet;
 
 public class FindMinimumTimetoFinishAllJobs {
 
@@ -22,10 +23,15 @@ public class FindMinimumTimetoFinishAllJobs {
             this.minTime = Math.min(this.minTime, findMax(workers));
             return;
         }
+        HashSet<Integer> visited = new HashSet();
         for (int j = 0; j < workers.length; j++) {
             if (workers[j] + jobs[i] > this.minTime) {
                 continue;
             }
+            if (visited.contains(workers[j])) {
+                continue;
+            }
+            visited.add(workers[j]);
             workers[j] += jobs[i];
             backtracking(jobs, i + 1, workers);
             workers[j] -= jobs[i];
