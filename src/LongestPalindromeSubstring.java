@@ -2,47 +2,30 @@
 public class LongestPalindromeSubstring {
 
     public String longestPalindrome(String s) {
-        String max = "";
-        for (int i = 0; i <= s.length(); i++) {
-            String temp, temp1, temp2;
-            temp1 = moveFromCenter(s, i);
-            temp2 = moveFromCenter2(s, i);
-            temp = temp1.length() > temp2.length() ? temp1 : temp2;
-            max = max.length() > temp.length() ? max : temp;
+        String longest = "";
+        for (int i = 0; i < s.length(); i++) {
+            String pal = expandFromCenter(i, i, s);
+            if (pal.length() > longest.length()) {
+                longest = pal;
+            }
+            String pal2 = expandFromCenter(i, i + 1, s);
+            if (pal2.length() > longest.length()) {
+                longest = pal2;
+            }
         }
-        return max;
+        return longest;
     }
 
-    public String moveFromCenter(String ip, int k) {
-        String ans = "";
-        int left = k;
-        int right = k;
-        while (left >= 0 && right < ip.length()) {
-            if (ip.charAt(left) == ip.charAt(right)) {
-                ans = ip.substring(left, right + 1);
+    private String expandFromCenter(int left, int right, String s) {
+        while (left >= 0 && right < s.length()) {
+            if (s.charAt(left) == s.charAt(right)) {
                 left--;
                 right++;
             } else {
                 break;
             }
         }
-        return ans;
-    }
-
-    public String moveFromCenter2(String ip, int k) {
-        String ans = "";
-        int left = k;
-        int right = k + 1;
-        while (left >= 0 && right < ip.length()) {
-            if (ip.charAt(left) == ip.charAt(right)) {
-                ans = ip.substring(left, right + 1);
-                left--;
-                right++;
-            } else {
-                break;
-            }
-        }
-        return ans;
+        return s.substring(left + 1, right);
     }
 
     public static void main(String args[]) {
