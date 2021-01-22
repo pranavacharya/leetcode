@@ -1,4 +1,6 @@
 
+import java.util.Stack;
+
 public class MaximalRectangle {
 
     public int maximalRectangle(char[][] matrix) {
@@ -21,12 +23,36 @@ public class MaximalRectangle {
             }
         }
         for (int i = 0; i < arr.length; i++) {
+            Stack<Integer> stack = new Stack();
             for (int j = 0; j < arr[i].length; j++) {
+                if (stack.isEmpty()) {
+                    stack.push(j);
+                } else if (!stack.isEmpty() && arr[i][stack.peek()] <= arr[i][j]) {
+                    stack.push(j);
+                } else {
+                    while (!stack.isEmpty() && arr[i][stack.peek()] > arr[i][j]) {
+                        int index = stack.pop();
+                        int height = arr[i][index];
+                        int local = 0;
+                        if (stack.isEmpty()) {
+                            local = height * j;
+                        } else {
+                            local = height * (j - stack.peek() - 1);
+                        }
+                        area = Math.max(area, local);
+                    }
+                    stack.push(j);
+                }
+            }
+
+            while (!stack.isEmpty()) {
+                int index = stack.pop();
+                int height = arr[i][index];
                 int local = 0;
-                int min = arr[i][j];
-                for (int k = j; k >= 0; k--) {
-                    min = Math.min(min, arr[i][k]);
-                    local = Math.max(local, min * (j - k + 1));
+                if (stack.isEmpty()) {
+                    local = height * arr[i].length;
+                } else {
+                    local = height * (arr[i].length - stack.peek() - 1);
                 }
                 area = Math.max(area, local);
             }
