@@ -1,36 +1,41 @@
 
-import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Set;
+import java.util.TreeSet;
 
 public class ClosestSubsequenceSum {
 
-    private long minDiff;
-    private HashMap<Integer, HashSet<Long>> visited;
-
-    public int minAbsDifference(int[] nums, int goal) {
-        this.minDiff = Integer.MAX_VALUE;
-        this.visited = new HashMap();
-        for (int i = 0; i <= nums.length; i++) {
-            this.visited.put(i, new HashSet());
+    public static int minAbsDifference(int[] nums, int goal) {
+        Set<Integer> leftSet = new HashSet<>();
+        Set<Integer> rightSet = new HashSet<>();
+        generate(0, nums.length / 2, nums, 0, leftSet);
+        generate(nums.length / 2, nums.length, nums, 0, rightSet);
+        TreeSet<Integer> ts = new TreeSet<>(rightSet);
+        int ans = Math.abs(goal);
+        for (int left : leftSet) {
+            int right = goal - left;
+            if (ts.contains(right)) {
+                return 0;
+            }
+            Integer right1 = ts.lower(right);
+            Integer right2 = ts.higher(right);
+            if (right1 != null) {
+                ans = Math.min(ans, Math.abs(left + right1 - goal));
+            }
+            if (right2 != null) {
+                ans = Math.min(ans, Math.abs(left + right2 - goal));
+            }
         }
-        backtracking(nums, 0, goal, 0);
-        return (int) this.minDiff;
+        return ans;
     }
 
-    private void backtracking(int[] nums, int index, long goal, long sum) {
-        if (index == nums.length) {
-            this.minDiff = Math.min(this.minDiff, Math.abs(sum - goal));
+    private static void generate(int pos, int stop, int[] nums, int sum, Set<Integer> set) {
+        if (pos == stop) {
+            set.add(sum);
             return;
         }
-        HashSet<Long> set = this.visited.get(index + 1);
-        if (!set.contains(sum + nums[index])) {
-            backtracking(nums, index + 1, goal, sum + nums[index]);
-            set.add(sum + nums[index]);
-        }
-        if (!set.contains(sum)) {
-            backtracking(nums, index + 1, goal, sum);
-            set.add(sum);
-        }
+        generate(pos + 1, stop, nums, sum, set);
+        generate(pos + 1, stop, nums, sum + nums[pos], set);
     }
 
     public static void main(String args[]) {
