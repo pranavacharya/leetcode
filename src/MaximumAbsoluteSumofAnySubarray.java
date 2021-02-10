@@ -2,15 +2,29 @@
 public class MaximumAbsoluteSumofAnySubarray {
 
     public int maxAbsoluteSum(int[] nums) {
-        int[] prefix = new int[nums.length + 1];
         int max = 0;
         int min = 0;
-        for (int i = 1; i < prefix.length; i++) {
-            prefix[i] = nums[i - 1] + prefix[i - 1];
-            max = Math.max(max, prefix[i]);
-            min = Math.min(min, prefix[i]);
+
+        int sum = 0;
+        for (int i = 0; i < nums.length; i++) {
+            if (sum < 0) {
+                sum = 0;
+            }
+            sum += nums[i];
+            max = Math.max(max, sum);
         }
-        return Math.abs(max - min);
+
+        sum = 0;
+
+        for (int i = 0; i < nums.length; i++) {
+            if (sum > 0) {
+                sum = 0;
+            }
+            sum += nums[i];
+            min = Math.min(min, sum);
+        }
+
+        return Math.max(Math.abs(max), Math.abs(min));
     }
 
     public static void main(String args[]) {
