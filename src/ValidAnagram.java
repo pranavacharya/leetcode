@@ -2,16 +2,17 @@
 public class ValidAnagram {
 
     public boolean isAnagram(String s, String t) {
-        int[] first = new int[26];
-        int[] second = new int[26];
-        for (char c : s.toCharArray()) {
-            first[c - 'a']++;
+        int[] freq = new int[26];
+        for (int i = 0; i < s.length(); i++) {
+            freq[s.charAt(i) - 'a']++;
         }
-        for (char c : t.toCharArray()) {
-            second[c - 'a']++;
+
+        for (int i = 0; i < t.length(); i++) {
+            freq[t.charAt(i) - 'a']--;
         }
-        for (int i = 0; i < first.length; i++) {
-            if (first[i] != second[i]) {
+
+        for (int i = 0; i < freq.length; i++) {
+            if (freq[i] != 0) {
                 return false;
             }
         }
