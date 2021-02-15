@@ -3,8 +3,9 @@ public class IsGraphBipartite {
 
     public boolean isBipartite(int[][] graph) {
         int nodes = graph.length;
-        for (int i = 0; i < graph.length; i++) {
-            if (!biparte(graph, new int[nodes], 1, new boolean[nodes], i)) {
+        int[] colors = new int[nodes];
+        for (int i = 0; i < colors.length; i++) {
+            if (colors[i] == 0 && !biparte(graph, colors, 1, new boolean[nodes], i)) {
                 return false;
             }
         }
