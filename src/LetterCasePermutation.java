@@ -6,27 +6,23 @@ public class LetterCasePermutation {
 
     public List<String> letterCasePermutation(String S) {
         List<String> list = new ArrayList();
-        permutation(S, 0, "", list);
+        permute(S, 0, list, new char[S.length()]);
         return list;
     }
 
-    public void permutation(String s, int index, String soFar, List<String> list) {
-        if (index == s.length() && !list.contains(soFar)) {
-            list.add(soFar);
+    private void permute(String s, int index, List<String> result, char[] soFar) {
+        if (index == s.length()) {
+            result.add(new String(soFar));
+            return;
+        }
+        if (Character.isDigit(s.charAt(index))) {
+            soFar[index] = s.charAt(index);
+            permute(s, index + 1, result, soFar);
         } else {
-            char c = s.charAt(index);
-            if (Character.isAlphabetic(c)) {
-                permutation(s, index + 1, soFar.concat("" + c), list);
-                if (Character.isLowerCase(c)) {
-                    c = Character.toUpperCase(c);
-                    permutation(s, index + 1, soFar.concat("" + c), list);
-                } else {
-                    c = Character.toLowerCase(c);
-                    permutation(s, index + 1, soFar.concat("" + c), list);
-                }
-            } else {
-                permutation(s, index + 1, soFar.concat("" + c), list);
-            }
+            soFar[index] = Character.toLowerCase(s.charAt(index));
+            permute(s, index + 1, result, soFar);
+            soFar[index] = Character.toUpperCase(s.charAt(index));
+            permute(s, index + 1, result, soFar);
         }
     }
 
