@@ -2,20 +2,18 @@
 public class SearchA2DMatrix2 {
 
     public boolean searchMatrix(int[][] matrix, int target) {
-        if (matrix.length == 0) {
-            return false;
-        }
-        int column = matrix[0].length - 1;
-        int row = 0;
-
-        while (row >= 0 && row < matrix.length && column >= 0 && column < matrix[row].length) {
-            if (matrix[row][column] == target) {
-                return true;
-            } else if (matrix[row][column] < target) {
-                row++;
-            } else {
-                column--;
+        int m = matrix.length;
+        int n = matrix[0].length;
+        int i = 0;
+        int j = n - 1;
+        while (i < m && j < n) {
+            while (j > 0 && matrix[i][j] > target) {
+                j--;
             }
+            if (matrix[i][j] == target) {
+                return true;
+            }
+            i++;
         }
         return false;
     }
