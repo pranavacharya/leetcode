@@ -1,31 +1,19 @@
 
-import java.util.Stack;
-
 public class ScoreofParentheses {
 
     public int scoreOfParentheses(String S) {
-        int ans = 0;
-        Stack<Character> stack = new Stack();
-        for (int i = 0; i < S.length(); i++) {
+        int ans = 0, bal = 0;
+        for (int i = 0; i < S.length(); ++i) {
             if (S.charAt(i) == '(') {
-                stack.push('(');
+                bal++;
             } else {
-                int local = 0;
-                while (!stack.isEmpty() && stack.peek() != '(') {
-                    local += (stack.pop() - '0');
+                bal--;
+                if (S.charAt(i - 1) == '(') {
+                    ans += 1 << bal;
                 }
-                stack.pop();
-                if (local == 0) {
-                    local++;
-                } else {
-                    local *= 2;
-                }
-                stack.push((char) (local + '0'));
             }
         }
-        while (!stack.isEmpty()) {
-            ans += (stack.pop() - '0');
-        }
+
         return ans;
     }
 
