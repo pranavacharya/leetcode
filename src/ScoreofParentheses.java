@@ -4,32 +4,34 @@ import java.util.Stack;
 public class ScoreofParentheses {
 
     public int scoreOfParentheses(String S) {
-        Stack<Integer> stack = new Stack();
-        int score = 0;
-        int index = 0;
-        while (index < S.length()) {
-            if (S.charAt(index) == '(') {
-                stack.push(0);
+        int ans = 0;
+        Stack<Character> stack = new Stack();
+        for (int i = 0; i < S.length(); i++) {
+            if (S.charAt(i) == '(') {
+                stack.push('(');
             } else {
-                int localsrc = stack.pop();
-                localsrc *= 2;
-                if (localsrc == 0) {
-                    localsrc++;
+                int local = 0;
+                while (!stack.isEmpty() && stack.peek() != '(') {
+                    local += (stack.pop() - '0');
                 }
-                if (stack.isEmpty()) {
-                    score += localsrc;
+                stack.pop();
+                if (local == 0) {
+                    local++;
                 } else {
-                    int lastState = stack.pop();
-                    stack.push(lastState + localsrc);
+                    local *= 2;
                 }
+                stack.push((char) (local + '0'));
             }
-            index++;
         }
-        return score;
+        while (!stack.isEmpty()) {
+            ans += (stack.pop() - '0');
+        }
+        return ans;
     }
 
     public static void main(String args[]) {
         ScoreofParentheses sop = new ScoreofParentheses();
+        System.out.println(sop.scoreOfParentheses("(()(()))"));
         System.out.println(sop.scoreOfParentheses("((()())())"));
     }
 }
