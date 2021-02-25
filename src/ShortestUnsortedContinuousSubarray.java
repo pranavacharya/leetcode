@@ -1,29 +1,28 @@
 
-import java.util.Arrays;
+import java.util.Stack;
 
 public class ShortestUnsortedContinuousSubarray {
 
     public int findUnsortedSubarray(int[] nums) {
-        int[] temp = new int[nums.length];
-        for (int i = 0; i < temp.length; i++) {
-            temp[i] = nums[i];
+        Stack<Integer> stack = new Stack();
+        int start = nums.length, end = 0;
+        for (int i = 0; i < nums.length; i++) {
+            while (!stack.isEmpty() && nums[stack.peek()] > nums[i]) {
+                start = Math.min(start, stack.pop());
+            }
+            stack.push(i);
         }
-
-        Arrays.sort(temp);
-        int i = 0;
-        int j = nums.length - 1;
-        while (i < nums.length && nums[i] == temp[i]) {
-            i++;
+        stack.clear();
+        for (int i = nums.length - 1; i >= 0; i--) {
+            while (!stack.isEmpty() && nums[stack.peek()] < nums[i]) {
+                end = Math.max(end, stack.pop());
+            }
+            stack.push(i);
         }
-
-        while (j >= 0 && nums[j] == temp[j]) {
-            j--;
-        }
-
-        if (i > j) {
+        if (end < start) {
             return 0;
         } else {
-            return j - i + 1;
+            return end - start + 1;
         }
     }
 
