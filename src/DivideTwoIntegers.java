@@ -2,15 +2,16 @@
 public class DivideTwoIntegers {
 
     public int divide(int dividend, int divisor) {
-        long ans = 0;
-        int sign = (dividend < 0 && divisor < 0) || (dividend > 0 && divisor > 0) ? 1 : -1;
-        long dv = Math.abs((long) dividend);
-        long ds = Math.abs((long) divisor);
-        while (dv >= ds) {
-            dv -= ds;
-            ans++;
+        if (dividend == 1 << 31 && divisor == -1) {
+            return (1 << 31) - 1;
         }
-        return (int) Math.min(Integer.MAX_VALUE, (sign * ans));
+        int a = Math.abs(dividend), b = Math.abs(divisor), res = 0, x = 0;
+        while (a - b >= 0) {
+            for (x = 0; a - (b << x << 1) >= 0; x++);
+            res += 1 << x;
+            a -= b << x;
+        }
+        return (dividend > 0) == (divisor > 0) ? res : -res;
     }
 
     public static void main(String[] args) {
