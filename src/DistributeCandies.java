@@ -4,11 +4,11 @@ import java.util.HashMap;
 public class DistributeCandies {
 
     public int distributeCandies(int[] candies) {
-        HashMap<Integer, Integer> frequency = new HashMap();
+        HashMap<Integer, Integer> freq = new HashMap();
         for (int i = 0; i < candies.length; i++) {
-            frequency.put(candies[i], frequency.getOrDefault(candies[i], 0) + 1);
+            freq.put(candies[i], freq.getOrDefault(candies[i], 0) + 1);
         }
-        return candies.length / 2 > frequency.size() ? frequency.size() : candies.length / 2;
+        return Math.min(candies.length / 2, freq.size());
     }
 
     public static void main(String args[]) {
