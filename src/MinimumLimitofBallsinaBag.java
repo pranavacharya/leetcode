@@ -1,12 +1,9 @@
 
-import java.util.Arrays;
-
 public class MinimumLimitofBallsinaBag {
 
     public int minimumSize(int[] nums, int maxOperations) {
-        Arrays.sort(nums);
         int low = 0;
-        int high = nums[nums.length - 1];
+        int high = (int) 1e9;
         while (low <= high) {
             int mid = low + (high - low) / 2;
             if (canSatisfy(nums, maxOperations, mid)) {
@@ -25,7 +22,7 @@ public class MinimumLimitofBallsinaBag {
         int opsNeeded = 0;
         for (int i = nums.length - 1; i >= 0; i--) {
             if (nums[i] <= mid) {
-                break;
+                continue;
             }
             opsNeeded += calculateDivs(nums[i], mid);
         }
