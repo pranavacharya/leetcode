@@ -2,27 +2,12 @@
 public class MissingNumber {
 
     public int missingNumber(int[] nums) {
-        boolean last = false;
+        int n = nums.length;
         for (int i = 0; i < nums.length; i++) {
-            if (Math.abs(nums[i]) == nums.length) {
-                last = true;
-            } else {
-                nums[Math.abs(nums[i])] *= -1;
-            }
+            n = n ^ i;
+            n = n ^ nums[i];
         }
-        int zeroindex = -1;
-        if (!last) {
-            return nums.length;
-        } else {
-            for (int i = 0; i < nums.length; i++) {
-                if (nums[i] > 0) {
-                    return i;
-                } else if (nums[i] == 0) {
-                    zeroindex = i;
-                }
-            }
-        }
-        return zeroindex;
+        return n;
     }
 
     public static void main(String args[]) {
