@@ -3,33 +3,36 @@ import java.util.HashSet;
 
 public class IntersectionOfTwoLinkedList {
 
-    public class ListNode {
-
-        int val;
-        ListNode next;
-
-        ListNode(int x) {
-            val = x;
-            next = null;
-        }
-    }
-
     public ListNode getIntersectionNode(ListNode headA, ListNode headB) {
-        if (headA == null || headB == null) {
-            return null;
-        }
-        HashSet<ListNode> set = new HashSet<>();
-        set.add(headA);
-        while (headA.next != null) {
-            set.add(headA.next);
+
+        HashSet<ListNode> set = new HashSet();
+        while (headA != null) {
+            set.add(headA);
             headA = headA.next;
         }
+
         while (headB != null) {
             if (set.contains(headB)) {
                 return headB;
+            } else {
+                headB = headB.next;
             }
-            headB = headB.next;
         }
+
         return null;
+    }
+
+    public static void main(String args[]) {
+        IntersectionOfTwoLinkedList itll = new IntersectionOfTwoLinkedList();
+        ListNode headA = new ListNode(4);
+        ListNode headB = new ListNode(5);
+        headA.next = new ListNode(1);
+        headA.next.next = new ListNode(8);
+        headA.next.next.next = new ListNode(4);
+        headA.next.next.next.next = new ListNode(5);
+        headB.next = new ListNode(6);
+        headB.next.next = new ListNode(1);
+        headB.next.next.next = headA.next.next;
+        System.out.println(itll.getIntersectionNode(headA, headB).val);
     }
 }
