@@ -10,16 +10,16 @@ public class AverageofLevelsinBinaryTree {
         List<Double> result = new ArrayList();
         Queue<TreeNode> queue = new LinkedList();
         if (root == null) {
-            return result;
+            return null;
         }
         queue.add(root);
         while (!queue.isEmpty()) {
             int size = queue.size();
-            int nodes = size;
-            double sum = 0;
+            double total = 0;
+            double elements = (double) size;
             while (size > 0) {
                 TreeNode curr = queue.poll();
-                sum += curr.val;
+                total += curr.val;
                 if (curr.left != null) {
                     queue.add(curr.left);
                 }
@@ -28,7 +28,7 @@ public class AverageofLevelsinBinaryTree {
                 }
                 size--;
             }
-            result.add(sum / nodes);
+            result.add(total / elements);
         }
         return result;
     }
