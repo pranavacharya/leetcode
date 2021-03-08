@@ -17,21 +17,16 @@ public class SumofBeautyofAllSubstrings {
     }
 
     private void preCalculate(int[][] dpMax, int[][] dpMin, String s) {
-        int[] freq = new int[26];
         for (int i = 0; i < s.length(); i++) {
-            freq[s.charAt(i) - 'a']++;
+            int[] freq = new int[26];
             dpMax[i][i] = 1;
             dpMin[i][i] = 1;
-            for (int j = i + 1; j < s.length(); j++) {
+            for (int j = i; j < s.length(); j++) {
                 freq[s.charAt(j) - 'a']++;
                 int[] maxmin = findMaxMin(freq);
                 dpMax[i][j] = maxmin[0];
                 dpMin[i][j] = maxmin[1];
             }
-            for (int j = i + 1; j < s.length(); j++) {
-                freq[s.charAt(j) - 'a']--;
-            }
-            freq[s.charAt(i) - 'a']--;
         }
     }
 
