@@ -20,29 +20,15 @@ public class FindMedianfromDataStream {
         if (this.maxHeap.size() == this.minHeap.size()) {
             return (this.maxHeap.peek() + this.minHeap.peek()) / 2.0;
         } else {
-            return this.maxHeap.peek();
+            return this.minHeap.peek();
         }
     }
 
     private void balanceHeap() {
-        while (!this.maxHeap.isEmpty() && !this.minHeap.isEmpty()
-                && this.maxHeap.peek() > this.minHeap.peek()) {
+        this.maxHeap.add(this.minHeap.poll());
+        if (this.minHeap.size() < this.maxHeap.size()) {
             this.minHeap.add(this.maxHeap.poll());
         }
-        int sizeDiff = this.minHeap.size() - this.maxHeap.size();
-        if (sizeDiff == 0) {
-            return;
-        }
-        if (sizeDiff % 2 == 0) {
-            for (int i = 0; i < sizeDiff / 2; i++) {
-                this.maxHeap.add(this.minHeap.poll());
-            }
-        } else {
-            for (int i = 0; i < (sizeDiff + 1) / 2; i++) {
-                this.maxHeap.add(this.minHeap.poll());
-            }
-        }
-
     }
 
     public static void main(String[] args) {
