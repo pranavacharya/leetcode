@@ -2,32 +2,40 @@
 public class MedianofTwoSortedArrays {
 
     public double findMedianSortedArrays(int[] nums1, int[] nums2) {
-        int n = nums1.length + nums2.length;
-        int median = n / 2;
-        int[] nums = new int[n];
-        int i = 0;
-        int j = 0;
-        int index = 0;
-        while (i < nums1.length && j < nums2.length && index <= median) {
-            if (nums1[i] < nums2[j]) {
-                nums[index++] = nums1[i++];
+        if (nums1.length > nums2.length) {
+            return findMedianSortedArrays(nums2, nums1);
+        }
+
+        int x = nums1.length;
+        int y = nums2.length;
+
+        int low = 0;
+        int high = x;
+
+        while (low <= high) {
+            int mid = low + (high - low) / 2;
+            int mid2 = ((x + y + 1) / 2) - mid;
+
+            int min1 = mid == 0 ? Integer.MIN_VALUE : nums1[mid - 1];
+            int max1 = mid == x ? Integer.MAX_VALUE : nums1[mid];
+
+            int min2 = mid2 == 0 ? Integer.MIN_VALUE : nums2[mid2 - 1];
+            int max2 = mid2 == y ? Integer.MAX_VALUE : nums2[mid2];
+
+            if (min1 <= max2 && min2 <= max1) {
+                if ((x + y) % 2 == 0) {
+                    return ((double) Math.max(min1, min2) + (double) Math.min(max1, max2)) / 2.0;
+                } else {
+                    return (double) Math.max(min1, min2);
+                }
+            } else if (min1 > max2) {
+                high = mid - 1;
             } else {
-                nums[index++] = nums2[j++];
+                low = mid + 1;
             }
         }
-        while (i < nums1.length && index <= median) {
-            nums[index++] = nums1[i++];
-        }
 
-        while (j < nums2.length && index <= median) {
-            nums[index++] = nums2[j++];
-        }
-
-        if (n % 2 != 0) {
-            return (double) nums[median];
-        } else {
-            return ((double) nums[median] + (double) nums[median - 1]) / 2.0;
-        }
+        return -1;
     }
 
     public static void main(String[] args) {
