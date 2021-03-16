@@ -2,22 +2,17 @@
 public class BestTimetoBuyandSellStockwithTransactionFee {
 
     public int maxProfit(int[] prices, int fee) {
-        int[] dp = new int[prices.length];
-        dp[0] = 0;
-        for (int i = 1; i < dp.length; i++) {
-            dp[i] = dp[i - 1];
-            for (int j = i - 1; j >= 0; j--) {
-                if (prices[j] < prices[i]) {
-                    if (j != 0) {
-                        dp[i] = Math.max(dp[i], dp[j - 1]
-                                + prices[i] - prices[j] - fee);
-                    } else {
-                        dp[i] = Math.max(dp[i], prices[i] - prices[j] - fee);
-                    }
-                }
-            }
+        int[] buy = new int[prices.length];
+        int[] sell = new int[prices.length];
+        sell[0] = 0;
+        buy[0] = -prices[0];
+
+        for (int i = 1; i < prices.length; i++) {
+            buy[i] = Math.max(buy[i - 1], sell[i - 1] - prices[i]);
+            sell[i] = Math.max(sell[i - 1], buy[i - 1] + prices[i] - fee);
         }
-        return dp[dp.length - 1];
+
+        return sell[sell.length - 1];
     }
 
     public static void main(String args[]) {
