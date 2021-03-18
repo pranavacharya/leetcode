@@ -12,53 +12,38 @@ public class MinimumWindowSubstring {
         String ans = s + "a";
         int i = 0;
         int j = 0;
+        int total = freqt.size();
+        int unique = 0;
         while (j < s.length()) {
 
             //expand
-            while (j < s.length()) {
-                freq.put(s.charAt(j), freq.getOrDefault(s.charAt(j), 0) + 1);
-                if (matchFreq(freq, freqt)) {
-                    String local = s.substring(i, j + 1);
-                    if (local.length() < ans.length()) {
-                        ans = local;
-                    }
-                    break;
-                }
-                j++;
+            freq.put(s.charAt(j), freq.getOrDefault(s.charAt(j), 0) + 1);
+
+            if (freqt.containsKey(s.charAt(j))
+                    && freq.get(s.charAt(j)).intValue() == freqt.get(s.charAt(j)).intValue()) {
+                unique++;
             }
 
             //contract
-            while (i <= j) {
-                freq.put(s.charAt(i), freq.get(s.charAt(i)) - 1);
-                if (matchFreq(freq, freqt)) {
-                    i++;
-                    String local = s.substring(i, j + 1);
-                    if (local.length() < ans.length()) {
-                        ans = local;
-                    }
-                } else {
-                    freq.put(s.charAt(i), freq.get(s.charAt(i)) + 1);
-                    break;
+            while (i <= j && unique == total) {
+                String local = s.substring(i, j + 1);
+                if (local.length() < ans.length()) {
+                    ans = local;
                 }
+                freq.put(s.charAt(i), freq.get(s.charAt(i)) - 1);
+                if (freqt.containsKey(s.charAt(i))
+                        && freq.get(s.charAt(i)).intValue() < freqt.get(s.charAt(i)).intValue()) {
+                    unique--;
+                }
+                i++;
             }
             j++;
         }
         return ans.length() > s.length() ? "" : ans;
     }
 
-    private boolean matchFreq(HashMap<Character, Integer> freq, HashMap<Character, Integer> freqt) {
-        for (char tKey : freqt.keySet()) {
-            if (!freq.containsKey(tKey)) {
-                return false;
-            } else if (freq.get(tKey) < freqt.get(tKey)) {
-                return false;
-            }
-        }
-        return true;
-    }
-
     public static void main(String[] args) {
         MinimumWindowSubstring mws = new MinimumWindowSubstring();
-        System.out.println(mws.minWindow("a", "aa"));
+        System.out.println(mws.minWindow("ADOBECODEBANC", "ABC"));
     }
 }
