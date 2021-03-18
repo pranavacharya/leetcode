@@ -2,7 +2,6 @@
 public class WiggleSubsequence {
 
     public int wiggleMaxLength(int[] nums) {
-        int ans = 1;
         int[] pos = new int[nums.length];
         int[] neg = new int[nums.length];
         pos[0] = 1;
@@ -18,9 +17,8 @@ public class WiggleSubsequence {
                     neg[i] = Math.max(neg[i], 1);
                 }
             }
-            ans = Math.max(ans, Math.max(pos[i], neg[i]));
         }
-        return ans;
+        return Math.max(pos[nums.length - 1], neg[nums.length - 1]);
     }
 
     public static void main(String[] args) {
