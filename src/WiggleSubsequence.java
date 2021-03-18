@@ -7,15 +7,15 @@ public class WiggleSubsequence {
         pos[0] = 1;
         neg[0] = 1;
         for (int i = 1; i < nums.length; i++) {
-            for (int j = i - 1; j >= 0; j--) {
-                if (nums[i] - nums[j] > 0) {
-                    pos[i] = Math.max(pos[i], neg[j] + 1);
-                } else if (nums[i] - nums[j] < 0) {
-                    neg[i] = Math.max(neg[i], pos[j] + 1);
-                } else {
-                    pos[i] = Math.max(pos[i], 1);
-                    neg[i] = Math.max(neg[i], 1);
-                }
+            if (nums[i] - nums[i - 1] > 0) {
+                pos[i] = neg[i - 1] + 1;
+                neg[i] = neg[i - 1];
+            } else if (nums[i] - nums[i - 1] < 0) {
+                neg[i] = pos[i - 1] + 1;
+                pos[i] = pos[i - 1];
+            } else {
+                pos[i] = pos[i - 1];
+                neg[i] = neg[i - 1];
             }
         }
         return Math.max(pos[nums.length - 1], neg[nums.length - 1]);
