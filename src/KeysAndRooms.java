@@ -1,30 +1,27 @@
 
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.Queue;
 
 public class KeysAndRooms {
 
     public boolean canVisitAllRooms(List<List<Integer>> rooms) {
-        if (rooms.isEmpty()) {
+        HashSet<Integer> visited = new HashSet();
+        return dfs(0, visited, rooms);
+    }
+
+    private boolean dfs(int room, HashSet<Integer> visited, List<List<Integer>> rooms) {
+        visited.add(room);
+        if (visited.size() == rooms.size()) {
             return true;
         }
-        HashSet<Integer> visited = new HashSet<>();
-        Queue<Integer> queue = new LinkedList<>();
-        queue.add(0);
-        visited.add(0);
-        while (!queue.isEmpty()) {
-            List<Integer> list = rooms.get(queue.remove());
-            for (Integer num : list) {
-                if (!visited.contains(num)) {
-                    visited.add(num);
-                    queue.add(num);
-                }
+        List<Integer> keys = rooms.get(room);
+        for (int i = 0; i < keys.size(); i++) {
+            if (!visited.contains(keys.get(i)) && dfs(keys.get(i), visited, rooms)) {
+                return true;
             }
         }
-        return (rooms.size() == visited.size());
+        return false;
     }
 
     public static void main(String args[]) {
