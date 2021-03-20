@@ -1,57 +1,66 @@
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 
 public class WordSearchII {
 
+    class Trie {
+
+        String word;
+        Trie[] child = new Trie[26];
+    }
+
     private int[][] dirs = new int[][]{{0, 1}, {0, -1}, {1, 0}, {-1, 0}};
 
     public List<String> findWords(char[][] board, String[] words) {
+        Trie root = buildTrie(words);
         List<String> ans = new ArrayList();
-        for (int i = 0; i < words.length; i++) {
-            if (findWord(board, words[i])) {
-                ans.add(words[i]);
+        for (int i = 0; i < board.length; i++) {
+            for (int j = 0; j < board[i].length; j++) {
+                dfs(board, root, ans, i, j);
             }
         }
         return ans;
     }
 
-    private boolean findWord(char[][] board, String word) {
-        for (int i = 0; i < board.length; i++) {
-            for (int j = 0; j < board[i].length; j++) {
-                if (dfs(board, word, "", i, j, 0, new HashSet())) {
-                    return true;
-                }
+    private Trie buildTrie(String[] words) {
+        Trie root = new Trie();
+        for (int i = 0; i < words.length; i++) {
+            String word = words[i];
+            Trie temp = root;
+            int j = 0;
+            while (j < word.length() && temp.child[word.charAt(j) - 'a'] != null) {
+                temp = temp.child[word.charAt(j) - 'a'];
+                j++;
             }
+
+            for (int k = j; k < word.length(); k++) {
+                temp.child[word.charAt(k) - 'a'] = new Trie();
+                temp = temp.child[word.charAt(k) - 'a'];
+            }
+
+            temp.word = word;
         }
-        return false;
+        return root;
     }
 
-    private boolean dfs(char[][] board, String word, String soFar, int row, int col, int index, HashSet<String> visited) {
-        if (index == word.length()) {
-            return true;
+    private void dfs(char[][] board, Trie root, List<String> ans, int row, int col) {
+        if (row < 0 || row >= board.length || col < 0 || col >= board[row].length) {
+            return;
         }
-
-        if (row < 0 || row >= board.length || col < 0 || col >= board[row].length || visited.contains(row + " " + col)) {
-            return false;
-        }
-
-        soFar += board[row][col];
-        visited.add(row + " " + col);
-
-        if (word.charAt(index) != soFar.charAt(index)) {
-            visited.remove(row + " " + col);
-            return false;
-        }
-
-        for (int[] dir : dirs) {
-            if (dfs(board, word, soFar, row + dir[0], col + dir[1], index + 1, visited)) {
-                return true;
+        char curr = board[row][col];
+        if (curr != '.' && root.child[curr - 'a'] != null) {
+            root = root.child[curr - 'a'];
+            if (root.word != null) {
+                ans.add(root.word);
+                root.word = null;
             }
+            board[row][col] = '.';
+            for (int[] dir : dirs) {
+                dfs(board, root, ans, row + dir[0], col + dir[1]);
+            }
+            board[row][col] = curr;
         }
-        visited.remove(row + " " + col);
-        return false;
     }
 
     public static void main(String[] args) {
