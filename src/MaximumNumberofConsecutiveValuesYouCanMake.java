@@ -1,6 +1,4 @@
 
-import java.util.Arrays;
-
 public class MaximumNumberofConsecutiveValuesYouCanMake {
 
     public int getMaximumConsecutive(int[] coins) {
@@ -9,20 +7,26 @@ public class MaximumNumberofConsecutiveValuesYouCanMake {
         for (int i = 0; i < n; i++) {
             sum += coins[i];
         }
-        int[][] dp = new int[n + 1][sum + 1];
-        for (int i = 0; i <= n; i++) {
+        int[][] dp = new int[2][sum + 1];
+        for (int i = 0; i < 2; i++) {
             dp[i][0] = 1;
         }
-        for (int i = 1; i < dp.length; i++) {
-            for (int j = 1; j < dp[i].length; j++) {
-                dp[i][j] = dp[i - 1][j];
-                if (j >= coins[i - 1]) {
-                    dp[i][j] += dp[i - 1][j - coins[i - 1]];
+        for (int i = 0; i < coins.length; i++) {
+            for (int j = 1; j <= sum; j++) {
+                if (i % 2 == 0) {
+                    dp[1][j] = dp[0][j];
+                    if (j >= coins[i]) {
+                        dp[1][j] += dp[0][j - coins[i]];
+                    }
+                } else {
+                    dp[0][j] = dp[1][j];
+                    if (j >= coins[i]) {
+                        dp[0][j] += dp[1][j - coins[i]];
+                    }
                 }
             }
         }
-        int[] valid = dp[n];
-        System.out.println(Arrays.toString(valid));
+        int[] valid = coins.length % 2 == 0 ? dp[0] : dp[1];
         int ans = 0;
         int count = 0;
         for (int i = 0; i < valid.length; i++) {
