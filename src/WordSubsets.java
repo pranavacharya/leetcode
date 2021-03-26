@@ -6,20 +6,16 @@ public class WordSubsets {
 
     public List<String> wordSubsets(String[] A, String[] B) {
         List<String> res = new ArrayList();
-        int[][] freqB = new int[B.length][26];
+        int[] bSupper = new int[26];
         for (int i = 0; i < B.length; i++) {
             int[] freq = calcFreq(B[i]);
-            freqB[i] = freq;
+            for (int j = 0; j < freq.length; j++) {
+                bSupper[j] = Math.max(bSupper[j], freq[j]);
+            }
         }
         for (int i = 0; i < A.length; i++) {
             int[] freq = calcFreq(A[i]);
-            boolean status = true;
-            for (int[] fb : freqB) {
-                if (!isSubset(freq, fb)) {
-                    status = false;
-                }
-            }
-            if (status) {
+            if (isSubset(freq, bSupper)) {
                 res.add(A[i]);
             }
         }
