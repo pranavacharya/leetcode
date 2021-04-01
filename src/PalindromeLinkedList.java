@@ -1,21 +1,42 @@
 
-import java.util.ArrayList;
-
 public class PalindromeLinkedList {
 
     public boolean isPalindrome(ListNode head) {
-        ArrayList<Integer> list = new ArrayList();
-        while (head != null) {
-            list.add(head.val);
-            head = head.next;
+        ListNode fast = head;
+        ListNode slow = head;
+
+        while (fast != null && fast.next != null) {
+            fast = fast.next.next;
+            slow = slow.next;
         }
-        for (int i = 0; i < list.size() / 2; i++) {
-            if (list.get(i) != list.get(list.size() - i - 1)) {
+
+        if (fast != null) {
+            slow = slow.next;
+        }
+
+        slow = reverse(slow);
+
+        while (slow != null) {
+            if (head.val != slow.val) {
                 return false;
             }
+
+            head = head.next;
+            slow = slow.next;
         }
 
         return true;
+    }
+
+    private ListNode reverse(ListNode head) {
+        ListNode prev = null;
+        while (head != null) {
+            ListNode next = head.next;
+            head.next = prev;
+            prev = head;
+            head = next;
+        }
+        return prev;
     }
 
     public static void main(String[] args) {
