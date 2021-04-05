@@ -1,4 +1,6 @@
 
+import java.util.HashMap;
+
 public class CountNicePairsinanArray {
 
     private int mod = (int) (1e9 + 7);
@@ -6,16 +8,17 @@ public class CountNicePairsinanArray {
     public int countNicePairs(int[] nums) {
         int[] cache = new int[nums.length];
         for (int i = 0; i < nums.length; i++) {
-            cache[i] = calRev(nums[i]);
+            cache[i] = nums[i] - calRev(nums[i]);
         }
         int count = 0;
-
+        HashMap<Integer, Integer> freq = new HashMap();
         for (int i = 0; i < nums.length; i++) {
-            for (int j = i + 1; j < nums.length; j++) {
-                if (nums[i] + cache[j] == nums[j] + cache[i]) {
-                    count = (count % mod + 1 % mod) % mod;
-                }
+            if (freq.containsKey(cache[i])) {
+                int freqcount = freq.get(cache[i]);
+
+                count = ((count % mod) + (freqcount % mod)) % mod;
             }
+            freq.put(cache[i], freq.getOrDefault(cache[i], 0) + 1);
         }
 
         return count;
