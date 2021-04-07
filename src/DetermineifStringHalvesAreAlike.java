@@ -4,21 +4,25 @@ import java.util.HashSet;
 public class DetermineifStringHalvesAreAlike {
 
     public boolean halvesAreAlike(String s) {
-        s = s.toLowerCase();
-        HashSet<Character> set = new HashSet();
+        HashSet<Character> vowels = new HashSet();
+        vowels.add('A');
+        vowels.add('E');
+        vowels.add('I');
+        vowels.add('O');
+        vowels.add('U');
+        vowels.add('a');
+        vowels.add('e');
+        vowels.add('i');
+        vowels.add('o');
+        vowels.add('u');
         int count = 0;
-        set.add('a');
-        set.add('e');
-        set.add('i');
-        set.add('o');
-        set.add('u');
         for (int i = 0; i < s.length() / 2; i++) {
-            if (set.contains(s.charAt(i))) {
+            if (vowels.contains(s.charAt(i))) {
                 count++;
             }
         }
         for (int i = s.length() / 2; i < s.length(); i++) {
-            if (set.contains(s.charAt(i))) {
+            if (vowels.contains(s.charAt(i))) {
                 count--;
             }
         }
