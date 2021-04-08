@@ -58,26 +58,26 @@ public class LetterCombinationsofaPhoneNumber {
         if (digits.length() == 0) {
             return result;
         }
-        dfs(digits, 0, result, "");
+        dfs(digits, 0, result, new StringBuilder());
         return result;
     }
 
-    private void dfs(String s, int index, List<String> result, String path) {
+    private void dfs(String s, int index, List<String> result, StringBuilder path) {
         if (index == s.length() && path.length() == s.length()) {
-            result.add(path);
+            result.add(path.toString());
             return;
         }
         ArrayList<Character> alpha = this.map.get(s.charAt(index));
         for (int i = 0; i < alpha.size(); i++) {
             char c = alpha.get(i);
-            path = path + c;
+            path.append(c);
             dfs(s, index + 1, result, path);
-            path = path.substring(0, path.length() - 1);
+            path.deleteCharAt(path.length() - 1);
         }
     }
 
     public static void main(String[] args) {
         LetterCombinationsofaPhoneNumber lcpn = new LetterCombinationsofaPhoneNumber();
-        System.out.println(lcpn.letterCombinations(""));
+        System.out.println(lcpn.letterCombinations("23"));
     }
 }
