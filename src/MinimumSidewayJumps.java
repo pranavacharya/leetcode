@@ -1,28 +1,41 @@
 
+import java.util.Arrays;
+
 public class MinimumSidewayJumps {
 
-    private int minJumps = Integer.MAX_VALUE;
+    int[][] memo;
 
     public int minSideJumps(int[] obstacles) {
-        dfs(1, 0, obstacles, 0);
-        return this.minJumps == Integer.MAX_VALUE ? - 1 : this.minJumps;
+        this.memo = new int[3][obstacles.length];
+        for (int i = 0; i < this.memo.length; i++) {
+            Arrays.fill(this.memo[i], -1);
+        }
+        return dfs(1, 0, obstacles);
     }
 
-    private void dfs(int lane, int point, int[] obstacles, int jumps) {
-        if (point == obstacles.length - 1) {
-            this.minJumps = Math.min(this.minJumps, jumps);
-            return;
+    private int dfs(int lane, int point, int[] obstacles) {
+        if (this.memo[lane][point] != -1) {
+            return this.memo[lane][point];
         }
+        if (point == obstacles.length - 1) {
+            return 0;
+        }
+        int jump = 0;
         if (obstacles[point + 1] != 0 && obstacles[point + 1] == lane + 1) {
+            jump++;
+            int options = Integer.MAX_VALUE;
             if (obstacles[point] != (lane + 1) % 3 + 1) {
-                dfs((lane + 1) % 3, point, obstacles, jumps + 1);
+                options = Math.min(options, dfs((lane + 1) % 3, point, obstacles));
             }
             if (obstacles[point] != (lane + 2) % 3 + 1) {
-                dfs((lane + 2) % 3, point, obstacles, jumps + 1);
+                options = Math.min(options, dfs((lane + 2) % 3, point, obstacles));
             }
+            jump += options;
         } else {
-            dfs(lane, point + 1, obstacles, jumps);
+            jump = dfs(lane, point + 1, obstacles);
         }
+        this.memo[lane][point] = jump;
+        return jump;
     }
 
     public static void main(String[] args) {
