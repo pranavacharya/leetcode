@@ -10,13 +10,7 @@ public class BeautifulArrangement {
 
     private void backTracking(int i, int n, boolean[] visited) {
         if (i == n + 1) {
-            boolean status = true;
-            for (int j = 1; j < visited.length; j++) {
-                status = status & visited[j];
-            }
-            if (status) {
-                this.arrangement++;
-            }
+            this.arrangement++;
             return;
         }
         for (int j = 1; j <= n; j++) {
