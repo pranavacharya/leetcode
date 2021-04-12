@@ -1,41 +1,36 @@
 
-import java.util.ArrayList;
-
 public class BeautifulArrangement {
 
-    private int count;
+    private int arrangement = 0;
 
-    public BeautifulArrangement() {
-        this.count = 0;
+    public int countArrangement(int n) {
+        backTracking(1, n, new boolean[n + 1]);
+        return this.arrangement;
     }
 
-    public int countArrangement(int N) {
-        backtracking(N, 1, new ArrayList(), new boolean[N + 1]);
-        return this.count;
-    }
-
-    public void backtracking(int n, int pos, ArrayList<Integer> path, boolean[] used) {
-        if (pos > n) {
-            //System.out.println(path);
-            this.count++;
-        } else {
-            for (int i = 1; i <= n; i++) {
-                if (used[i]) {
-                    continue;
-                }
-                if ((pos % i == 0 || i % pos == 0)) {
-                    path.add(i);
-                    used[i] = true;
-                    backtracking(n, pos + 1, path, used);
-                    used[i] = false;
-                    path.remove(path.size() - 1);
-                }
+    private void backTracking(int i, int n, boolean[] visited) {
+        if (i == n + 1) {
+            boolean status = true;
+            for (int j = 1; j < visited.length; j++) {
+                status = status & visited[j];
             }
+            if (status) {
+                this.arrangement++;
+            }
+            return;
+        }
+        for (int j = 1; j <= n; j++) {
+            if (visited[j] || !(j % i == 0 || i % j == 0)) {
+                continue;
+            }
+            visited[j] = true;
+            backTracking(i + 1, n, visited);
+            visited[j] = false;
         }
     }
 
     public static void main(String args[]) {
         BeautifulArrangement ba = new BeautifulArrangement();
-        System.out.println(ba.countArrangement(14));
+        System.out.println(ba.countArrangement(15));
     }
 }
