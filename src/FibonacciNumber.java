@@ -1,21 +1,21 @@
 
-import java.util.HashMap;
-
 public class FibonacciNumber {
 
-    private HashMap<Integer, Integer> map = new HashMap();
-
-    public int fib(int N) {
-        if (N == 0 || N == 1) {
-            return N;
+    public int fib(int n) {
+        if (n == 0) {
+            return 0;
         }
-        if (map.containsKey(N)) {
-            return map.get(N);
-        } else {
-            int ans = fib(N - 2) + fib(N - 1);
-            map.put(N, ans);
-            return ans;
+        if (n == 1) {
+            return 1;
         }
+        int a = 0;
+        int b = 1;
+        for (int i = 2; i <= n; i++) {
+            int temp = a;
+            a = b;
+            b = temp + b;
+        }
+        return b;
     }
 
     public static void main(String args[]) {
