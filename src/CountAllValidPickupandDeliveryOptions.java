@@ -2,35 +2,20 @@
 public class CountAllValidPickupandDeliveryOptions {
 
     private int mod = (int) 1e9 + 7;
-    private int count = 0;
 
     public int countOrders(int n) {
-        boolean[] visited = new boolean[n * 2];
-        backtrack(0, 2 * n, visited);
-        return this.count;
-    }
+        long count = 1;
 
-    private void backtrack(int index, int n, boolean[] visited) {
-        if (index == n) {
-            this.count = (this.count % mod + 1 % mod) % mod;
-            return;
+        // n! * (1 * 3 * 5 ... 2n-1)
+        for (int i = 1; i <= n; i++) {
+            count = (count % mod * i % mod) % mod;
         }
-        for (int i = 0; i < n; i++) {
-            if (visited[i]) {
-                continue;
-            }
-            if (i % 2 == 0) {
-                visited[i] = true;
-                backtrack(index + 1, n, visited);
-                visited[i] = false;
-            } else {
-                if (visited[i - 1]) {
-                    visited[i] = true;
-                    backtrack(index + 1, n, visited);
-                    visited[i] = false;
-                }
-            }
+
+        for (int i = 1; i < 2 * n; i += 2) {
+            count = (count % mod * i % mod) % mod;
         }
+
+        return (int) count;
     }
 
     public static void main(String[] args) {
