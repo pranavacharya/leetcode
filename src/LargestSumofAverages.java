@@ -3,42 +3,36 @@ import java.util.Arrays;
 
 public class LargestSumofAverages {
 
-    private double[][][] dp;
+    private double[][] dp;
 
     public double largestSumOfAverages(int[] A, int K) {
-        this.dp = new double[A.length][A.length][K];
+        this.dp = new double[A.length][K + 1];
         for (int i = 0; i < this.dp.length; i++) {
-            for (int j = 0; j < this.dp[i].length; j++) {
-                Arrays.fill(this.dp[i][j], -1.0);
-            }
+            Arrays.fill(this.dp[i], -1.0);
         }
         double[] prefix = new double[A.length + 1];
         for (int i = 0; i < A.length; i++) {
             prefix[i + 1] = prefix[i] + A[i];
         }
-        return helper(0, A.length - 1, K - 1, prefix);
+        return helper(0, A.length, K, prefix);
     }
 
-    private double helper(int i, int j, int k, double[] prefix) {
+    private double helper(int i, int len, int k, double[] prefix) {
 
-        if (this.dp[i][j][k] != -1) {
-            return this.dp[i][j][k];
+        if (this.dp[i][k] != -1) {
+            return this.dp[i][k];
         }
 
-        if (i == j || k == 0) {
-            return this.dp[i][j][k] = (double) (prefix[j + 1] - prefix[i]) / (double) (j - i + 1);
+        if (k == 1) {
+            return this.dp[i][k] = ((double) (prefix[len] - prefix[i]) / (len - i));
         }
 
         double max = 0;
 
-        // X
-        for (int l = i; l < j; l++) {
-            // K
-            for (int m = 0; m < k; m++) {
-                max = Math.max(max, helper(i, l, m, prefix) + helper(l + 1, j, k - 1 - m, prefix));
-            }
+        for (int l = i; l + k <= len; l++) {
+            max = Math.max(max, ((double) (prefix[l + 1] - prefix[i]) / (l - i + 1)) + helper(l + 1, len, k - 1, prefix));
         }
-        return this.dp[i][j][k] = max;
+        return this.dp[i][k] = max;
     }
 
     public static void main(String[] args) {
