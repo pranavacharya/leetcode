@@ -1,20 +1,33 @@
 
+import java.util.Arrays;
+
 public class MinimumPathSum {
 
+    private int[][] dp;
+
     public int minPathSum(int[][] grid) {
-        int[][] dp = grid;
-        for (int i = 0; i < dp.length; i++) {
-            for (int j = 0; j < dp[i].length; j++) {
-                if (i != 0 && j != 0) {
-                    dp[i][j] += +Math.min(dp[i][j - 1], dp[i - 1][j]);
-                } else if (i == 0 && j != 0) {
-                    dp[i][j] += dp[i][j - 1];
-                } else if (j == 0 && i != 0) {
-                    dp[i][j] += dp[i - 1][j];
-                }
-            }
+        this.dp = new int[grid.length + 1][grid[0].length + 1];
+        for (int i = 0; i < this.dp.length; i++) {
+            Arrays.fill(this.dp[i], -1);
         }
-        return dp[dp.length - 1][dp[dp.length - 1].length - 1];
+        return helper(grid.length - 1, grid[0].length - 1, grid);
+    }
+
+    private int helper(int i, int j, int[][] grid) {
+        if (i == 0 && j == 0) {
+            return grid[i][j];
+        }
+        if (this.dp[i][j] != -1) {
+            return this.dp[i][j];
+        }
+        int ans = Integer.MAX_VALUE;
+        if (i > 0) {
+            ans = Math.min(ans, helper(i - 1, j, grid));
+        }
+        if (j > 0) {
+            ans = Math.min(ans, helper(i, j - 1, grid));
+        }
+        return this.dp[i][j] = ans + grid[i][j];
     }
 
     public static void main(String args[]) {
