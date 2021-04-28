@@ -1,18 +1,40 @@
 
+import java.util.Arrays;
+
 public class UncrossedLines {
 
+    private int[][] dp;
+
     public int maxUncrossedLines(int[] A, int[] B) {
-        int m = A.length, n = B.length, dp[][] = new int[m + 1][n + 1];
-        for (int i = 1; i <= m; i++) {
-            for (int j = 1; j <= n; j++) {
-                if (A[i - 1] == B[j - 1]) {
-                    dp[i][j] = 1 + dp[i - 1][j - 1];
-                } else {
-                    dp[i][j] = Math.max(dp[i][j - 1], dp[i - 1][j]);
-                }
+        this.dp = new int[A.length][B.length];
+        for (int i = 0; i < this.dp.length; i++) {
+            Arrays.fill(this.dp[i], -1);
+        }
+        return helper(A, B, A.length - 1, B.length - 1);
+    }
+
+    private int helper(int[] A, int[] B, int i, int j) {
+        if (i == 0 && j == 0) {
+            if (A[i] == B[j]) {
+                return 1;
+            } else {
+                return 0;
             }
         }
-        return dp[m][n];
+        if (i < 0 || j < 0) {
+            return 0;
+        }
+        if (this.dp[i][j] != -1) {
+            return this.dp[i][j];
+        }
+
+        int ans = 0;
+        if (A[i] == B[j]) {
+            ans = 1 + helper(A, B, i - 1, j - 1);
+        } else {
+            ans = Math.max(helper(A, B, i - 1, j), helper(A, B, i, j - 1));
+        }
+        return this.dp[i][j] = ans;
     }
 
     public static void main(String args[]) {
