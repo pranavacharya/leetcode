@@ -1,22 +1,33 @@
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class WordBreak {
 
-    public boolean wordBreak(String s, List<String> wordDict) {
-        boolean[] dp = new boolean[s.length() + 1];
-        dp[0] = true;
+    private int[] dp;
 
-        for (int i = 0; i < dp.length; i++) {
-            for (int j = 0; j < i; j++) {
-                dp[i] = dp[j] && wordDict.contains(s.substring(j, i));
-                if (dp[i]) {
-                    break;
-                }
+    public boolean wordBreak(String s, List<String> wordDict) {
+        this.dp = new int[s.length()];
+        Arrays.fill(this.dp, -1);
+        return helper(0, wordDict, s);
+    }
+
+    private boolean helper(int index, List<String> dict, String s) {
+        if (index == s.length()) {
+            return true;
+        }
+        if (this.dp[index] != -1) {
+            return this.dp[index] == 1;
+        }
+        for (int i = index + 1; i <= s.length(); i++) {
+            if (dict.contains(s.substring(index, i)) && helper(i, dict, s)) {
+                this.dp[index] = 1;
+                return true;
             }
         }
-        return dp[s.length()];
+        this.dp[index] = 0;
+        return false;
     }
 
     public static void main(String args[]) {
