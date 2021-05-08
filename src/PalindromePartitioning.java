@@ -6,28 +6,30 @@ public class PalindromePartitioning {
 
     public List<List<String>> partition(String s) {
         List<List<String>> result = new ArrayList();
-        backtracking(result, new ArrayList(), s);
+        helper(0, s, result, new ArrayList());
         return result;
     }
 
-    public void backtracking(List<List<String>> result, ArrayList<String> path, String s) {
-        if (s.isEmpty()) {
-            result.add(new ArrayList(path));
-        } else {
-            for (int i = 0; i < s.length(); i++) {
-                String letter = s.substring(0, i + 1);
-                if (isPalindrome(letter)) {
-                    path.add(letter);
-                    backtracking(result, path, s.substring(i + 1));
-                    path.remove(path.size() - 1);
-                }
+    private void helper(int index, String s, List<List<String>> result, List<String> path) {
+        if (index == s.length()) {
+            List<String> temp = new ArrayList(path);
+            result.add(temp);
+            return;
+        }
+
+        for (int i = index; i < s.length(); i++) {
+            if (isPalindrome(s.substring(index, i + 1))) {
+                path.add(s.substring(index, i + 1));
+                helper(i + 1, s, result, path);
+                path.remove(path.size() - 1);
             }
         }
+
     }
 
-    public boolean isPalindrome(String a) {
-        for (int i = 0; i < a.length() / 2; i++) {
-            if (a.charAt(i) != a.charAt(a.length() - i - 1)) {
+    private boolean isPalindrome(String s) {
+        for (int i = 0; i < s.length() / 2; i++) {
+            if (s.charAt(i) != s.charAt(s.length() - 1 - i)) {
                 return false;
             }
         }
