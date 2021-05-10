@@ -1,64 +1,22 @@
 
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.Stack;
 
 public class DailyTemperature {
 
-    public class obj {
-
-        private int data;
-        private int index;
-
-        public obj(int data, int index) {
-            this.data = data;
-            this.index = index;
-        }
-
-        public int getData() {
-            return data;
-        }
-
-        public void setData(int data) {
-            this.data = data;
-        }
-
-        public int getIndex() {
-            return index;
-        }
-
-        public void setIndex(int index) {
-            this.index = index;
-        }
-    }
-
     public int[] dailyTemperatures(int[] T) {
-        Stack<obj> stk = new Stack<>();
-        HashMap<Integer, Integer> map = new HashMap<>();
         int[] res = new int[T.length];
-        for (int i = 0; i < T.length; i++) {
-            if (stk.empty() || T[i] < stk.peek().getData()) {
-                stk.push(new obj(T[i], i));
-            } else {
-                obj top = stk.peek();
-                while (top.getData() < T[i]) {
-                    map.put(top.getIndex(), i);
-                    stk.pop();
-                    if (!stk.empty()) {
-                        top = stk.peek();
-                    } else {
-                        break;
-                    }
-                }
-                stk.push(new obj(T[i], i));
+        Stack<Integer> stack = new Stack();
+        for (int i = T.length - 1; i >= 0; i--) {
+            while (!stack.isEmpty() && T[stack.peek()] <= T[i]) {
+                stack.pop();
             }
-        }
-        for (int i = 0; i < T.length; i++) {
-            if (map.containsKey(i)) {
-                res[i] = map.get(i) - i;
-            } else {
+            if (stack.isEmpty()) {
                 res[i] = 0;
+            } else {
+                res[i] = stack.peek() - i;
             }
+            stack.push(i);
         }
         return res;
     }
