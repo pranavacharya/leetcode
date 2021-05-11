@@ -1,23 +1,28 @@
 
+import java.util.Arrays;
+
 public class MaximumPointsYouCanObtainfromCards {
 
+    private int[][][] dp;
+
     public int maxScore(int[] cardPoints, int k) {
-        int[] prefix = new int[k + 1];
-        int[] suffix = new int[k + 1];
-        prefix[0] = 0;
-        for (int i = 1; i < prefix.length; i++) {
-            prefix[i] = prefix[i - 1] + cardPoints[i - 1];
+        this.dp = new int[cardPoints.length][cardPoints.length][k + 1];
+        for (int i = 0; i < this.dp.length; i++) {
+            for (int j = 0; j < this.dp[i].length; j++) {
+                Arrays.fill(this.dp[i][j], -1);
+            }
         }
-        suffix[k] = 0;
-        for (int i = cardPoints.length - 1, len = k - 1; i >= 0 && len >= 0; i--, len--) {
-            suffix[len] = suffix[len + 1] + cardPoints[i];
+        return helper(0, cardPoints.length - 1, k, cardPoints);
+    }
+
+    private int helper(int i, int j, int k, int[] cardPoints) {
+        if (k == 0) {
+            return 0;
         }
-        int max = 0;
-        for (int i = 0; i <= k; i++) {
-            int score = prefix[i] + suffix[i];
-            max = Math.max(max, score);
+        if (this.dp[i][j][k] != -1) {
+            return this.dp[i][j][k];
         }
-        return max;
+        return this.dp[i][j][k] = Math.max(helper(i + 1, j, k - 1, cardPoints) + cardPoints[i], helper(i, j - 1, k - 1, cardPoints) + cardPoints[j]);
     }
 
     public static void main(String args[]) {
