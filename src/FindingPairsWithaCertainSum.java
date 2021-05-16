@@ -3,12 +3,14 @@ import java.util.HashMap;
 
 public class FindingPairsWithaCertainSum {
 
+    private HashMap<Integer, Integer> map;
     private HashMap<Integer, Integer> map1;
     private HashMap<Integer, Integer> map2;
     private int[] nums1;
     private int[] nums2;
 
     public FindingPairsWithaCertainSum(int[] nums1, int[] nums2) {
+        this.map = new HashMap();
         this.map1 = new HashMap();
         this.map2 = new HashMap();
         this.nums1 = nums1;
@@ -19,24 +21,23 @@ public class FindingPairsWithaCertainSum {
         for (int i = 0; i < nums2.length; i++) {
             this.map2.put(this.nums2[i], this.map2.getOrDefault(this.nums2[i], 0) + 1);
         }
+        for (int key1 : this.map1.keySet()) {
+            for (int key2 : this.map2.keySet()) {
+                this.map.put(key1 + key2, this.map.getOrDefault(key1 + key2, 0) + this.map1.get(key1) * this.map2.get(key2));
+            }
+        }
     }
 
     public void add(int index, int val) {
-        this.map2.put(this.nums2[index], this.map2.get(this.nums2[index]) - 1);
+        for (int i = 0; i < this.nums1.length; i++) {
+            this.map.put(this.nums1[i] + this.nums2[index], this.map.get(this.nums1[i] + this.nums2[index]) - 1);
+            this.map.put(this.nums1[i] + this.nums2[index] + val, this.map.get(this.nums1[i] + this.nums2[index] + val) + 1);
+        }
         this.nums2[index] += val;
-        this.map2.put(this.nums2[index], this.map2.getOrDefault(this.nums2[index], 0) + 1);
     }
 
     public int count(int tot) {
-        int count = 0;
-        for (int key1 : this.map1.keySet()) {
-            for (int key2 : this.map2.keySet()) {
-                if (key1 + key2 == tot) {
-                    count += (this.map1.get(key1) * this.map2.get(key2));
-                }
-            }
-        }
-        return count;
+        return this.map.getOrDefault(tot, 0);
     }
 
     public static void main(String[] args) {
