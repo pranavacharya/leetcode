@@ -13,6 +13,9 @@ public class LongestConsecutiveSequence {
         }
         int max = 0;
         for (int item : set) {
+            if (set.contains(item - 1)) {
+                continue;
+            }
             int local = 1;
             while (set.contains(item + 1)) {
                 item++;
