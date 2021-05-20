@@ -1,10 +1,7 @@
 
-import java.util.HashMap;
 import java.util.HashSet;
 
 public class LongestConsecutiveSequence {
-
-    private HashMap<Integer, Integer> map = new HashMap();
 
     public int longestConsecutive(int[] nums) {
         if (nums.length == 0) {
@@ -14,32 +11,16 @@ public class LongestConsecutiveSequence {
         for (int i = 0; i < nums.length; i++) {
             set.add(nums[i]);
         }
-        for (int i = 0; i < nums.length; i++) {
-            if (set.contains(nums[i] + 1)) {
-                union(nums[i], nums[i] + 1);
-            }
-        }
         int max = 0;
-        for (int key : this.map.keySet()) {
-            int parent = findParent(key);
-            max = Math.max(max, key - parent);
+        for (int item : set) {
+            int local = 1;
+            while (set.contains(item + 1)) {
+                item++;
+                local++;
+            }
+            max = Math.max(max, local);
         }
-        return max + 1;
-    }
-
-    private void union(int x, int y) {
-        int x1 = findParent(x);
-        int y1 = findParent(y);
-        this.map.put(y1, x1);
-    }
-
-    private int findParent(int key) {
-        int child = key;
-        while (this.map.containsKey(key) && this.map.get(key) != key) {
-            key = this.map.get(key);
-        }
-        this.map.put(child, key);
-        return this.map.get(child);
+        return max;
     }
 
     public static void main(String[] args) {
