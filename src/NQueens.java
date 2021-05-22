@@ -1,63 +1,60 @@
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class NQueens {
 
     public List<List<String>> solveNQueens(int n) {
-        char[][] board = new char[n][n];
-        for (int i = 0; i < n; i++) {
-            for (int j = 0; j < n; j++) {
-                board[i][j] = '.';
-            }
+        List<List<String>> list = new ArrayList();
+        char[][] grid = new char[n][n];
+        for (int i = 0; i < grid.length; i++) {
+            Arrays.fill(grid[i], '.');
         }
-        List<List<String>> list = new ArrayList<>();
-        permutation(n, 0, board, list);
+        backtracking(0, grid, list);
         return list;
     }
 
-    public void permutation(int n, int col, char[][] board, List<List<String>> list) {
-        if (n == 0) {
-            ArrayList<String> matrix = new ArrayList();
-            for (int i = 0; i < board.length; i++) {
-                StringBuilder sb = new StringBuilder();
-                for (int j = 0; j < board.length; j++) {
-                    sb.append(board[i][j]);
-                }
-                matrix.add(sb.toString());
-            }
-            list.add(matrix);
-        } else {
-            for (int j = col; j < board.length && board.length - (j + 1) == n - 1; j++) {
-                for (int i = 0; i < board.length; i++) {
-                    if (isSafe(board, i, j)) {
-                        board[i][j] = 'Q';
-                        permutation(n - 1, j + 1, board, list);
-                        board[i][j] = '.';
-                    }
-                }
+    private void backtracking(int i, char[][] grid, List<List<String>> list) {
+        if (i == grid.length) {
+            list.add(generateList(grid));
+            return;
+        }
+        for (int j = 0; j < grid[i].length; j++) {
+            if (isValid(grid, i, j)) {
+                grid[i][j] = 'Q';
+                backtracking(i + 1, grid, list);
+                grid[i][j] = '.';
             }
         }
     }
 
-    public boolean isSafe(char board[][], int row, int col) {
-        int i, j;
-        for (i = 0; i < col; i++) {
-            if (board[row][i] == 'Q') {
+    private boolean isValid(char[][] grid, int i, int j) {
+        for (int k = 0; k < grid.length; k++) {
+            if (grid[k][j] == 'Q') {
                 return false;
             }
-        }
-        for (i = row, j = col; i >= 0 && j >= 0; i--, j--) {
-            if (board[i][j] == 'Q') {
-                return false;
-            }
-        }
-        for (i = row, j = col; j >= 0 && i < board.length; i++, j--) {
-            if (board[i][j] == 'Q') {
-                return false;
+            for (int l = 0; l < grid[i].length; l++) {
+                if (k == 0) {
+                    if (grid[i][l] == 'Q') {
+                        return false;
+                    }
+                }
+                if (Math.abs(k - i) == Math.abs(l - j) && grid[k][l] == 'Q') {
+                    return false;
+                }
             }
         }
         return true;
+    }
+
+    private List<String> generateList(char[][] grid) {
+        List<String> combo = new ArrayList();
+        for (int i = 0; i < grid.length; i++) {
+            String row = new String(grid[i]);
+            combo.add(row);
+        }
+        return combo;
     }
 
     public static void main(String args[]) {
