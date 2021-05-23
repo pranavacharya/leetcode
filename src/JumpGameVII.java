@@ -1,32 +1,31 @@
 
-import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.Queue;
 
 public class JumpGameVII {
-
-    private int dp[];
 
     public boolean canReach(String s, int minJump, int maxJump) {
         if (s.charAt(s.length() - 1) != '0') {
             return false;
         }
-        this.dp = new int[s.length()];
-        Arrays.fill(this.dp, -1);
-        return helper(s, 0, minJump, maxJump) == 1;
-    }
-
-    private int helper(String s, int index, int min, int max) {
-        if (index == s.length() - 1) {
-            return this.dp[index] = 1;
-        }
-        if (this.dp[index] != -1) {
-            return this.dp[index];
-        }
-        for (int i = index + min; i <= Math.min(index + max, s.length() - 1); i++) {
-            if (s.charAt(i) == '0' && helper(s, i, min, max) == 1) {
-                return this.dp[index] = 1;
+        Queue<Integer> queue = new LinkedList();
+        queue.add(0);
+        int lastAdded = 0;
+        while (!queue.isEmpty()) {
+            int curr = queue.poll();
+            if (curr == s.length() - 1) {
+                return true;
+            }
+            int start = Math.max(lastAdded + 1, curr + minJump);
+            int end = Math.min(s.length() - 1, curr + maxJump);
+            for (int i = start; i <= end; i++) {
+                if (s.charAt(i) == '0') {
+                    queue.add(i);
+                }
+                lastAdded = i;
             }
         }
-        return this.dp[index] = 0;
+        return false;
     }
 
     public static void main(String[] args) {
