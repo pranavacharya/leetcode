@@ -1,27 +1,21 @@
 
-import java.util.HashSet;
-
 public class MaximumProductofWordLengths {
 
     public int maxProduct(String[] words) {
         int count = 0;
+        int[] masks = new int[words.length];
         for (int i = 0; i < words.length; i++) {
-            for (int j = i + 1; j < words.length; j++) {
-                char[] arr1 = words[i].toCharArray();
-                char[] arr2 = words[j].toCharArray();
-                HashSet<Character> set = new HashSet();
-                for (int k = 0; k < arr1.length; k++) {
-                    set.add(arr1[k]);
-                }
-                boolean flag = true;
-                for (int k = 0; k < arr2.length; k++) {
-                    if (set.contains(arr2[k])) {
-                        flag = false;
-                        break;
-                    }
-                }
-                if (flag) {
-                    count = Math.max(count, arr1.length * arr2.length);
+            String word = words[i];
+            int mask = 0;
+            for (int j = 0; j < word.length(); j++) {
+                mask = mask | 1 << (word.charAt(j) - 'a');
+            }
+            masks[i] = mask;
+        }
+        for (int i = 0; i < masks.length; i++) {
+            for (int j = i + 1; j < masks.length; j++) {
+                if ((masks[i] & masks[j]) == 0) {
+                    count = Math.max(count, words[i].length() * words[j].length());
                 }
             }
         }
