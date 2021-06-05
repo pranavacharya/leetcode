@@ -1,8 +1,6 @@
 
 import java.util.Arrays;
-import java.util.LinkedList;
 import java.util.PriorityQueue;
-import java.util.Queue;
 
 public class ProcessTasksUsingServers {
 
@@ -10,10 +8,12 @@ public class ProcessTasksUsingServers {
 
         int index;
         int processEndTime;
+        int weight;
 
-        public Servers(int index, int processEndTime) {
+        public Servers(int index, int processEndTime, int weight) {
             this.index = index;
             this.processEndTime = processEndTime;
+            this.weight = weight;
         }
     }
 
@@ -21,36 +21,26 @@ public class ProcessTasksUsingServers {
         int[] ans = new int[tasks.length];
         PriorityQueue<Integer> available = new PriorityQueue<>((a, b) -> (servers[a] == servers[b]
                 ? a - b : servers[a] - servers[b]));
-        PriorityQueue<Servers> unavailable = new PriorityQueue<>((a, b) -> (a.processEndTime == b.processEndTime
-                ? a.index - b.index : a.processEndTime - b.processEndTime));
+        PriorityQueue<Servers> unavailable = new PriorityQueue<>((a, b) -> (a.processEndTime != b.processEndTime
+                ? a.processEndTime - b.processEndTime : (a.weight != b.weight) ? a.weight - b.weight : a.index - b.index));
         for (int i = 0; i < servers.length; i++) {
             available.add(i);
         }
         int time = 0;
-        Queue<Integer> taskQueue = new LinkedList();
         for (int i = 0; i < tasks.length; i++) {
             time = i;
-            taskQueue.add(i);
             while (!unavailable.isEmpty() && unavailable.peek().processEndTime <= time) {
                 available.add(unavailable.poll().index);
             }
-            while (!available.isEmpty() && !taskQueue.isEmpty()) {
+            if (available.isEmpty()) {
+                Servers curr = unavailable.poll();
+                ans[i] = curr.index;
+                curr.processEndTime += tasks[i];
+                unavailable.add(curr);
+            } else {
                 int curr = available.poll();
-                int taskTime = taskQueue.poll();
-                ans[taskTime] = curr;
-                unavailable.add(new Servers(curr, time + tasks[taskTime]));
-            }
-        }
-        while (!taskQueue.isEmpty()) {
-            time++;
-            while (!unavailable.isEmpty() && unavailable.peek().processEndTime <= time) {
-                available.add(unavailable.poll().index);
-            }
-            while (!available.isEmpty() && !taskQueue.isEmpty()) {
-                int curr = available.poll();
-                int taskTime = taskQueue.poll();
-                ans[taskTime] = curr;
-                unavailable.add(new Servers(curr, time + tasks[taskTime]));
+                ans[i] = curr;
+                unavailable.add(new Servers(curr, time + tasks[i], servers[curr]));
             }
         }
         return ans;
