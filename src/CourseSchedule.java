@@ -1,7 +1,8 @@
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.Queue;
 
 public class CourseSchedule {
 
@@ -10,38 +11,32 @@ public class CourseSchedule {
         for (int i = 0; i < numCourses; i++) {
             adj.put(i, new ArrayList());
         }
+        int[] indegree = new int[numCourses];
         for (int[] pre : prerequisites) {
             int start = pre[1];
             int end = pre[0];
             adj.get(start).add(end);
+            indegree[end]++;
         }
-        boolean[] isVisited = new boolean[numCourses];
+        Queue<Integer> queue = new LinkedList();
         for (int i = 0; i < numCourses; i++) {
-            if (!isVisited[i] && !dfs(adj, i, isVisited, new HashSet())) {
-                return false;
+            if (indegree[i] == 0) {
+                queue.add(i);
             }
         }
-        return true;
-    }
-
-    private boolean dfs(HashMap<Integer, ArrayList<Integer>> adj, int root,
-            boolean[] isVisited, HashSet<Integer> path) {
-        if (path.contains(root)) {
-            return false;
-        }
-        if (isVisited[root]) {
-            return true;
-        }
-        path.add(root);
-        isVisited[root] = true;
-        ArrayList<Integer> preq = adj.get(root);
-        for (int i = 0; i < preq.size(); i++) {
-            if (!dfs(adj, preq.get(i), isVisited, path)) {
-                return false;
+        ArrayList<Integer> sorted = new ArrayList();
+        while (!queue.isEmpty()) {
+            int curr = queue.poll();
+            sorted.add(curr);
+            ArrayList<Integer> preq = adj.get(curr);
+            for (int i = 0; i < preq.size(); i++) {
+                indegree[preq.get(i)]--;
+                if (indegree[preq.get(i)] == 0) {
+                    queue.add(preq.get(i));
+                }
             }
         }
-        path.remove(root);
-        return true;
+        return sorted.size() == numCourses;
     }
 
     public static void main(String args[]) {
