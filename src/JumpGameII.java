@@ -7,23 +7,22 @@ public class JumpGameII {
 
     public int jump(int[] nums) {
         this.dp = new int[nums.length];
-        Arrays.fill(this.dp, -1);
+        Arrays.fill(this.dp, - 1);
         return helper(0, nums);
     }
 
-    private int helper(int i, int[] nums) {
-        if (i == nums.length - 1) {
+    private int helper(int index, int[] nums) {
+        if (index >= nums.length - 1) {
             return 0;
         }
-        if (this.dp[i] != -1) {
-            return this.dp[i];
+        if (this.dp[index] != -1) {
+            return this.dp[index];
         }
         int min = Integer.MAX_VALUE;
-        int val = nums[i];
-        for (int j = 1; i + j < nums.length && j <= val; j++) {
-            min = Math.min(min, helper(i + j, nums));
+        for (int i = 1; i <= nums[index]; i++) {
+            min = Math.min(min, helper(index + i, nums));
         }
-        return this.dp[i] = min == Integer.MAX_VALUE ? min : min + 1;
+        return this.dp[index] = min == Integer.MAX_VALUE ? Integer.MAX_VALUE : min + 1;
     }
 
     public static void main(String[] args) {
