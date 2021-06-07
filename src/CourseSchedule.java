@@ -1,41 +1,47 @@
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.Queue;
+import java.util.HashSet;
 
 public class CourseSchedule {
 
     public boolean canFinish(int numCourses, int[][] prerequisites) {
         HashMap<Integer, ArrayList<Integer>> adj = new HashMap();
-        int[] indegree = new int[numCourses];
+        for (int i = 0; i < numCourses; i++) {
+            adj.put(i, new ArrayList());
+        }
         for (int[] pre : prerequisites) {
-            ArrayList<Integer> list = adj.getOrDefault(pre[0], new ArrayList());
-            list.add(pre[1]);
-            adj.put(pre[0], list);
-            indegree[pre[1]]++;
+            int start = pre[1];
+            int end = pre[0];
+            adj.get(start).add(end);
         }
-        Queue<Integer> queue = new LinkedList();
-        for (int i = 0; i < indegree.length; i++) {
-            if (indegree[i] == 0) {
-                queue.add(i);
+        boolean[] isVisited = new boolean[numCourses];
+        for (int i = 0; i < numCourses; i++) {
+            if (!isVisited[i] && !dfs(adj, i, isVisited, new HashSet())) {
+                return false;
             }
         }
-        int count = 0;
-        while (!queue.isEmpty()) {
-            int current = queue.poll();
-            count++;
-            if (!adj.containsKey(current)) {
-                continue;
-            }
-            for (int nei : adj.get(current)) {
-                indegree[nei]--;
-                if (indegree[nei] == 0) {
-                    queue.add(nei);
-                }
+        return true;
+    }
+
+    private boolean dfs(HashMap<Integer, ArrayList<Integer>> adj, int root,
+            boolean[] isVisited, HashSet<Integer> path) {
+        if (path.contains(root)) {
+            return false;
+        }
+        if (isVisited[root]) {
+            return true;
+        }
+        path.add(root);
+        isVisited[root] = true;
+        ArrayList<Integer> preq = adj.get(root);
+        for (int i = 0; i < preq.size(); i++) {
+            if (!dfs(adj, preq.get(i), isVisited, path)) {
+                return false;
             }
         }
-        return count == numCourses;
+        path.remove(root);
+        return true;
     }
 
     public static void main(String args[]) {
