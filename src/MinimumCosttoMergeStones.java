@@ -1,5 +1,9 @@
 
+import java.util.Arrays;
+
 public class MinimumCosttoMergeStones {
+
+    private int[][][] dp;
 
     public int mergeStones(int[] stones, int k) {
         int n = stones.length;
@@ -12,6 +16,12 @@ public class MinimumCosttoMergeStones {
         if (n != 1) {
             return -1;
         }
+        this.dp = new int[stones.length][stones.length][k + 1];
+        for (int i = 0; i < this.dp.length; i++) {
+            for (int j = 0; j < this.dp[i].length; j++) {
+                Arrays.fill(this.dp[i][j], -1);
+            }
+        }
         int[] prefix = new int[stones.length + 1];
         for (int i = 1; i < prefix.length; i++) {
             prefix[i] = prefix[i - 1] + stones[i - 1];
@@ -20,13 +30,14 @@ public class MinimumCosttoMergeStones {
     }
 
     private int helper(int[] stones, int i, int j, int piles, int k, int[] prefix) {
+        if (this.dp[i][j][piles] != -1) {
+            return this.dp[i][j][piles];
+        }
         int min = Integer.MAX_VALUE;
-
         if (i == j) {
             min = piles == 1 ? 0 : min;
-            return min;
+            return this.dp[i][j][piles] = min;
         }
-
         if (piles == 1) {
             int mergek = helper(stones, i, j, k, k, prefix);
             if (mergek != Integer.MAX_VALUE) {
@@ -41,7 +52,7 @@ public class MinimumCosttoMergeStones {
                 }
             }
         }
-        return min;
+        return this.dp[i][j][piles] = min;
     }
 
     public static void main(String[] args) {
