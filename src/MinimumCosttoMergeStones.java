@@ -12,29 +12,36 @@ public class MinimumCosttoMergeStones {
         if (n != 1) {
             return -1;
         }
-        n = stones.length;
-        int[] arr = new int[n - k + 1];
+        int[] prefix = new int[stones.length + 1];
+        for (int i = 1; i < prefix.length; i++) {
+            prefix[i] = prefix[i - 1] + stones[i - 1];
+        }
+        return helper(stones, 0, stones.length - 1, 1, k, prefix);
+    }
+
+    private int helper(int[] stones, int i, int j, int piles, int k, int[] prefix) {
         int min = Integer.MAX_VALUE;
-        for (int i = 0; i + k <= n; i++) {
-            int cost = 0;
-            for (int j = 0; j < arr.length; j++) {
-                if (j < i) {
-                    arr[j] = stones[j];
-                } else if (j == i) {
-                    int sum = 0;
-                    for (int l = 0; l < k; l++) {
-                        sum += stones[j + l];
-                    }
-                    cost = sum;
-                    arr[j] = sum;
-                } else {
-                    // j > i
-                    arr[j] = stones[j + k - 1];
+
+        if (i == j) {
+            min = piles == 1 ? 0 : min;
+            return min;
+        }
+
+        if (piles == 1) {
+            int mergek = helper(stones, i, j, k, k, prefix);
+            if (mergek != Integer.MAX_VALUE) {
+                min = mergek + prefix[j + 1] - prefix[i];
+            }
+        } else {
+            for (int l = i; l < j; l++) {
+                int left = helper(stones, i, l, piles - 1, k, prefix);
+                int right = helper(stones, l + 1, j, 1, k, prefix);
+                if (left != Integer.MAX_VALUE && right != Integer.MAX_VALUE) {
+                    min = Math.min(min, left + right);
                 }
             }
-            min = Math.min(min, cost + mergeStones(arr, k));
         }
-        return min == Integer.MAX_VALUE ? 0 : min;
+        return min;
     }
 
     public static void main(String[] args) {
