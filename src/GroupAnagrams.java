@@ -7,24 +7,17 @@ import java.util.List;
 public class GroupAnagrams {
 
     public List<List<String>> groupAnagrams(String[] strs) {
-        HashMap<String, List<String>> map = new HashMap<>();
-        List<List<String>> result = new ArrayList<>();
+        HashMap<String, List<String>> map = new HashMap();
         for (String str : strs) {
             char[] arr = str.toCharArray();
             Arrays.sort(arr);
-            String sorted = new String(arr);
-            if (map.containsKey(sorted)) {
-                List<String> templist = map.get(sorted);
-                templist.add(str);
-                map.put(sorted, templist);
-            } else {
-                List<String> templist = new ArrayList<>();
-                templist.add(str);
-                map.put(sorted, templist);
-            }
+            String newStr = new String(arr);
+            map.putIfAbsent(newStr, new ArrayList());
+            map.get(newStr).add(str);
         }
-        for (String s : map.keySet()) {
-            result.add(map.get(s));
+        List<List<String>> result = new ArrayList();
+        for (String key : map.keySet()) {
+            result.add(map.get(key));
         }
         return result;
     }
