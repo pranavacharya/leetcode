@@ -4,63 +4,51 @@ import java.util.List;
 
 public class WordSearchII {
 
-    class Trie {
-
-        String word;
-        Trie[] child = new Trie[26];
-    }
-
     private int[][] dirs = new int[][]{{0, 1}, {0, -1}, {1, 0}, {-1, 0}};
 
     public List<String> findWords(char[][] board, String[] words) {
-        Trie root = buildTrie(words);
         List<String> ans = new ArrayList();
-        for (int i = 0; i < board.length; i++) {
-            for (int j = 0; j < board[i].length; j++) {
-                dfs(board, root, ans, i, j);
+
+        for (String word : words) {
+            outer:
+            for (int i = 0; i < board.length; i++) {
+                for (int j = 0; j < board[i].length; j++) {
+                    if (word.charAt(0) == board[i][j]) {
+                        if (findWord(board, i, j, word, 0)) {
+                            ans.add(word);
+                            break outer;
+                        }
+                    }
+                }
             }
         }
+
         return ans;
     }
 
-    private Trie buildTrie(String[] words) {
-        Trie root = new Trie();
-        for (int i = 0; i < words.length; i++) {
-            String word = words[i];
-            Trie temp = root;
-            int j = 0;
-            while (j < word.length() && temp.child[word.charAt(j) - 'a'] != null) {
-                temp = temp.child[word.charAt(j) - 'a'];
-                j++;
-            }
-
-            for (int k = j; k < word.length(); k++) {
-                temp.child[word.charAt(k) - 'a'] = new Trie();
-                temp = temp.child[word.charAt(k) - 'a'];
-            }
-
-            temp.word = word;
+    private boolean findWord(char[][] board, int i, int j, String word, int index) {
+        if (index == word.length() || index == 0 && word.length() == 1) {
+            return true;
         }
-        return root;
-    }
 
-    private void dfs(char[][] board, Trie root, List<String> ans, int row, int col) {
-        if (row < 0 || row >= board.length || col < 0 || col >= board[row].length) {
-            return;
+        if (board[i][j] != word.charAt(index)) {
+            return false;
         }
-        char curr = board[row][col];
-        if (curr != '.' && root.child[curr - 'a'] != null) {
-            root = root.child[curr - 'a'];
-            if (root.word != null) {
-                ans.add(root.word);
-                root.word = null;
+
+        char c = board[i][j];
+        board[i][j] = '.';
+        for (int[] dir : dirs) {
+            int x = i + dir[0];
+            int y = j + dir[1];
+            if (x >= 0 && x < board.length && y >= 0 && y < board[x].length) {
+                if (findWord(board, x, y, word, index + 1)) {
+                    board[i][j] = c;
+                    return true;
+                }
             }
-            board[row][col] = '.';
-            for (int[] dir : dirs) {
-                dfs(board, root, ans, row + dir[0], col + dir[1]);
-            }
-            board[row][col] = curr;
         }
+        board[i][j] = c;
+        return false;
     }
 
     public static void main(String[] args) {
