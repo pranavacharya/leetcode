@@ -1,54 +1,41 @@
 
-import java.util.HashMap;
+import java.util.PriorityQueue;
 
 public class MinimumNumberofRefuelingStops {
 
-    private HashMap<Integer, Integer>[] dp;
-
     public int minRefuelStops(int target, int startFuel, int[][] stations) {
-        this.dp = new HashMap[stations.length + 2];
-        int[][] newStations = new int[stations.length + 1][2];
-        for (int i = 0; i < this.dp.length; i++) {
-            this.dp[i] = new HashMap();
-        }
-        newStations[0][1] = startFuel;
-        for (int i = 0; i < stations.length; i++) {
-            newStations[i + 1][0] = stations[i][0];
-            newStations[i + 1][1] = stations[i][1];
-        }
-
-        int ans = helper(newStations, target, 0, 0);
-
-        return ans == Integer.MAX_VALUE ? -1 : ans;
-    }
-
-    private int helper(int[][] stations, int target, int index, int fuel) {
-
-        int range = fuel + stations[index][1];
-
-        int distCovered = stations[index][0];
-
-        if (range >= target - distCovered) {
-            return 0;
-        }
-
-        if (this.dp[index].containsKey(fuel)) {
-            return this.dp[index].get(fuel);
-        }
-
-        int minStops = Integer.MAX_VALUE;
-
-        for (int i = index + 1; i < stations.length; i++) {
-            if (stations[i][0] > distCovered + range) {
-                break;
+        int maxFuel = startFuel;
+        PriorityQueue<Integer> queue = new PriorityQueue<>((a, b) -> (b - a));
+        int stop = 0;
+        int index = 0;
+        while (index < stations.length) {
+            if (stations[index][0] <= maxFuel) {
+                queue.add(stations[index][1]);
+                index++;
+            } else {
+                if (queue.isEmpty()) {
+                    return -1;
+                } else {
+                    maxFuel += queue.poll();
+                    stop++;
+                }
             }
-
-            minStops = Math.min(minStops, helper(stations, target, i, range - (stations[i][0] - distCovered)));
-
+            if (maxFuel >= target) {
+                return stop;
+            }
         }
-        this.dp[index].put(fuel, minStops == Integer.MAX_VALUE ? minStops : minStops + 1);
-        return minStops == Integer.MAX_VALUE ? minStops : minStops + 1;
-
+        while (maxFuel < target) {
+            if (queue.isEmpty()) {
+                return -1;
+            } else {
+                maxFuel += queue.poll();
+                stop++;
+            }
+            if (maxFuel >= target) {
+                return stop;
+            }
+        }
+        return stop;
     }
 
     public static void main(String[] args) {
