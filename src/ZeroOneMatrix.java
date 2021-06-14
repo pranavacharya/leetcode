@@ -7,40 +7,41 @@ public class ZeroOneMatrix {
 
     private int[][] dirs = new int[][]{{0, 1}, {0, -1}, {1, 0}, {-1, 0}};
 
-    public int[][] updateMatrix(int[][] matrix) {
-        int[][] result = new int[matrix.length][matrix[0].length];
-        for (int i = 0; i < result.length; i++) {
-            Arrays.fill(result[i], -1);
+    public int[][] updateMatrix(int[][] mat) {
+        int m = mat.length;
+        int n = mat[0].length;
+        int[][] ans = new int[m][n];
+        for (int i = 0; i < ans.length; i++) {
+            Arrays.fill(ans[i], -1);
         }
-
         Queue<int[]> queue = new LinkedList();
-        for (int i = 0; i < matrix.length; i++) {
-            for (int j = 0; j < matrix[i].length; j++) {
-                if (matrix[i][j] == 0) {
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                if (mat[i][j] == 0) {
                     queue.add(new int[]{i, j});
                 }
             }
         }
-        int distance = 0;
+        int dist = 0;
         while (!queue.isEmpty()) {
             int size = queue.size();
             while (size > 0) {
                 int[] curr = queue.poll();
-                if (result[curr[0]][curr[1]] == -1) {
-                    result[curr[0]][curr[1]] = distance;
+                if (ans[curr[0]][curr[1]] == -1) {
+                    ans[curr[0]][curr[1]] = dist;
                     for (int[] dir : dirs) {
-                        if (curr[0] + dir[0] < matrix.length && curr[0] + dir[0] >= 0
-                                && curr[1] + dir[1] >= 0 && curr[1] + dir[1] < matrix[0].length
-                                && result[curr[0] + dir[0]][curr[1] + dir[1]] == -1) {
-                            queue.add(new int[]{curr[0] + dir[0], curr[1] + dir[1]});
+                        int x = curr[0] + dir[0];
+                        int y = curr[1] + dir[1];
+                        if (x >= 0 && x < m && y >= 0 && y < n && ans[x][y] == -1) {
+                            queue.add(new int[]{x, y});
                         }
                     }
                 }
                 size--;
             }
-            distance++;
+            dist++;
         }
-        return result;
+        return ans;
     }
 
     public static void main(String args[]) {
