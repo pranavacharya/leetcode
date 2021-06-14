@@ -1,27 +1,19 @@
 
-import java.util.PriorityQueue;
-
 public class MaximumUnitsonaTruck {
 
     public int maximumUnits(int[][] boxTypes, int truckSize) {
-        PriorityQueue<Integer> maxHeap = new PriorityQueue<>((a, b)
-                -> (boxTypes[b][1] - boxTypes[a][1]));
-        for (int i = 0; i < boxTypes.length; i++) {
-            maxHeap.add(i);
-        }
+        Arrays.sort(boxTypes, ((a, b) -> b[1] - a[1]));
         int units = 0;
-        while (truckSize > 0 && !maxHeap.isEmpty()) {
-            int index = maxHeap.poll();
-            int boxes = boxTypes[index][0];
-            int unitsPerBox = boxTypes[index][1];
-            if (boxes <= truckSize) {
-                truckSize -= boxes;
-                units += boxes * unitsPerBox;
+        int index = 0;
+        while (truckSize > 0 && index < boxTypes.length) {
+            if (truckSize > boxTypes[index][0]) {
+                truckSize -= boxTypes[index][0];
+                units += (boxTypes[index][0] * boxTypes[index][1]);
             } else {
-                int diff = truckSize;
+                units += truckSize * boxTypes[index][1];
                 truckSize = 0;
-                units += diff * unitsPerBox;
             }
+            index++;
         }
         return units;
     }
