@@ -1,5 +1,4 @@
 
-import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.Queue;
 
@@ -7,21 +6,23 @@ public class JumpGameIII {
 
     public boolean canReach(int[] arr, int start) {
         Queue<Integer> queue = new LinkedList();
-        HashSet<Integer> visited = new HashSet();
         queue.add(start);
+        boolean[] visited = new boolean[arr.length];
         while (!queue.isEmpty()) {
             int curr = queue.poll();
-
             if (arr[curr] == 0) {
                 return true;
             }
-            visited.add(curr);
-            if (curr + arr[curr] < arr.length && curr + arr[curr] >= 0 && !visited.contains(curr + arr[curr])) {
-                queue.add(curr + arr[curr]);
-            }
-            if (curr - arr[curr] < arr.length && curr - arr[curr] >= 0 && !visited.contains(curr - arr[curr])) {
+            if (curr - arr[curr] >= 0 && curr - arr[curr] < arr.length && !visited[curr - arr[curr]]) {
                 queue.add(curr - arr[curr]);
+                visited[curr - arr[curr]] = true;
             }
+
+            if (curr + arr[curr] >= 0 && curr + arr[curr] < arr.length && !visited[curr + arr[curr]]) {
+                queue.add(curr + arr[curr]);
+                visited[curr + arr[curr]] = true;
+            }
+
         }
         return false;
     }
