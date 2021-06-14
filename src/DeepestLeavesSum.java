@@ -1,31 +1,27 @@
 
 public class DeepestLeavesSum {
 
-    private int maxDepth = 0;
-    private int maxDepthSum = 0;
-
     public int deepestLeavesSum(TreeNode root) {
-        dfs(root, 0);
-        return this.maxDepthSum;
+        return deepestSum(root)[1];
     }
 
-    private void dfs(TreeNode root, int depth) {
+    private int[] deepestSum(TreeNode root) {
         if (root == null) {
-            return;
+            return new int[]{0, 0};
         }
-
-        depth++;
-        if (this.maxDepth < depth) {
-            this.maxDepth = depth;
-            this.maxDepthSum = 0;
-            this.maxDepthSum += root.val;
-        } else if (this.maxDepth == depth) {
-            this.maxDepthSum += root.val;
+        if (root.left == null && root.right == null) {
+            return new int[]{1, root.val};
         }
-
-        dfs(root.left, depth);
-        dfs(root.right, depth);
-
+        int[] left = deepestSum(root.left);
+        int[] right = deepestSum(root.right);
+        if (left[0] == right[0]) {
+            return new int[]{left[0] + 1, left[1] + right[1]};
+        }
+        if (left[0] > right[0]) {
+            return new int[]{left[0] + 1, left[1]};
+        } else {
+            return new int[]{right[0] + 1, right[1]};
+        }
     }
 
     public static void main(String[] args) {
