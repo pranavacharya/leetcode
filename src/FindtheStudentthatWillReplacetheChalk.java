@@ -4,6 +4,9 @@ public class FindtheStudentthatWillReplacetheChalk {
     public int chalkReplacer(int[] chalk, int k) {
         int n = chalk.length;
         int[] prefix = new int[n];
+        if (chalk[0] > k) {
+            return 0;
+        }
         prefix[0] = chalk[0];
         for (int i = 1; i < n; i++) {
             prefix[i] = prefix[i - 1] + chalk[i];
@@ -26,7 +29,7 @@ public class FindtheStudentthatWillReplacetheChalk {
 
     public static void main(String[] args) {
         FindtheStudentthatWillReplacetheChalk fsrc = new FindtheStudentthatWillReplacetheChalk();
-        int[] chalk = new int[]{5, 1, 5};
-        System.out.println(fsrc.chalkReplacer(chalk, 22));
+        int[] chalk = new int[]{2, 2, 3};
+        System.out.println(fsrc.chalkReplacer(chalk, 1));
     }
 }
