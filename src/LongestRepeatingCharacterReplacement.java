@@ -3,26 +3,20 @@ public class LongestRepeatingCharacterReplacement {
 
     public int characterReplacement(String s, int k) {
         int ans = 0;
-        for (char c = 'A'; c <= 'Z'; c++) {
-            int i = 0;
-            int j = 0;
-            int n = k;
-            while (j < s.length()) {
-                if (s.charAt(j) == c) {
-                    j++;
-                } else {
-                    if (n > 0) {
-                        n--;
-                        j++;
-                    } else {
-                        if (s.charAt(i) != c) {
-                            n++;
-                        }
-                        i++;
-                    }
-                }
-                ans = Math.max(ans, j - i);
+        int mostFreq = 0;
+        int[] freq = new int[26];
+        int i = 0;
+        for (int j = 0; j < s.length(); j++) {
+            freq[s.charAt(j) - 'A']++;
+            mostFreq = Math.max(mostFreq, freq[s.charAt(j) - 'A']);
+
+            int size = j - i + 1;
+            int change = size - mostFreq;
+            if (change > k) {
+                freq[s.charAt(i) - 'A']--;
+                i++;
             }
+            ans = Math.max(ans, j - i + 1);
         }
         return ans;
     }
