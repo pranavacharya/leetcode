@@ -3,21 +3,28 @@ import java.util.Arrays;
 
 public class ReducingDishes {
 
-    private int max = 0;
+    private int[][] dp;
 
     public int maxSatisfaction(int[] satisfaction) {
         Arrays.sort(satisfaction);
-        helper(satisfaction, 0, 1, 0);
-        return this.max;
+        this.dp = new int[satisfaction.length + 1][satisfaction.length + 1];
+        for (int i = 0; i < this.dp.length; i++) {
+            Arrays.fill(this.dp[i], -1);
+        }
+        return helper(satisfaction, 0, 1);
     }
 
-    private void helper(int[] satisfaction, int index, int count, int sum) {
+    private int helper(int[] satisfaction, int index, int count) {
         if (index == satisfaction.length) {
-            this.max = Math.max(this.max, sum);
-            return;
+            return 0;
         }
-        helper(satisfaction, index + 1, count + 1, sum + satisfaction[index] * count);
-        helper(satisfaction, index + 1, count, sum);
+        if (this.dp[index][count] != -1) {
+            return this.dp[index][count];
+        }
+        int max = 0;
+        max = Math.max(max, satisfaction[index] * count + helper(satisfaction, index + 1, count + 1));
+        max = Math.max(max, helper(satisfaction, index + 1, count));
+        return this.dp[index][count] = max;
     }
 
     public static void main(String[] args) {
