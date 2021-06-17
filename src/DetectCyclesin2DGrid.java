@@ -3,49 +3,40 @@ import java.util.ArrayList;
 
 public class DetectCyclesin2DGrid {
 
-    int[][] dirs = new int[][]{{0, 1}, {0, -1}, {1, 0}, {-1, 0}};
+    private int[][] dirs = new int[][]{{0, 1}, {0, -1}, {1, 0}, {-1, 0}};
 
     public boolean containsCycle(char[][] grid) {
-        boolean[][] visited = new boolean[grid.length][grid[0].length];
-        for (int i = 0; i < grid.length; i++) {
-            for (int j = 0; j < grid[i].length; j++) {
-                ArrayList<String> path = new ArrayList();
-                if (!visited[i][j]) {
-                    if (dfs(grid, i, j, visited, path)) {
-                        return true;
-                    }
+        int m = grid.length;
+        int n = grid[0].length;
+        boolean[][] visited = new boolean[m][n];
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                if (!visited[i][j] && dfs(grid, visited, i, j, new ArrayList())) {
+                    return true;
                 }
             }
         }
         return false;
     }
 
-    public boolean dfs(char[][] grid, int row, int col,
-            boolean[][] visited, ArrayList<String> path) {
-        if (row < 0 || row >= grid.length || col < 0 || col >= grid[row].length) {
-            return false;
-        }
-        if (path.contains("" + row + " " + col)
-                && path.get(path.size() - 2).equals("" + row + " " + col)) {
-            return false;
-        }
-        if (path.contains("" + row + " " + col)) {
+    private boolean dfs(char[][] grid, boolean[][] visited, int i, int j, ArrayList<String> path) {
+        if (visited[i][j]) {
+            System.out.println("i " + i + " j " + j);
             return true;
         }
-        path.add("" + row + " " + col);
-        boolean status = false;
+        String lastPath = path.isEmpty() ? "" : path.get(path.size() - 1);
+        path.add("i " + i + " j " + j);
+        visited[i][j] = true;
         for (int[] dir : dirs) {
-            if (row + dir[0] >= 0 && col + dir[1] >= 0
-                    && row + dir[0] < grid.length && col + dir[1] < grid[row].length
-                    && grid[row][col] == grid[row + dir[0]][col + dir[1]]) {
-                status = status || dfs(grid, row + dir[0], col + dir[1], visited, path);
-                if (status) {
+            int x = dir[0] + i;
+            int y = dir[1] + j;
+            if (x >= 0 && x < grid.length && y >= 0 && y < grid[x].length && grid[x][y] == grid[i][j]) {
+                String nextPath = new String("i " + x + " j " + y);
+                if (!lastPath.equals(nextPath) && dfs(grid, visited, x, y, path)) {
                     return true;
                 }
+
             }
-        }
-        if (!status) {
-            visited[row][col] = true;
         }
         path.remove(path.size() - 1);
         return false;
