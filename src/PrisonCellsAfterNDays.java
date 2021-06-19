@@ -4,40 +4,35 @@ import java.util.HashSet;
 
 public class PrisonCellsAfterNDays {
 
-    public int[] prisonAfterNDays(int[] cells, int N) {
+    public int[] prisonAfterNDays(int[] cells, int n) {
+        if (n == 0) {
+            return cells;
+        }
         HashSet<String> set = new HashSet();
-        int size = 0;
-        for (int i = 0; i < N; i++) {
-            int[] temp = new int[cells.length];
+        for (int i = 1; i <= n; i++) {
+            int[] temp = new int[8];
             for (int j = 1; j < 7; j++) {
-                if (cells[j - 1] == cells[j + 1]) {
+                if (cells[j + 1] == cells[j - 1]) {
                     temp[j] = 1;
                 } else {
                     temp[j] = 0;
                 }
             }
-            temp[0] = 0;
-            temp[7] = 0;
-            if (!set.contains(Arrays.toString(temp))) {
-                set.add(Arrays.toString(temp));
-                size++;
-            } else {
+            if (!set.add(Arrays.toString(temp))) {
                 break;
             }
             cells = temp;
         }
-        N = N % size;
-        for (int i = 0; i < N; i++) {
-            int[] temp = new int[cells.length];
+        n = n % set.size();
+        for (int i = 1; i <= n; i++) {
+            int[] temp = new int[8];
             for (int j = 1; j < 7; j++) {
-                if (cells[j - 1] == cells[j + 1]) {
+                if (cells[j + 1] == cells[j - 1]) {
                     temp[j] = 1;
                 } else {
                     temp[j] = 0;
                 }
             }
-            temp[0] = 0;
-            temp[7] = 0;
             cells = temp;
         }
         return cells;
