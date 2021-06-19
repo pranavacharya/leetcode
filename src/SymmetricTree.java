@@ -1,45 +1,25 @@
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.Objects;
-import java.util.Queue;
-
 public class SymmetricTree {
 
     public boolean isSymmetric(TreeNode root) {
         if (root == null) {
+            return false;
+        }
+        return helper(root.left, root.right);
+    }
+
+    private boolean helper(TreeNode left, TreeNode right) {
+        if (left == null && right == null) {
             return true;
         }
-        Queue<TreeNode> queue = new LinkedList();
-        queue.add(root);
-        while (!queue.isEmpty()) {
-            int size = queue.size();
-            ArrayList<Integer> list = new ArrayList();
-            while (size > 0) {
-                TreeNode current = queue.poll();
-                if (current == null) {
-                    list.add(null);
-                } else {
-                    list.add(current.val);
-                }
-                if (current != null) {
-                    queue.add(current.left);
-                    queue.add(current.right);
-                }
-                size--;
-            }
-            int i = 0;
-            int j = list.size() - 1;
-            while (i <= j) {
-                if (Objects.equals(list.get(i), list.get(j))) {
-                    i++;
-                    j--;
-                } else {
-                    return false;
-                }
-            }
+        if (left == null || right == null || left.val != right.val) {
+            return false;
         }
-        return true;
+        boolean status1 = false;
+        boolean status2 = false;
+        status1 = helper(left.left, right.right);
+        status2 = helper(left.right, right.left);
+        return status1 && status2;
     }
 
     public static void main(String args[]) {
