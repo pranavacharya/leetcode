@@ -9,8 +9,7 @@ public class CountSubIslands {
         for (int i = 0; i < grid2.length; i++) {
             for (int j = 0; j < grid2[i].length; j++) {
                 if (grid2[i][j] == 1 && !visited[i][j] && grid1[i][j] == 1) {
-                    if (isSubIsland(grid1, grid2, i, j, visited, new boolean[grid1.length][grid1[0].length])) {
-                        // System.out.println("i " + i + " j" + j);
+                    if (isSubIsland(grid1, grid2, i, j, visited)) {
                         count++;
                     }
                 }
@@ -19,24 +18,23 @@ public class CountSubIslands {
         return count;
     }
 
-    private boolean isSubIsland(int[][] grid1, int[][] grid2, int i, int j, boolean[][] visited, boolean[][] path) {
+    private boolean isSubIsland(int[][] grid1, int[][] grid2, int i, int j, boolean[][] visited) {
         visited[i][j] = true;
-        path[i][j] = true;
+        boolean ans = true;
         for (int[] dir : dirs) {
             int x = dir[0] + i;
             int y = dir[1] + j;
 
-            if (x >= 0 && x < grid2.length && y >= 0 && y < grid2[x].length && grid2[x][y] == 1 && !path[x][y]) {
+            if (x >= 0 && x < grid2.length && y >= 0 && y < grid2[x].length && grid2[x][y] == 1 && !visited[x][y]) {
                 if (grid1[x][y] == 0) {
-                    return false;
-                } else {
-                    if (!isSubIsland(grid1, grid2, x, y, visited, path)) {
-                        return false;
-                    }
+                    ans = false;
+                }
+                if (!isSubIsland(grid1, grid2, x, y, visited)) {
+                    ans = false;
                 }
             }
         }
-        return true;
+        return ans;
     }
 
     public static void main(String[] args) {
