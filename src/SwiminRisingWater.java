@@ -1,30 +1,38 @@
 
 public class SwiminRisingWater {
 
-    private int max = Integer.MAX_VALUE;
-
     private int[][] dirs = new int[][]{{0, 1}, {0, -1}, {1, 0}, {-1, 0}};
 
     public int swimInWater(int[][] grid) {
-        helper(grid, 0, 0, new boolean[grid.length][grid[0].length], grid[0][0]);
-        return this.max;
+        int low = grid[0][0];
+        int high = grid.length * grid.length - 1;
+        while (low < high) {
+            int mid = low + (high - low) / 2;
+            if (helper(grid, 0, 0, new boolean[grid.length][grid.length], mid)) {
+                high = mid;
+            } else {
+                low = mid + 1;
+            }
+        }
+        return low;
     }
 
-    private void helper(int[][] grid, int i, int j, boolean[][] visited, int max) {
-        // System.out.println("i " + i + " j " + j);
+    private boolean helper(int[][] grid, int i, int j, boolean[][] visited, int max) {
         if (i == grid.length - 1 && j == grid[i].length - 1) {
-            this.max = Math.min(this.max, max);
-            return;
+            return true;
         }
         visited[i][j] = true;
         for (int[] dir : dirs) {
             int x = dir[0] + i;
             int y = dir[1] + j;
-            if (x >= 0 && x < grid.length && y >= 0 && y < grid[x].length && !visited[x][y]) {
-                helper(grid, x, y, visited, Math.max(max, grid[x][y]));
+            if (x >= 0 && x < grid.length && y >= 0 && y < grid[x].length
+                    && !visited[x][y] && grid[x][y] <= max) {
+                if (helper(grid, x, y, visited, max)) {
+                    return true;
+                }
             }
         }
-        visited[i][j] = false;
+        return false;
     }
 
     public static void main(String[] args) {
