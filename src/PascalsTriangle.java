@@ -5,29 +5,24 @@ import java.util.List;
 public class PascalsTriangle {
 
     public List<List<Integer>> generate(int numRows) {
-        int[][] arr = new int[numRows + 1][numRows + 1];
-        for (int i = 1; i < arr.length; i++) {
-            for (int j = 1; j <= i; j++) {
-                if (i == j) {
-                    arr[i][j] = 1;
+        List<List<Integer>> result = new ArrayList();
+        List<Integer> first = new ArrayList();
+        first.add(1);
+        result.add(first);
+        for (int i = 2; i <= numRows; i++) {
+            List<Integer> prev = result.get(result.size() - 1);
+            List<Integer> temp = new ArrayList();
+            for (int j = 0; j < i; j++) {
+                if (j == 0 || j == i - 1) {
+                    temp.add(1);
                 } else {
-                    arr[i][j] = arr[i - 1][j] + arr[i - 1][j - 1];
+                    temp.add(prev.get(j) + prev.get(j - 1));
                 }
             }
+            result.add(temp);
         }
 
-        List<List<Integer>> triangle = new ArrayList();
-        for (int i = 1; i < arr.length; i++) {
-            int[] row = arr[i];
-            List<Integer> rowList = new ArrayList();
-            for (int num : row) {
-                if (num != 0) {
-                    rowList.add(num);
-                }
-            }
-            triangle.add(rowList);
-        }
-        return triangle;
+        return result;
     }
 
     public static void main(String args[]) {
