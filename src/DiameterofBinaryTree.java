@@ -1,22 +1,24 @@
 
 public class DiameterofBinaryTree {
 
-    int ans;
+    private int max = 0;
 
     public int diameterOfBinaryTree(TreeNode root) {
-        ans = 1;
-        depth(root);
-        return ans - 1;
+        helper(root);
+        return this.max;
     }
 
-    public int depth(TreeNode node) {
-        if (node == null) {
+    private int helper(TreeNode root) {
+        if (root == null) {
             return 0;
         }
-        int L = depth(node.left);
-        int R = depth(node.right);
-        ans = Math.max(ans, L + R + 1);
-        return Math.max(L, R) + 1;
+
+        int left = helper(root.left);
+        int right = helper(root.right);
+
+        this.max = Math.max(this.max, left + right);
+
+        return Math.max(left, right) + 1;
     }
 
     public static void main(String args[]) {
