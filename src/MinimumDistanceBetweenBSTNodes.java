@@ -1,20 +1,37 @@
 
 public class MinimumDistanceBetweenBSTNodes {
 
-    Integer res = Integer.MAX_VALUE, pre = null;
+    private int min = Integer.MAX_VALUE;
 
     public int minDiffInBST(TreeNode root) {
+        helper(root);
+        return this.min;
+    }
+
+    private void helper(TreeNode root) {
         if (root.left != null) {
-            minDiffInBST(root.left);
+            this.min = Math.min(this.min, root.val - rightMost(root.left));
+            helper(root.left);
         }
-        if (pre != null) {
-            res = Math.min(res, root.val - pre);
-        }
-        pre = root.val;
+
         if (root.right != null) {
-            minDiffInBST(root.right);
+            this.min = Math.min(this.min, leftMost(root.right) - root.val);
+            helper(root.right);
         }
-        return res;
+    }
+
+    private int leftMost(TreeNode root) {
+        while (root.left != null) {
+            root = root.left;
+        }
+        return root.val;
+    }
+
+    private int rightMost(TreeNode root) {
+        while (root.right != null) {
+            root = root.right;
+        }
+        return root.val;
     }
 
     public static void main(String args[]) {
