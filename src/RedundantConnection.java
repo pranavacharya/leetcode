@@ -4,36 +4,34 @@ import java.util.HashMap;
 
 public class RedundantConnection {
 
+    private HashMap<Integer, Integer> map;
+
     public int[] findRedundantConnection(int[][] edges) {
-        HashMap<Integer, Integer> map = new HashMap();
-        for (int i = 0; i < edges.length; i++) {
-            if (find(map, edges[i][0]) == find(map, edges[i][1])) {
-                return edges[i];
+        this.map = new HashMap();
+        for (int[] edge : edges) {
+            if (find(edge[0]) == find(edge[1])) {
+                return edge;
             } else {
-                union(map, edges[i][0], edges[i][1]);
+                union(edge[0], edge[1]);
             }
         }
         return new int[]{-1, -1};
     }
 
-    private void union(HashMap<Integer, Integer> map, int x, int y) {
-        int xp = find(map, x);
-        int yp = find(map, y);
-        if (xp != yp) {
-            map.put(xp, yp);
+    private int find(int x) {
+        while (this.map.containsKey(x) && this.map.get(x) != x) {
+            x = this.map.get(x);
         }
+        if (!this.map.containsKey(x)) {
+            this.map.put(x, x);
+        }
+        return this.map.get(x);
     }
 
-    private int find(HashMap<Integer, Integer> map, int x) {
-        if (map.containsKey(x)) {
-            while (map.get(x) != x) {
-                x = map.get(x);
-            }
-            return map.get(x);
-        } else {
-            map.put(x, x);
-            return x;
-        }
+    private void union(int x, int y) {
+        int x1 = find(x);
+        int y1 = find(y);
+        this.map.put(y1, x1);
     }
 
     public static void main(String args[]) {
