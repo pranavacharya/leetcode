@@ -1,20 +1,32 @@
 
+import java.util.Stack;
+
 public class ContainerWithMostWater {
 
     public int maxArea(int[] height) {
-        int maxArea = 0;
-        int i = 0;
-        int j = height.length - 1;
-        while (i < j) {
-            int area = Math.min(height[i], height[j]) * (j - i);
-            maxArea = Math.max(maxArea, area);
-            if (height[i] < height[j]) {
-                i++;
+        Stack<Integer> stack = new Stack();
+        int ans = 0;
+        for (int i = 0; i < height.length; i++) {
+            if (stack.isEmpty()) {
+                stack.push(i);
             } else {
-                j--;
+                ans = Math.max(ans, Math.min(height[i], height[stack.peek()]) * (i - stack.peek()));
+                Stack<Integer> temp = new Stack();
+                while (!stack.isEmpty()) {
+                    int index = stack.pop();
+                    ans = Math.max(ans, Math.min(height[i], height[index]) * (i - index));
+                    temp.push(index);
+
+                }
+                while (!temp.isEmpty()) {
+                    stack.push(temp.pop());
+                }
+                if (height[stack.peek()] < height[i]) {
+                    stack.push(i);
+                }
             }
         }
-        return maxArea;
+        return ans;
     }
 
     public static void main(String args[]) {
