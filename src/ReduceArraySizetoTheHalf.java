@@ -1,6 +1,6 @@
 
-import java.util.Arrays;
 import java.util.HashMap;
+import java.util.PriorityQueue;
 
 public class ReduceArraySizetoTheHalf {
 
@@ -9,18 +9,16 @@ public class ReduceArraySizetoTheHalf {
         for (int i = 0; i < arr.length; i++) {
             freq.put(arr[i], freq.getOrDefault(arr[i], 0) + 1);
         }
-        int[] freqs = new int[freq.size()];
-        int index = 0;
+        PriorityQueue<Integer> maxHeap = new PriorityQueue<>((a, b) -> b - a);
         for (int key : freq.keySet()) {
-            freqs[index++] = freq.get(key);
+            maxHeap.add(freq.get(key));
         }
-        Arrays.sort(freqs);
-        int size = arr.length / 2;
-        int sum = 0;
-        for (int i = freqs.length - 1; i >= 0; i--) {
-            sum += freqs[i];
-            if (sum >= size) {
-                return freqs.length - i;
+        int initSize = maxHeap.size();
+        int reqSize = arr.length / 2;
+        while (!maxHeap.isEmpty()) {
+            reqSize -= maxHeap.poll();
+            if (reqSize <= 0) {
+                return initSize - maxHeap.size();
             }
         }
         return arr.length;
