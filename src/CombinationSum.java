@@ -5,23 +5,25 @@ import java.util.List;
 public class CombinationSum {
 
     public List<List<Integer>> combinationSum(int[] candidates, int target) {
-        List<List<Integer>> result = new ArrayList();
-        backtrack(result, new ArrayList(), candidates, target, 0);
-        return result;
+        List<List<Integer>> list = new ArrayList();
+        helper(candidates, target, 0, new ArrayList(), list);
+        return list;
     }
 
-    public void backtrack(List<List<Integer>> result, ArrayList<Integer> path, int[] candidates, int target, int index) {
-        if (target == 0) {
-            result.add(new ArrayList(path));
-        } else if (target < 0) {
-            return;
-        } else {
-            for (int i = index; i < candidates.length; i++) {
-                path.add(candidates[i]);
-                backtrack(result, path, candidates, target - candidates[i], i);
-                path.remove(path.size() - 1);
+    private void helper(int[] candidates, int target, int index, List<Integer> path, List<List<Integer>> result) {
+        if (index == candidates.length) {
+            if (target == 0) {
+                result.add(new ArrayList(path));
             }
+            return;
         }
+        if (candidates[index] <= target) {
+            path.add(candidates[index]);
+            helper(candidates, target - candidates[index], index, path, result);
+            path.remove(path.size() - 1);
+        }
+        helper(candidates, target, index + 1, path, result);
+
     }
 
     public static void main(String args[]) {
