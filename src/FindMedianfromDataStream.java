@@ -3,31 +3,44 @@ import java.util.PriorityQueue;
 
 public class FindMedianfromDataStream {
 
-    private PriorityQueue<Integer> maxHeap;
-    private PriorityQueue<Integer> minHeap;
+    // maxHeap
+    private PriorityQueue<Integer> first;
+    // minHeap
+    private PriorityQueue<Integer> second;
 
+    /**
+     * initialize your data structure here.
+     */
     public FindMedianfromDataStream() {
-        maxHeap = new PriorityQueue<>((a, b) -> (b - a));
-        minHeap = new PriorityQueue<>();
+        this.first = new PriorityQueue<>((a, b) -> (b - a));
+        this.second = new PriorityQueue<>();
     }
 
     public void addNum(int num) {
-        this.minHeap.add(num);
-        balanceHeap();
+        this.second.add(num);
+        balance();
     }
 
     public double findMedian() {
-        if (this.maxHeap.size() == this.minHeap.size()) {
-            return (this.maxHeap.peek() + this.minHeap.peek()) / 2.0;
+        if (this.first.size() > this.second.size()) {
+            return this.first.peek();
         } else {
-            return this.minHeap.peek();
+            double ans = (double) (this.first.peek() + this.second.peek()) / 2.0;
+            return ans;
         }
     }
 
-    private void balanceHeap() {
-        this.maxHeap.add(this.minHeap.poll());
-        if (this.minHeap.size() < this.maxHeap.size()) {
-            this.minHeap.add(this.maxHeap.poll());
+    private void balance() {
+        while (!second.isEmpty() && !first.isEmpty() && second.peek() < first.peek()) {
+            first.add(second.poll());
+        }
+
+        while (second.size() > first.size()) {
+            first.add(second.poll());
+        }
+
+        while (first.size() > second.size() + 1) {
+            second.add(first.poll());
         }
     }
 
