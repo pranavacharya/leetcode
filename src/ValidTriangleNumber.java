@@ -6,13 +6,13 @@ public class ValidTriangleNumber {
     public int triangleNumber(int[] nums) {
         int count = 0;
         Arrays.sort(nums);
-        for (int i = 0; i < nums.length; i++) {
-            for (int j = i + 1; j < nums.length; j++) {
-                for (int k = j + 1; k < nums.length; k++) {
-                    if (nums[i] + nums[j] > nums[k]) {
-                        count++;
-                    }
+        for (int i = 0; i < nums.length - 2; i++) {
+            int k = i + 2;
+            for (int j = i + 1; j < nums.length - 1; j++) {
+                while (k < nums.length && nums[i] + nums[j] > nums[k]) {
+                    k++;
                 }
+                count += Math.max(0, (k - j - 1));
             }
         }
         return count;
