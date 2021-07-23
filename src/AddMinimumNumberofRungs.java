@@ -4,14 +4,12 @@ public class AddMinimumNumberofRungs {
     public int addRungs(int[] rungs, int dist) {
         int count = 0;
         int last = 0;
-        for (int i = 0; i < rungs.length;) {
+        for (int i = 0; i < rungs.length; i++) {
             if (last + dist < rungs[i]) {
-                last = last + dist;
-                count++;
-            } else {
-                last = rungs[i];
-                i++;
+                int steps = (rungs[i] - last - 1) / dist;
+                count += steps;
             }
+            last = rungs[i];
         }
         return count;
     }
