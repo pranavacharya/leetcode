@@ -1,39 +1,26 @@
 
-import java.util.Stack;
-
 public class TrappingRainWater {
 
     public int trap(int[] height) {
-        int max = 0;
-        int maxIndex = 0;
+        int[] left = new int[height.length];
+        int[] right = new int[height.length];
         for (int i = 0; i < height.length; i++) {
-            if (height[i] >= max) {
-                max = height[i];
-                maxIndex = i;
+            if (i == 0) {
+                left[i] = height[i];
+                continue;
             }
+            left[i] = Math.max(height[i], left[i - 1]);
+        }
+        for (int i = height.length - 1; i >= 0; i--) {
+            if (i == height.length - 1) {
+                right[i] = height[i];
+                continue;
+            }
+            right[i] = Math.max(height[i], right[i + 1]);
         }
         int water = 0;
-        Stack<Integer> stack = new Stack();
-        for (int i = 0; i <= maxIndex; i++) {
-            if (stack.isEmpty()) {
-                stack.push(i);
-            } else if (height[stack.peek()] <= height[i]) {
-                water += (height[stack.peek()] * (i - stack.peek() - 1));
-                stack.push(i);
-            } else {
-                water -= height[i];
-            }
-        }
-        stack.clear();
-        for (int i = height.length - 1; i >= maxIndex; i--) {
-            if (stack.isEmpty()) {
-                stack.push(i);
-            } else if (height[stack.peek()] <= height[i]) {
-                water += (height[stack.peek()] * (stack.peek() - i - 1));
-                stack.push(i);
-            } else {
-                water -= height[i];
-            }
+        for (int i = 1; i < height.length; i++) {
+            water += (Math.min(left[i], right[i]) - height[i]);
         }
         return water;
     }
