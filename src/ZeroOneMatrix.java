@@ -8,38 +8,39 @@ public class ZeroOneMatrix {
     private int[][] dirs = new int[][]{{0, 1}, {0, -1}, {1, 0}, {-1, 0}};
 
     public int[][] updateMatrix(int[][] mat) {
-        int m = mat.length;
-        int n = mat[0].length;
-        int[][] ans = new int[m][n];
-        for (int i = 0; i < ans.length; i++) {
-            Arrays.fill(ans[i], -1);
-        }
-        Queue<int[]> queue = new LinkedList();
-        for (int i = 0; i < m; i++) {
-            for (int j = 0; j < n; j++) {
-                if (mat[i][j] == 0) {
+        int[][] ans = new int[mat.length][mat[0].length];
+        for (int i = 0; i < mat.length; i++) {
+            for (int j = 0; j < mat[0].length; j++) {
+                if (mat[i][j] == 1) {
+                    Queue<int[]> queue = new LinkedList();
+                    boolean[][] visited = new boolean[mat.length][mat[0].length];
+                    int dist = 0;
                     queue.add(new int[]{i, j});
-                }
-            }
-        }
-        int dist = 0;
-        while (!queue.isEmpty()) {
-            int size = queue.size();
-            while (size > 0) {
-                int[] curr = queue.poll();
-                if (ans[curr[0]][curr[1]] == -1) {
-                    ans[curr[0]][curr[1]] = dist;
-                    for (int[] dir : dirs) {
-                        int x = curr[0] + dir[0];
-                        int y = curr[1] + dir[1];
-                        if (x >= 0 && x < m && y >= 0 && y < n && ans[x][y] == -1) {
-                            queue.add(new int[]{x, y});
+                    outer:
+                    while (!queue.isEmpty()) {
+                        dist++;
+                        int size = queue.size();
+                        while (size > 0) {
+                            int[] curr = queue.poll();
+                            visited[curr[0]][curr[1]] = true;
+                            for (int[] dir : dirs) {
+                                int x = curr[0] + dir[0];
+                                int y = curr[1] + dir[1];
+                                if (x >= 0 && x < mat.length && y >= 0 && y < mat[0].length && !visited[x][y]) {
+                                    if (mat[x][y] == 1) {
+                                        queue.add(new int[]{x, y});
+                                        visited[x][y] = true;
+                                    } else {
+                                        break outer;
+                                    }
+                                }
+                            }
+                            size--;
                         }
                     }
+                    ans[i][j] = dist;
                 }
-                size--;
             }
-            dist++;
         }
         return ans;
     }
