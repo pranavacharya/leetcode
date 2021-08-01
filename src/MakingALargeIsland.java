@@ -1,30 +1,53 @@
 
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
+
 public class MakingALargeIsland {
 
     private int[][] dirs = new int[][]{{0, 1}, {0, -1}, {1, 0}, {-1, 0}};
 
     public int largestIsland(int[][] grid) {
-        int largest = -1;
+        HashMap<Integer, Integer> map = new HashMap();
+        map.put(0, 0);
+        int color = 2;
         for (int i = 0; i < grid.length; i++) {
             for (int j = 0; j < grid[i].length; j++) {
-                if (grid[i][j] == 0) {
-                    grid[i][j] = 1;
-                    largest = Math.max(largest, helper(grid, i, j, new boolean[grid.length][grid[0].length]));
-                    grid[i][j] = 0;
+                if (grid[i][j] == 1) {
+                    int size = helper(grid, i, j, color);
+                    map.put(color, size);
+                    color++;
                 }
             }
         }
-        return largest == -1 ? grid.length * grid[0].length : largest;
+        int result = map.getOrDefault(2, 0);
+        for (int i = 0; i < grid.length; i++) {
+            for (int j = 0; j < grid[i].length; j++) {
+                if (grid[i][j] == 0) {
+                    Set<Integer> set = new HashSet<>();
+                    set.add(i > 0 ? grid[i - 1][j] : 0);
+                    set.add(i < grid.length - 1 ? grid[i + 1][j] : 0);
+                    set.add(j > 0 ? grid[i][j - 1] : 0);
+                    set.add(j < grid.length - 1 ? grid[i][j + 1] : 0);
+                    int newSize = 1;
+                    for (int c : set) {
+                        newSize += map.get(c);
+                    }
+                    result = Math.max(result, newSize);
+                }
+            }
+        }
+        return result;
     }
 
-    private int helper(int[][] grid, int i, int j, boolean[][] visited) {
+    private int helper(int[][] grid, int i, int j, int color) {
         int ans = 1;
-        visited[i][j] = true;
+        grid[i][j] = color;
         for (int[] dir : dirs) {
             int x = i + dir[0];
             int y = j + dir[1];
-            if (x >= 0 && x < grid.length && y >= 0 && y < grid[x].length && grid[x][y] == 1 && !visited[x][y]) {
-                ans += helper(grid, x, y, visited);
+            if (x >= 0 && x < grid.length && y >= 0 && y < grid[x].length && grid[x][y] == 1) {
+                ans += helper(grid, x, y, color);
             }
         }
         return ans;
