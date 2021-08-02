@@ -8,20 +8,21 @@ public class Subsets2 {
     public List<List<Integer>> subsetsWithDup(int[] nums) {
         List<List<Integer>> result = new ArrayList();
         Arrays.sort(nums);
-        subsets(nums, 0, new ArrayList(), result);
+        helper(result, nums, new ArrayList(), 0);
         return result;
     }
 
-    public void subsets(int[] nums, int index, ArrayList path, List<List<Integer>> result) {
-        result.add(new ArrayList(path));
-        for (int i = index; i < nums.length; i++) {
-            if (i > index && nums[i] == nums[i - 1]) {
-                continue;
+    private void helper(List<List<Integer>> result, int[] nums, List<Integer> path, int index) {
+        if (index == nums.length) {
+            if (!result.contains(path)) {
+                result.add(new ArrayList(path));
             }
-            path.add(nums[i]);
-            subsets(nums, i + 1, path, result);
-            path.remove(path.size() - 1);
+            return;
         }
+        helper(result, nums, path, index + 1);
+        path.add(nums[index]);
+        helper(result, nums, path, index + 1);
+        path.remove(path.size() - 1);
     }
 
     public static void main(String args[]) {
