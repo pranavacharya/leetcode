@@ -1,78 +1,52 @@
 
+import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
 import java.util.PriorityQueue;
 import java.util.Scanner;
 
 public class ReachableNodesInSubdividedGraph {
 
-    class ANode {
-
-        int node, dist;
-
-        ANode(int n, int d) {
-            node = n;
-            dist = d;
+    public int reachableNodes(int[][] edges, int maxMoves, int n) {
+        HashMap<Integer, ArrayList<Integer>> adj = new HashMap();
+        for (int i = 0; i < n; i++) {
+            adj.put(i, new ArrayList());
         }
-    }
-
-    public int reachableNodes(int[][] edges, int M, int N) {
-        Map<Integer, Map<Integer, Integer>> graph = new HashMap();
-        for (int[] edge : edges) {
-            int u = edge[0], v = edge[1], w = edge[2];
-            graph.computeIfAbsent(u, x -> new HashMap()).put(v, w);
-            graph.computeIfAbsent(v, x -> new HashMap()).put(u, w);
+        int[][] weight = new int[n][n];
+        for (int i = 0; i < edges.length; i++) {
+            adj.get(edges[i][0]).add(edges[i][1]);
+            adj.get(edges[i][1]).add(edges[i][0]);
+            weight[edges[i][0]][edges[i][1]] = edges[i][2];
+            weight[edges[i][1]][edges[i][0]] = edges[i][2];
         }
+        boolean[] visited = new boolean[n];
 
-        PriorityQueue<ANode> pq = new PriorityQueue<ANode>(
-                (a, b) -> Integer.compare(a.dist, b.dist));
-        pq.offer(new ANode(0, 0));
+        PriorityQueue<int[]> queue = new PriorityQueue<>((a, b) -> (b[1] - a[1]));
 
-        Map<Integer, Integer> dist = new HashMap();
-        dist.put(0, 0);
-        Map<Integer, Integer> used = new HashMap();
+        queue.add(new int[]{0, maxMoves});
+
         int ans = 0;
 
-        while (!pq.isEmpty()) {
-            ANode anode = pq.poll();
-            int node = anode.node;
-            int d = anode.dist;
-
-            if (d > dist.getOrDefault(node, 0)) {
+        while (!queue.isEmpty()) {
+            int[] curr = queue.poll();
+            int node = curr[0];
+            int movesLeft = curr[1];
+            if (visited[node]) {
                 continue;
             }
-            // Each node is only visited once.  We've reached
-            // a node in our original graph.
             ans++;
+            visited[node] = true;
+            ArrayList<Integer> neighbours = adj.get(node);
+            for (int neighbour : neighbours) {
 
-            if (!graph.containsKey(node)) {
-                continue;
-            }
-            for (int nei : graph.get(node).keySet()) {
-                // M - d is how much further we can walk from this node;
-                // weight is how many new nodes there are on this edge.
-                // v is the maximum utilization of this edge.
-                int weight = graph.get(node).get(nei);
-                int v = Math.min(weight, M - d);
-                used.put(N * node + nei, v);
-
-                // d2 is the total distance to reach 'nei' (neighbor) node
-                // in the original graph.
-                int d2 = d + weight + 1;
-                if (d2 < dist.getOrDefault(nei, M + 1)) {
-                    pq.offer(new ANode(nei, d2));
-                    dist.put(nei, d2);
+                if (!visited[neighbour] && weight[node][neighbour] + 1 <= movesLeft) {
+                    queue.add(new int[]{neighbour, movesLeft - weight[node][neighbour] - 1});
                 }
-            }
-        }
+                int cost = Math.min(movesLeft, weight[node][neighbour]);
+                weight[node][neighbour] -= cost;
+                weight[neighbour][node] -= cost;
 
-        // At the end, each edge (u, v, w) can be used with a maximum
-        // of w new nodes: a max of used[u, v] nodes from one side,
-        // and used[v, u] nodes from the other.
-        // [We use the encoding (u, v) = u * N + v.]
-        for (int[] edge : edges) {
-            ans += Math.min(edge[2], used.getOrDefault(edge[0] * N + edge[1], 0)
-                    + used.getOrDefault(edge[1] * N + edge[0], 0));
+                ans += cost;
+            }
         }
 
         return ans;
