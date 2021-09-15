@@ -6,37 +6,20 @@ public class ReverseOnlyLetters {
         int i = 0;
         int j = arr.length - 1;
         while (i < j) {
-            while (i < j) {
-                if (Integer.valueOf(arr[i]) < 65) {
-                    i++;
-                } else if ((Integer.valueOf(arr[i]) > 90)
-                        && (Integer.valueOf(arr[i]) < 97)) {
-                    i++;
-                } else if (Integer.valueOf(arr[i]) > 122) {
-                    i++;
-                } else {
-                    break;
-                }
+            while (i < arr.length && (!((arr[i] >= 'a' && arr[i] <= 'z') || (arr[i] >= 'A' && arr[i] <= 'Z')))) {
+                i++;
             }
-            while (j > i) {
-                if (Integer.valueOf(arr[j]) < 65) {
-                    j--;
-                } else if ((Integer.valueOf(arr[j]) > 90)
-                        && (Integer.valueOf(arr[j]) < 97)) {
-                    j--;
-                } else if (Integer.valueOf(arr[j]) > 122) {
-                    j--;
-                } else {
-                    break;
-                }
+            while (j >= 0 && (!((arr[j] >= 'a' && arr[j] <= 'z') || (arr[j] >= 'A' && arr[j] <= 'Z')))) {
+                j--;
             }
-            if (j > i) {
+            if (i < j) {
                 char temp = arr[i];
                 arr[i] = arr[j];
                 arr[j] = temp;
-                j--;
-                i++;
             }
+            i++;
+            j--;
+
         }
         return new String(arr);
     }
