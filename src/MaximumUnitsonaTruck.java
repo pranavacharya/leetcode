@@ -1,4 +1,6 @@
 
+import java.util.Arrays;
+
 public class MaximumUnitsonaTruck {
 
     public int maximumUnits(int[][] boxTypes, int truckSize) {
