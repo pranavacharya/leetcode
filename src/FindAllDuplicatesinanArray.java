@@ -5,15 +5,19 @@ import java.util.List;
 public class FindAllDuplicatesinanArray {
 
     public List<Integer> findDuplicates(int[] nums) {
-        List<Integer> ans = new ArrayList<>();
+        List<Integer> result = new ArrayList();
         for (int i = 0; i < nums.length; i++) {
-            int index = Math.abs(nums[i]) - 1;
-            if (nums[index] < 0) {
-                ans.add(index + 1);
+            int num = nums[i];
+            if (num < 0) {
+                num *= -1;
             }
-            nums[index] = -nums[index];
+            if (nums[num - 1] < 0) {
+                result.add(num);
+            } else {
+                nums[num - 1] *= -1;
+            }
         }
-        return ans;
+        return result;
     }
 
     public static void main(String args[]) {
