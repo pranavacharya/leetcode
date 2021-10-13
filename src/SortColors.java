@@ -4,25 +4,28 @@ import java.util.Arrays;
 public class SortColors {
 
     public void sortColors(int[] nums) {
-        int low = 0;
-        int mid = 0;
-        int high = nums.length - 1;
-        while (mid <= high) {
-            if (nums[mid] == 0) {
-                int temp = nums[low];
-                nums[low] = nums[mid];
-                nums[mid] = temp;
-                low++;
-                mid++;
-            } else if (nums[mid] == 1) {
-                mid++;
+        int i = 0;
+        int j = nums.length - 1;
+        for (int k = 0; k < nums.length && k <= j;) {
+            if (nums[k] == 0) {
+                swap(nums, i, k);
+                if (i == k) {
+                    k++;
+                }
+                i++;
+            } else if (nums[k] == 2) {
+                swap(nums, j, k);
+                j--;
             } else {
-                int temp = nums[high];
-                nums[high] = nums[mid];
-                nums[mid] = temp;
-                high--;
+                k++;
             }
         }
+    }
+
+    public void swap(int[] nums, int i, int j) {
+        int temp = nums[i];
+        nums[i] = nums[j];
+        nums[j] = temp;
     }
 
     public static void main(String args[]) {
