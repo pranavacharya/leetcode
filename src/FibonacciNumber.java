@@ -1,21 +1,25 @@
 
+import java.util.Arrays;
+
 public class FibonacciNumber {
 
+    int[] memo;
+
     public int fib(int n) {
-        if (n == 0) {
-            return 0;
+        this.memo = new int[n + 1];
+        Arrays.fill(this.memo, -1);
+        return helper(n);
+    }
+
+    private int helper(int n) {
+        if (this.memo[n] != -1) {
+            return this.memo[n];
         }
-        if (n == 1) {
-            return 1;
+        if (n <= 1) {
+            return n;
+        } else {
+            return this.memo[n] = (helper(n - 1) + helper(n - 2));
         }
-        int a = 0;
-        int b = 1;
-        for (int i = 2; i <= n; i++) {
-            int temp = a;
-            a = b;
-            b = temp + b;
-        }
-        return b;
     }
 
     public static void main(String args[]) {
