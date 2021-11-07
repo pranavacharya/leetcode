@@ -19,11 +19,12 @@ public class VowelsofAllSubstrings {
             prefix[i + 1] = count;
         }
         long ans = 0;
-        for (int i = 0; i < word.length(); i++) {
-            for (int j = i; j < word.length(); j++) {
-                long vowels = prefix[j + 1] - prefix[i];
-                ans += vowels;
-            }
+        int times = 1;
+        int timesLess = word.length() - 1;
+        for (int i = 1; i < prefix.length; i++) {
+            ans += (prefix[i] * times - prefix[i] * timesLess);
+            times++;
+            timesLess--;
         }
         return ans;
     }
