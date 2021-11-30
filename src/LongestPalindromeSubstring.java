@@ -2,30 +2,26 @@
 public class LongestPalindromeSubstring {
 
     public String longestPalindrome(String s) {
-        String longest = "";
+        String ans = "";
         for (int i = 0; i < s.length(); i++) {
-            String pal = expandFromCenter(i, i, s);
-            if (pal.length() > longest.length()) {
-                longest = pal;
-            }
-            String pal2 = expandFromCenter(i, i + 1, s);
-            if (pal2.length() > longest.length()) {
-                longest = pal2;
+            for (int j = i; j < s.length(); j++) {
+                if (isPalindrome(s, i, j) && ans.length() < j - i + 1) {
+                    ans = s.substring(i, j + 1);
+                }
             }
         }
-        return longest;
+        return ans;
     }
 
-    private String expandFromCenter(int left, int right, String s) {
-        while (left >= 0 && right < s.length()) {
-            if (s.charAt(left) == s.charAt(right)) {
-                left--;
-                right++;
-            } else {
-                break;
+    private boolean isPalindrome(String s, int i, int j) {
+        while (i < j) {
+            if (s.charAt(i) != s.charAt(j)) {
+                return false;
             }
+            i++;
+            j--;
         }
-        return s.substring(left + 1, right);
+        return true;
     }
 
     public static void main(String args[]) {
