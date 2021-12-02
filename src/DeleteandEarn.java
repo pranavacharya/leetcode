@@ -6,55 +6,13 @@ public class DeleteandEarn {
         for (int i = 0; i < nums.length; i++) {
             freq[nums[i]]++;
         }
-        return backtracking(freq);
-    }
-
-    private int backtracking(int[] freq) {
-        boolean flag = true;
-        for (int i = 0; i < freq.length; i++) {
-            if (freq[i] != 0) {
-                flag = false;
-                break;
-            }
+        int[] dp = new int[10001];
+        dp[0] = freq[0] * 0;
+        dp[1] = freq[1] * 1;
+        for (int i = 2; i < 10001; i++) {
+            dp[i] = Math.max(dp[i - 1], freq[i] * i + dp[i - 2]);
         }
-        if (flag) {
-            return 0;
-        }
-        int cost = 0;
-        for (int i = 0; i < freq.length; i++) {
-            if (freq[i] == 0) {
-                continue;
-            }
-            if (i > 0 && i < freq.length - 1) {
-                int left = freq[i - 1];
-                int right = freq[i + 1];
-                int local = freq[i];
-                freq[i] = 0;
-                freq[i - 1] = 0;
-                freq[i + 1] = 0;
-                cost = Math.max(cost, i * local + backtracking(freq));
-                freq[i - 1] = left;
-                freq[i + 1] = right;
-                freq[i] = local;
-            } else if (i == 0) {
-                int right = freq[i + 1];
-                int local = freq[i];
-                freq[i] = 0;
-                freq[i + 1] = 0;
-                cost = Math.max(cost, i * local + backtracking(freq));
-                freq[i + 1] = right;
-                freq[i] = local;
-            } else {
-                int left = freq[i - 1];
-                int local = freq[i];
-                freq[i] = 0;
-                freq[i - 1] = 0;
-                cost = Math.max(cost, i * local + backtracking(freq));
-                freq[i - 1] = left;
-                freq[i] = local;
-            }
-        }
-        return cost;
+        return dp[10000];
     }
 
     public static void main(String[] args) {
