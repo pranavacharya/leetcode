@@ -7,19 +7,18 @@ import java.util.List;
 public class GroupAnagrams {
 
     public List<List<String>> groupAnagrams(String[] strs) {
+        List<List<String>> list = new ArrayList();
         HashMap<String, List<String>> map = new HashMap();
         for (String str : strs) {
             char[] arr = str.toCharArray();
             Arrays.sort(arr);
-            String newStr = new String(arr);
-            map.putIfAbsent(newStr, new ArrayList());
-            map.get(newStr).add(str);
+            map.putIfAbsent(new String(arr), new ArrayList());
+            map.get(new String(arr)).add(str);
         }
-        List<List<String>> result = new ArrayList();
         for (String key : map.keySet()) {
-            result.add(map.get(key));
+            list.add(map.get(key));
         }
-        return result;
+        return list;
     }
 
     public static void main(String args[]) {
