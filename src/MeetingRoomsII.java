@@ -5,22 +5,20 @@ import java.util.HashMap;
 public class MeetingRoomsII {
 
     public int minMeetingRooms(int[][] intervals) {
-        HashMap<Integer, ArrayList<Integer>> start = new HashMap();
-        HashMap<Integer, ArrayList<Integer>> end = new HashMap();
+        HashMap<Integer, Integer> start = new HashMap();
+        HashMap<Integer, Integer> end = new HashMap();
         for (int i = 0; i < intervals.length; i++) {
-            start.putIfAbsent(intervals[i][0], new ArrayList());
-            end.putIfAbsent(intervals[i][1], new ArrayList());
-            start.get(intervals[i][0]).add(i);
-            end.get(intervals[i][1]).add(i);
+            start.put(intervals[i][0], start.getOrDefault(intervals[i][0], 0) + 1);
+            end.put(intervals[i][1], end.getOrDefault(intervals[i][1], 0) + 1);
         }
         int count = 0;
         int ans = 0;
         for (int i = 0; i <= 1000000; i++) {
-            ArrayList<Integer> startlist = start.getOrDefault(i, new ArrayList());
-            ArrayList<Integer> endlist = end.getOrDefault(i, new ArrayList());
+            int startCount = start.getOrDefault(i, 0);
+            int endCount = end.getOrDefault(i, 0);
 
-            count += startlist.size();
-            count -= endlist.size();
+            count += startCount;
+            count -= endCount;
             ans = Math.max(ans, count);
 
         }
