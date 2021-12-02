@@ -1,28 +1,27 @@
 
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Arrays;
+import java.util.PriorityQueue;
 
 public class MeetingRoomsII {
 
     public int minMeetingRooms(int[][] intervals) {
-        HashMap<Integer, Integer> start = new HashMap();
-        HashMap<Integer, Integer> end = new HashMap();
-        for (int i = 0; i < intervals.length; i++) {
-            start.put(intervals[i][0], start.getOrDefault(intervals[i][0], 0) + 1);
-            end.put(intervals[i][1], end.getOrDefault(intervals[i][1], 0) + 1);
-        }
+        Arrays.sort(intervals, (a, b) -> a[0] == b[0] ? a[1] - b[1] : a[0] - b[0]);
+
+        PriorityQueue<Integer> queue = new PriorityQueue<>((a, b) -> intervals[a][1] - intervals[b][1]);
+
         int count = 0;
-        int ans = 0;
-        for (int i = 0; i <= 1000000; i++) {
-            int startCount = start.getOrDefault(i, 0);
-            int endCount = end.getOrDefault(i, 0);
 
-            count += startCount;
-            count -= endCount;
-            ans = Math.max(ans, count);
+        for (int i = 0; i < intervals.length; i++) {
+            while (!queue.isEmpty() && intervals[queue.peek()][1] <= intervals[i][0]) {
+                queue.poll();
+            }
 
+            queue.add(i);
+
+            count = Math.max(queue.size(), count);
         }
-        return ans;
+
+        return count;
     }
 
     public static void main(String[] args) {
