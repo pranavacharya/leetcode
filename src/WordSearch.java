@@ -1,7 +1,7 @@
 
 public class WordSearch {
 
-    private int[][] dirs = new int[][]{{0, 1}, {0, -1}, {1, 0}, {-1, 0}};
+    int[][] dirs = new int[][]{{0, 1}, {0, -1}, {1, 0}, {-1, 0}};
 
     public boolean exist(char[][] board, String word) {
         for (int i = 0; i < board.length; i++) {
@@ -11,36 +11,34 @@ public class WordSearch {
                 }
             }
         }
+
         return false;
     }
 
-    public boolean dfs(char[][] board, String word, int index, int i, int j) {
+    private boolean dfs(char[][] board, String word, int index, int x, int y) {
         if (index == word.length()) {
             return true;
         }
-
-        if (i < 0 || i >= board.length || j < 0 || j >= board[i].length) {
+        if (board[x][y] != word.charAt(index)) {
             return false;
         }
-
-        if (word.charAt(index) != board[i][j]) {
-            return false;
-        }
-
-        char c = board[i][j];
-
-        board[i][j] = '*';
+        char c = board[x][y];
+        board[x][y] = '#';
 
         for (int[] dir : dirs) {
-            int x = i + dir[0];
-            int y = j + dir[1];
-            if (dfs(board, word, index + 1, x, y)) {
-                return true;
+            int nx = dir[0] + x;
+            int ny = dir[1] + y;
+
+            if (nx >= 0 && nx < board.length && ny >= 0 && ny < board[nx].length) {
+                if (dfs(board, word, index + 1, nx, ny)) {
+                    board[x][y] = c;
+                    return true;
+                }
             }
         }
 
-        board[i][j] = c;
-        return false;
+        board[x][y] = c;
+        return index + 1 == word.length();
     }
 
     public static void main(String args[]) {
