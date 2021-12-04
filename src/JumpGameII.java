@@ -3,26 +3,19 @@ import java.util.Arrays;
 
 public class JumpGameII {
 
-    private int[] dp;
-
     public int jump(int[] nums) {
-        this.dp = new int[nums.length];
-        Arrays.fill(this.dp, - 1);
-        return helper(0, nums);
-    }
-
-    private int helper(int index, int[] nums) {
-        if (index >= nums.length - 1) {
-            return 0;
+        int[] dp = new int[nums.length];
+        Arrays.fill(dp, Integer.MAX_VALUE);
+        dp[0] = 0;
+        for (int i = 1; i < nums.length; i++) {
+            for (int j = i - 1; j >= 0; j--) {
+                if (i - j > nums[j]) {
+                    continue;
+                }
+                dp[i] = Math.min(dp[i], dp[j] + 1);
+            }
         }
-        if (this.dp[index] != -1) {
-            return this.dp[index];
-        }
-        int min = Integer.MAX_VALUE;
-        for (int i = 1; i <= nums[index]; i++) {
-            min = Math.min(min, helper(index + i, nums));
-        }
-        return this.dp[index] = min == Integer.MAX_VALUE ? Integer.MAX_VALUE : min + 1;
+        return dp[nums.length - 1];
     }
 
     public static void main(String[] args) {
