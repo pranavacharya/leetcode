@@ -1,34 +1,18 @@
 
-import java.util.Arrays;
-
 public class BestSightseeingPair {
 
-    int[][] dp;
-
     public int maxScoreSightseeingPair(int[] values) {
-        this.dp = new int[values.length][values.length];
-        for (int i = 0; i < dp.length; i++) {
-            Arrays.fill(dp[i], -1);
-        }
-        return helper(0, values.length - 1, values);
-    }
+        int i = 0;
+        int max = values[i] + i;
+        for (int j = 1; j < values.length; j++) {
+            int curr = values[i] + values[j] + i - j;
+            max = Math.max(curr, max);
 
-    private int helper(int i, int j, int[] values) {
-        if (i == j) {
-            return 0;
+            if (values[i] + i < values[j] + j) {
+                i = j;
+            }
         }
-
-        if (this.dp[i][j] != -1) {
-            return dp[i][j];
-        }
-
-        int max = values[i] + values[j] + i - j;
-
-        for (int k = i + 1; k < j; k++) {
-            max = Math.max(max, Math.max(helper(i, k, values), helper(k, j, values)));
-        }
-        // System.out.println("i " + i + " j " + j + " max " + max);
-        return dp[i][j] = max;
+        return max;
     }
 
     public static void main(String[] args) {
