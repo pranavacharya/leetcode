@@ -1,33 +1,39 @@
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 
 public class WordBreak {
 
-    private int[] dp;
+    private int[][] dp;
 
     public boolean wordBreak(String s, List<String> wordDict) {
-        this.dp = new int[s.length()];
-        Arrays.fill(this.dp, -1);
-        return helper(0, wordDict, s);
+        this.dp = new int[s.length() + 1][s.length() + 1];
+        for (int i = 0; i < s.length(); i++) {
+            Arrays.fill(this.dp[i], -1);
+        }
+        HashSet<String> set = new HashSet();
+        set.addAll(wordDict);
+        return helper(s, set, 0, s.length()) == 1;
     }
 
-    private boolean helper(int index, List<String> dict, String s) {
-        if (index == s.length()) {
-            return true;
+    private int helper(String s, HashSet<String> set, int i, int j) {
+        if (this.dp[i][j] != -1) {
+            return this.dp[i][j];
         }
-        if (this.dp[index] != -1) {
-            return this.dp[index] == 1;
+
+        if (set.contains(s.substring(i, j))) {
+            return dp[i][j] = 1;
         }
-        for (int i = index + 1; i <= s.length(); i++) {
-            if (dict.contains(s.substring(index, i)) && helper(i, dict, s)) {
-                this.dp[index] = 1;
-                return true;
+
+        for (int k = i + 1; k < j; k++) {
+            if (helper(s, set, i, k) == 1 && helper(s, set, k, j) == 1) {
+                return dp[i][j] = 1;
             }
         }
-        this.dp[index] = 0;
-        return false;
+
+        return dp[i][j] = 0;
     }
 
     public static void main(String args[]) {
