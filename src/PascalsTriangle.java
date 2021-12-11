@@ -9,19 +9,15 @@ public class PascalsTriangle {
         List<Integer> first = new ArrayList();
         first.add(1);
         result.add(first);
-        for (int i = 2; i <= numRows; i++) {
-            List<Integer> prev = result.get(result.size() - 1);
-            List<Integer> temp = new ArrayList();
-            for (int j = 0; j < i; j++) {
-                if (j == 0 || j == i - 1) {
-                    temp.add(1);
-                } else {
-                    temp.add(prev.get(j) + prev.get(j - 1));
-                }
+        for (int i = 1; i < numRows; i++) {
+            List<Integer> row = new ArrayList();
+            row.add(1);
+            for (int j = 1; j < i; j++) {
+                row.add(result.get(i - 1).get(j - 1) + result.get(i - 1).get(j));
             }
-            result.add(temp);
+            row.add(1);
+            result.add(row);
         }
-
         return result;
     }
 
