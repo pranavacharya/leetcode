@@ -1,50 +1,20 @@
 
-import java.util.Arrays;
-
 public class ArithmeticSlices {
 
-    private int[][] dp;
-
     public int numberOfArithmeticSlices(int[] nums) {
-        this.dp = new int[nums.length][nums.length];
-        for (int i = 0; i < dp.length; i++) {
-            Arrays.fill(this.dp[i], -1);
-        }
-        return helper(nums, 0, nums.length - 1);
-    }
-
-    private int helper(int[] nums, int i, int j) {
-
-        if (this.dp[i][j] != -1) {
-            return 0; // not using previously counted
-        }
-
-        if (j - i + 1 < 3) {
-            return this.dp[i][j] = 0;
-        }
-
-        boolean valid = true;
-
-        for (int start = i + 1; start < j; start++) {
-            if (nums[start] - nums[start - 1] != nums[start + 1] - nums[start]) {
-                valid = false;
-                break;
+        int ans = 0;
+        int[] dp = new int[nums.length];
+        for (int i = 2; i < nums.length; i++) {
+            if (nums[i - 1] - nums[i - 2] == nums[i] - nums[i - 1]) {
+                dp[i] = dp[i - 1] + 1;
+            } else {
+                dp[i] = 0;
             }
         }
-
-        int count = 0;
-
-        for (int k = i; k < j; k++) {
-            count += (helper(nums, i, k));
-            count += (helper(nums, k + 1, j));
+        for (int i = 0; i < nums.length; i++) {
+            ans += dp[i];
         }
-
-        if (valid) {
-            count++;
-        }
-
-        return this.dp[i][j] = count;
-
+        return ans;
     }
 
     public static void main(String args[]) {
