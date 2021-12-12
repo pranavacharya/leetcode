@@ -4,31 +4,35 @@ import java.util.ArrayList;
 public class UglyNumber2 {
 
     public int nthUglyNumber(int n) {
-        if (n == 0) {
-            return 0;
+        ArrayList<Integer> list = new ArrayList();
+        int first = 0;
+        int second = 0;
+        int third = 0;
+        list.add(1);
+        n--;
+        while (n > 0) {
+            int two = 2 * list.get(first);
+            int three = 3 * list.get(second);
+            int five = 5 * list.get(third);
+
+            int min = Math.min(two, Math.min(three, five));
+
+            if (min == two) {
+                first++;
+            }
+
+            if (min == three) {
+                second++;
+            }
+
+            if (min == five) {
+                third++;
+            }
+
+            list.add(min);
+            n--;
         }
-        int index2 = 0;
-        int index3 = 0;
-        int index5 = 0;
-        ArrayList<Integer> ugly = new ArrayList();
-        ugly.add(1);
-        while (ugly.size() < n) {
-            int fac2 = 2 * ugly.get(index2);
-            int fac3 = 3 * ugly.get(index3);
-            int fac5 = 5 * ugly.get(index5);
-            int min = Math.min(fac2, Math.min(fac3, fac5));
-            ugly.add(min);
-            if (min == fac2) {
-                index2++;
-            }
-            if (min == fac3) {
-                index3++;
-            }
-            if (min == fac5) {
-                index5++;
-            }
-        }
-        return ugly.get(ugly.size() - 1);
+        return list.get(list.size() - 1);
     }
 
     public static void main(String args[]) {
