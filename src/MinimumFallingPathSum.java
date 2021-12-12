@@ -1,29 +1,33 @@
 
 public class MinimumFallingPathSum {
 
-    public int minFallingPathSum(int[][] A) {
-        if (A.length == 0) {
-            return 0;
+    public int minFallingPathSum(int[][] matrix) {
+        int min = Integer.MAX_VALUE;
+        int[][] dp = new int[2][matrix.length];
+        for (int i = 0; i < matrix.length; i++) {
+            dp[0][i] = matrix[0][i];
+            min = Math.min(min, dp[0][i]);
         }
-        int[][] dp = new int[A.length][A[0].length];
-        int ans = Integer.MAX_VALUE;
-        for (int i = 0; i < dp.length; i++) {
-            for (int j = 0; j < dp[i].length; j++) {
-                if (i == 0) {
-                    dp[i][j] = A[i][j];
-                } else {
-                    int top = dp[i - 1][j];
-                    int topleft = j == 0 ? Integer.MAX_VALUE : dp[i - 1][j - 1];
-                    int topright = j == dp[0].length - 1 ? Integer.MAX_VALUE : dp[i - 1][j + 1];
-                    int value = Math.min(Math.min(top, topleft), topright);
-                    dp[i][j] = value + A[i][j];
+        int last = 0;
+        for (int i = 1; i < matrix.length; i++) {
+            min = Integer.MAX_VALUE;
+            for (int j = 0; j < matrix[i].length; j++) {
+                dp[(last + 1) % 2][j] = dp[last][j];
+
+                if (j != 0) {
+                    dp[(last + 1) % 2][j] = Math.min(dp[last][j - 1], dp[(last + 1) % 2][j]);
                 }
-                if (i == dp.length - 1) {
-                    ans = Math.min(ans, dp[i][j]);
+
+                if (j != matrix[i].length - 1) {
+                    dp[(last + 1) % 2][j] = Math.min(dp[last][j + 1], dp[(last + 1) % 2][j]);
                 }
+                dp[(last + 1) % 2][j] += matrix[i][j];
+                min = Math.min(min, dp[(last + 1) % 2][j]);
             }
+            last++;
+            last %= 2;
         }
-        return ans;
+        return min;
     }
 
     public static void main(String args[]) {
