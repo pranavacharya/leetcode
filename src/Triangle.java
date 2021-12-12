@@ -1,38 +1,36 @@
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class Triangle {
 
-    int[][] dp;
-
     public int minimumTotal(List<List<Integer>> triangle) {
-        this.dp = new int[triangle.size()][triangle.size()];
-        for (int i = 0; i < this.dp.length; i++) {
-            Arrays.fill(this.dp[i], -1);
-        }
-        return helper(0, 0, triangle);
-    }
+        int[][] dp = new int[triangle.size()][triangle.size()];
+        dp[0][0] = triangle.get(0).get(0);
+        for (int i = 1; i < triangle.size(); i++) {
+            List<Integer> row = triangle.get(i);
+            for (int j = 0; j < row.size(); j++) {
 
-    private int helper(int i, int j, List<List<Integer>> triangle) {
-        if (j > i) {
-            return 0;
-        }
-        if (i == triangle.size()) {
-            return 0;
-        }
+                if (j != 0 && j != row.size() - 1) {
+                    dp[i][j] = Math.min(dp[i - 1][j - 1], dp[i - 1][j]);
+                }
 
-        if (this.dp[i][j] != -1) {
-            return this.dp[i][j];
-        }
+                if (j == 0) {
+                    dp[i][j] = dp[i - 1][j];
+                }
 
+                if (j == row.size() - 1) {
+                    dp[i][j] = dp[i - 1][j - 1];
+                }
+
+                dp[i][j] += row.get(j);
+            }
+        }
         int min = Integer.MAX_VALUE;
-
-        min = Math.min(min, helper(i + 1, j, triangle));
-        min = Math.min(min, helper(i + 1, j + 1, triangle));
-
-        return this.dp[i][j] = min + triangle.get(i).get(j);
+        for (int i = 0; i < dp.length; i++) {
+            min = Math.min(min, dp[dp.length - 1][i]);
+        }
+        return min;
     }
 
     public static void main(String[] args) {
