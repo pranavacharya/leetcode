@@ -5,36 +5,34 @@ import java.util.List;
 public class PathSum2 {
 
     public List<List<Integer>> pathSum(TreeNode root, int targetSum) {
-        if (root == null) {
-            return new ArrayList();
-        }
         List<List<Integer>> result = new ArrayList();
-        helper(result, root, targetSum, 0, new ArrayList());
+        if (root == null) {
+            return result;
+        }
+        dfs(root, targetSum, result, new ArrayList());
         return result;
     }
 
-    private void helper(List<List<Integer>> result, TreeNode root, int targetSum, int sum, List<Integer> path) {
-        sum += root.val;
+    private void dfs(TreeNode root, int targetSum, List<List<Integer>> result, List<Integer> path) {
+        targetSum -= root.val;
         path.add(root.val);
 
         if (root.left == null && root.right == null) {
-            if (targetSum == sum) {
+            if (targetSum == 0) {
                 result.add(new ArrayList(path));
             }
-            sum -= root.val;
             path.remove(path.size() - 1);
             return;
         }
 
         if (root.left != null) {
-            helper(result, root.left, targetSum, sum, path);
+            dfs(root.left, targetSum, result, path);
         }
-
         if (root.right != null) {
-            helper(result, root.right, targetSum, sum, path);
+            dfs(root.right, targetSum, result, path);
         }
-        sum -= root.val;
         path.remove(path.size() - 1);
+
     }
 
     public static void main(String[] args) {
