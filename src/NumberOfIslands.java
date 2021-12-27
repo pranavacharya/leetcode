@@ -1,36 +1,31 @@
 
 public class NumberOfIslands {
 
-    int[][] dirs = new int[][]{{0, 1}, {0, -1}, {1, 0}, {-1, 0}};
-
     public int numIslands(char[][] grid) {
         int count = 0;
-
         for (int i = 0; i < grid.length; i++) {
             for (int j = 0; j < grid[i].length; j++) {
                 if (grid[i][j] == '1') {
-                    dfs(grid, i, j);
                     count++;
+                    dfs(grid, i, j);
                 }
             }
         }
-
         return count;
     }
 
-    private void dfs(char[][] grid, int x, int y) {
-        if (grid[x][y] != '1') {
+    int[][] dirs = new int[][]{{0, 1}, {0, -1}, {1, 0}, {-1, 0}};
+
+    private void dfs(char[][] grid, int i, int j) {
+        if (grid[i][j] != '1') {
             return;
         }
-
-        grid[x][y] = '#';
-
+        grid[i][j] = '#';
         for (int[] dir : dirs) {
-            int nx = dir[0] + x;
-            int ny = dir[1] + y;
-
-            if (nx >= 0 && nx < grid.length && ny >= 0 && ny < grid[nx].length) {
-                dfs(grid, nx, ny);
+            int x = i + dir[0];
+            int y = j + dir[1];
+            if (x >= 0 && x < grid.length && y >= 0 && y < grid[0].length) {
+                dfs(grid, x, y);
             }
         }
     }
