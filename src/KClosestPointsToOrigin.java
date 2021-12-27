@@ -4,35 +4,21 @@ import java.util.PriorityQueue;
 
 public class KClosestPointsToOrigin {
 
-    class point {
-
-        int x;
-        int y;
-
-        point(int x, int y) {
-            this.x = x;
-            this.y = y;
-        }
-    }
-
-    public int[][] kClosest(int[][] points, int K) {
-        PriorityQueue<point> maxHeap = new PriorityQueue<>((point a, point b) -> (squareDistanceFromOrigin(b) - squareDistanceFromOrigin(a)));
-        for (int i = 0; i < points.length; i++) {
-            maxHeap.add(new point(points[i][0], points[i][1]));
-            if (maxHeap.size() > K) {
-                maxHeap.remove();
+    public int[][] kClosest(int[][] points, int k) {
+        PriorityQueue<int[]> maxHeap = new PriorityQueue<>((a, b) -> (-(a[0] * a[0] + a[1] * a[1])
+                + (b[0] * b[0] + b[1] * b[1])));
+        for (int[] point : points) {
+            maxHeap.add(point);
+            if (maxHeap.size() > k) {
+                maxHeap.poll();
             }
         }
-        int[][] closest = new int[K][];
-        for (int i = 0; i < K; i++) {
-            point p = maxHeap.remove();
-            closest[i] = new int[]{p.x, p.y};
+        int[][] ans = new int[k][2];
+        int i = 0;
+        while (!maxHeap.isEmpty()) {
+            ans[i++] = maxHeap.poll();
         }
-        return closest;
-    }
-
-    public int squareDistanceFromOrigin(point a) {
-        return (a.x * a.x) + (a.y * a.y);
+        return ans;
     }
 
     public static void main(String args[]) {
