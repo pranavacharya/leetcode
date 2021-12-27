@@ -3,24 +3,29 @@ public class BinaryTreeMaximumPathSum {
 
     private int max;
 
-    public BinaryTreeMaximumPathSum() {
-        this.max = Integer.MIN_VALUE;
-    }
-
     public int maxPathSum(TreeNode root) {
-        dfs(root);
+        this.max = root.val;
+        if (root == null) {
+            return this.max;
+        }
+        helper(root);
         return this.max;
     }
 
-    public int dfs(TreeNode root) {
-        if (root == null) {
-            return 0;
-        } else {
-            int left = Math.max(0, dfs(root.left));
-            int right = Math.max(0, dfs(root.right));
-            this.max = Math.max(this.max, left + right + root.val);
-            return Math.max(left, right) + root.val;
+    private int helper(TreeNode root) {
+        int left = 0;
+        int right = 0;
+        if (root.left != null) {
+            left = helper(root.left);
         }
+        if (root.right != null) {
+            right = helper(root.right);
+        }
+        this.max = Math.max(this.max, left + root.val);
+        this.max = Math.max(this.max, right + root.val);
+        this.max = Math.max(this.max, root.val);
+        this.max = Math.max(this.max, left + right + root.val);
+        return Math.max(0, Math.max(root.val, Math.max(left, right) + root.val));
     }
 
     public static void main(String args[]) {
