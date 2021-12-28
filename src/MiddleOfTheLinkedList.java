@@ -2,20 +2,25 @@
 public class MiddleOfTheLinkedList {
 
     public ListNode middleNode(ListNode head) {
-        ListNode temp = head;
-        ListNode ans;
-        int size = 1;
-        while (temp.next != null) {
-            temp = temp.next;
-            size++;
+        ListNode slow = head;
+        ListNode fast = head.next;
+        if (fast != null) {
+            fast = fast.next;
+        } else {
+            return slow;
         }
-        size = (size / 2);
-        ans = head;
-        while (size > 0) {
-            ans = ans.next;
-            size--;
+        while (fast != null) {
+            slow = slow.next;
+            fast = fast.next;
+            if (fast == null) {
+                return slow;
+            }
+            fast = fast.next;
+            if (fast == null) {
+                return slow.next;
+            }
         }
-        return ans;
+        return slow.next;
     }
 
     public static void main(String args[]) {
