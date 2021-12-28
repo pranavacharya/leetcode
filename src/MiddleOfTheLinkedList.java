@@ -3,24 +3,14 @@ public class MiddleOfTheLinkedList {
 
     public ListNode middleNode(ListNode head) {
         ListNode slow = head;
-        ListNode fast = head.next;
-        if (fast != null) {
-            fast = fast.next;
-        } else {
-            return slow;
-        }
-        while (fast != null) {
+        ListNode fast = head;
+
+        while (fast != null && fast.next != null) {
             slow = slow.next;
-            fast = fast.next;
-            if (fast == null) {
-                return slow;
-            }
-            fast = fast.next;
-            if (fast == null) {
-                return slow.next;
-            }
+            fast = fast.next.next;
         }
-        return slow.next;
+        return slow;
+
     }
 
     public static void main(String args[]) {
