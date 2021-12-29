@@ -2,44 +2,41 @@
 public class ExpressiveWords {
 
     public int expressiveWords(String s, String[] words) {
-        int expressiveWords = 0;
-
+        int count = 0;
         for (String word : words) {
-            // check each word
             int i = 0;
             int j = 0;
-            boolean isExpressive = true;
             while (i < s.length() && j < word.length()) {
+                int count1 = 0;
+                int count2 = 0;
                 if (s.charAt(i) != word.charAt(j)) {
-                    isExpressive = false;
                     break;
                 }
-                int countS = 1;
-                int countW = 1;
                 while (i + 1 < s.length() && s.charAt(i) == s.charAt(i + 1)) {
                     i++;
-                    countS++;
+                    count1++;
                 }
                 while (j + 1 < word.length() && word.charAt(j) == word.charAt(j + 1)) {
                     j++;
-                    countW++;
+                    count2++;
                 }
-
-                if (countS != countW) {
-                    if (countS < 3 || countW > countS) {
-                        isExpressive = false;
+                if (count1 == count2) {
+                    i++;
+                    j++;
+                } else {
+                    if (count2 > count1 || count1 < 2) {
                         break;
+                    } else {
+                        i++;
+                        j++;
                     }
                 }
-                i++;
-                j++;
             }
-            if (isExpressive && i == s.length() && j == word.length()) {
-                expressiveWords++;
+            if (i == s.length() && j == word.length()) {
+                count++;
             }
         }
-
-        return expressiveWords;
+        return count;
     }
 
     public static void main(String[] args) {
