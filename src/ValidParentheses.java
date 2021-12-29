@@ -5,29 +5,23 @@ import java.util.Stack;
 public class ValidParentheses {
 
     public boolean isValid(String s) {
-        HashMap<Character, Character> map = new HashMap<>();
-        map.put('}', '{');
-        map.put(')', '(');
-        map.put(']', '[');
-        Stack<Character> stack = new Stack<>();
-        String Open = "({[";
-        char[] arr = s.toCharArray();
-        int i = 0;
-        while (i < arr.length) {
-            if (Open.indexOf(arr[i]) != -1) {
-                stack.push(arr[i]);
+        Stack<Character> stack = new Stack();
+        for (char c : s.toCharArray()) {
+            if (c == '(' || c == '{' || c == '[') {
+                stack.push(c);
             } else {
-                if (stack.empty()) {
+                if (stack.isEmpty()) {
                     return false;
+                } else {
+                    char top = stack.pop();
+                    if (!((c == ')' && top == '(') || (c == '}' && top == '{')
+                            || (c == ']' && top == '['))) {
+                        return false;
+                    }
                 }
-                if (map.get(arr[i]) != stack.peek()) {
-                    return false;
-                }
-                stack.pop();
             }
-            i++;
         }
-        return (stack.empty());
+        return stack.isEmpty();
     }
 
     public static void main(String args[]) {
