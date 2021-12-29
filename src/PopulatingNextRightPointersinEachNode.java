@@ -28,22 +28,24 @@ public class PopulatingNextRightPointersinEachNode {
 
     public Node connect(Node root) {
         Queue<Node> queue = new LinkedList();
-        if (root == null) {
-            return root;
+        if (root != null) {
+            queue.add(root);
         }
-
-        queue.add(root);
         while (!queue.isEmpty()) {
             int size = queue.size();
+            Node last = null;
             while (size > 0) {
                 Node curr = queue.poll();
-                curr.next = size == 1 ? null : queue.peek();
-                if (curr.left != null) {
-                    queue.add(curr.left);
-                }
                 if (curr.right != null) {
                     queue.add(curr.right);
                 }
+                if (curr.left != null) {
+                    queue.add(curr.left);
+                }
+                if (last != null) {
+                    curr.next = last;
+                }
+                last = curr;
                 size--;
             }
         }
