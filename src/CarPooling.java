@@ -1,18 +1,23 @@
 
+import java.util.Arrays;
+import java.util.PriorityQueue;
+
 public class CarPooling {
 
     public boolean carPooling(int[][] trips, int capacity) {
-        int[] timestamp = new int[1001];
-        for (int[] trip : trips) {
-            timestamp[trip[1]] += trip[0];
-            timestamp[trip[2]] -= trip[0];
-        }
-        int capacityAtMoment = 0;
-        for (int i = 0; i < timestamp.length; i++) {
-            capacityAtMoment += timestamp[i];
-            if (capacityAtMoment > capacity) {
+        PriorityQueue<int[]> minHeap = new PriorityQueue<>((a, b) -> (a[0] - b[0]));
+        Arrays.sort(trips, (a, b) -> Double.compare(a[1], b[1]));
+        for (int i = 0; i < trips.length; i++) {
+            int[] curr = trips[i];
+            while (!minHeap.isEmpty() && minHeap.peek()[0] <= curr[1]) {
+                capacity += minHeap.peek()[1];
+                minHeap.poll();
+            }
+            capacity -= curr[0];
+            if (capacity < 0) {
                 return false;
             }
+            minHeap.add(new int[]{curr[2], curr[0]});
         }
         return true;
     }
