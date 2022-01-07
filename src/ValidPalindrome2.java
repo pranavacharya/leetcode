@@ -2,32 +2,26 @@
 public class ValidPalindrome2 {
 
     public boolean validPalindrome(String s) {
-        if (isPalindrome(s)) {
-            return true;
-        }
-        char[] arr = s.toCharArray();
-        int i = 0;
-        int j = s.length() - 1;
-        while (i < j) {
-            if (arr[i] != arr[j]) {
-                if (isPalindrome(s.substring(0, i).concat(s.substring(i + 1)))) {
-                    return true;
-                } else if (isPalindrome(s.substring(0, j).concat(s.substring(j + 1)))) {
-                    return true;
-                } else {
-                    break;
-                }
+        int left = 0;
+        int right = s.length() - 1;
+        int count = 0;
+        while (left < right) {
+            if (s.charAt(left) == s.charAt(right)) {
+                left++;
+                right--;
+            } else {
+                return isPalindrome(s, left + 1, right) || isPalindrome(s, left, right - 1);
             }
-            i++;
-            j--;
         }
-        return false;
+        return true;
     }
 
-    public boolean isPalindrome(String s) {
-        char[] arr = s.toCharArray();
-        for (int i = 0; i < s.length() / 2; i++) {
-            if (arr[i] != arr[s.length() - 1 - i]) {
+    private boolean isPalindrome(String s, int left, int right) {
+        while (left < right) {
+            if (s.charAt(left) == s.charAt(right)) {
+                left++;
+                right--;
+            } else {
                 return false;
             }
         }
