@@ -1,17 +1,16 @@
 
 public class FindtheTownJudge {
 
-    public int findJudge(int N, int[][] trust) {
-        int[] trustedBy = new int[N];
-        int[] trusts = new int[N];
-        for (int[] t : trust) {
-            trustedBy[t[1] - 1]++;
-            trusts[t[0] - 1]++;
+    public int findJudge(int n, int[][] trust) {
+        int[] indegree = new int[1001];
+        int[] outdegree = new int[1001];
+        for (int i = 0; i < trust.length; i++) {
+            outdegree[trust[i][0]]++;
+            indegree[trust[i][1]]++;
         }
-
-        for (int i = 0; i < N; i++) {
-            if (trustedBy[i] == N - 1 && trusts[i] == 0) {
-                return i + 1;
+        for (int i = 1; i < indegree.length; i++) {
+            if (indegree[i] == n - 1 && outdegree[i] == 0) {
+                return i;
             }
         }
         return -1;
