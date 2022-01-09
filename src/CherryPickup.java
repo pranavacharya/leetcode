@@ -1,89 +1,46 @@
 
-import java.util.Arrays;
-
 public class CherryPickup {
+
+    private int[][][][] dp;
 
     public int cherryPickup(int[][] grid) {
         int n = grid.length;
-        int m = grid[0].length;
-        int[][] dp = new int[n + 1][m + 1];
-
-        int count = 0;
-
-        for (int i = 0; i < n; i++) {
-            for (int j = 0; j < m; j++) {
-                if (grid[i][j] == 1) {
-                    dp[i + 1][j + 1] = 1;
-                }
-                if (grid[i][j] == -1) {
-                    continue;
-                }
-                if ((i != 0 && j != 0) && grid[i - 1][j] == -1 && grid[i][j - 1] == 0) {
-                    dp[i + 1][j + 1] = 0;
-                }
-                dp[i + 1][j + 1] += Math.max(dp[i][j + 1], dp[i + 1][j]);
-            }
-        }
-
-        count += dp[n][m];
-
-        if (dp[n][m] == 0) {
-            return 0;
-        }
-        resetGrid(grid, dp, n, m);
-
-        for (int i = 0; i < dp.length; i++) {
-            Arrays.fill(dp[i], 0);
-        }
-
-        for (int i = 0; i < n; i++) {
-            for (int j = 0; j < m; j++) {
-                if (grid[i][j] == 1) {
-                    dp[i + 1][j + 1] = 1;
-                }
-                if (grid[i][j] == -1) {
-                    continue;
-                }
-                if ((i != 0 && j != 0) && grid[i - 1][j] == -1 && grid[i][j - 1] == 0) {
-                    dp[i + 1][j + 1] = 0;
-                }
-                dp[i + 1][j + 1] += Math.max(dp[i][j + 1], dp[i + 1][j]);
-            }
-        }
-
-        count += dp[n][m];
-
-        return count;
+        this.dp = new int[n][n][n][n];
+        int ans = helper(grid, 0, 0, 0, 0);
+        return ans < 0 ? 0 : ans;
     }
 
-    private void resetGrid(int[][] grid, int[][] dp, int n, int m) {
-        int i = n;
-        int j = m;
+    private int helper(int[][] grid, int x1, int y1, int x2, int y2) {
+        if (x1 < 0 || x1 > grid.length - 1 || y1 < 0 || y1 > grid.length - 1
+                || x2 < 0 || x2 > grid.length - 1 || y2 < 0 || y2 > grid.length - 1
+                || grid[x1][y1] == -1 || grid[x2][y2] == -1) {
+            return Integer.MIN_VALUE;
+        };
 
-        while (i > 1 && j > 1) {
-            if (grid[i - 1][j - 1] == 1) {
-                dp[i][j]--;
-            }
-            grid[i - 1][j - 1] = 0;
-            if (dp[i][j] == dp[i - 1][j]) {
-                i--;
-            } else {
-                j--;
-            }
+        if (x1 == grid.length - 1 && y1 == grid[0].length - 1) {
+            return grid[x1][y1];
         }
 
-        while (i > 1) {
-            grid[i - 1][j - 1] = 0;
-            i--;
+        if (this.dp[x1][y1][x2][y2] != 0) {
+            return this.dp[x1][y1][x2][y2];
         }
 
-        while (j > 1) {
-            grid[i - 1][j - 1] = 0;
-            j--;
+        int cherries = 0;
+        if (x1 == x2 && y1 == y2) {
+            cherries += grid[x1][y1];
+        } else {
+            cherries += grid[x1][y1];
+            cherries += grid[x2][y2];
         }
 
-        grid[i - 1][j - 1] = 0;
+        int f1 = helper(grid, x1 + 1, y1, x2 + 1, y2);
+        int f2 = helper(grid, x1 + 1, y1, x2, y2 + 1);
+        int f3 = helper(grid, x1, y1 + 1, x2 + 1, y2);
+        int f4 = helper(grid, x1, y1 + 1, x2, y2 + 1);
 
+        cherries += Math.max(Math.max(f1, f2), Math.max(f3, f4));
+
+        return this.dp[x1][y1][x2][y2] = cherries;
     }
 
     public static void main(String[] args) {
