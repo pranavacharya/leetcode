@@ -1,28 +1,34 @@
 
 public class SumofRootToLeafBinaryNumbers {
 
-    private int sum = 0;
+    int sum = 0;
 
     public int sumRootToLeaf(TreeNode root) {
         if (root != null) {
-            dfs(root, "");
+            helper(root, 0);
         }
-        return this.sum;
+        return sum;
     }
 
-    private void dfs(TreeNode root, String path) {
+    private void helper(TreeNode root, int num) {
         if (root.left == null && root.right == null) {
-            path = path.concat("" + root.val);
-            this.sum += Integer.parseInt(path, 2);
+            num = num << 1;
+            num += root.val;
+            sum += num;
             return;
         }
-        path = path.concat("" + root.val);
+
+        num = num << 1;
+        num += root.val;
+
         if (root.left != null) {
-            dfs(root.left, path);
+            helper(root.left, num);
         }
+
         if (root.right != null) {
-            dfs(root.right, path);
+            helper(root.right, num);
         }
+
     }
 
     public static void main(String args[]) {
