@@ -1,28 +1,25 @@
 
 public class TargetSum {
 
-    private int combination;
+    int valid = 0;
 
-    public int findTargetSumWays(int[] nums, int S) {
-        this.combination = 0;
-        backtracking(nums, S, 0, 0);
-        return this.combination;
+    public int findTargetSumWays(int[] nums, int target) {
+        helper(nums, target, 0);
+        return this.valid;
     }
 
-    private void backtracking(int[] nums, int target, int index, int sum) {
+    private void helper(int[] nums, int target, int index) {
         if (index == nums.length) {
-            if (target == sum) {
-                this.combination++;
+            if (target == 0) {
+                this.valid++;
             }
             return;
         }
-        for (int i = 0; i < 2; i++) {
-            if (i == 0) {
-                backtracking(nums, target, index + 1, sum + nums[index]);
-            } else {
-                backtracking(nums, target, index + 1, sum - nums[index]);
-            }
-        }
+
+        helper(nums, target - nums[index], index + 1);
+
+        helper(nums, target + nums[index], index + 1);
+
     }
 
     public static void main(String args[]) {
