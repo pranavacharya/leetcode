@@ -4,24 +4,23 @@ import java.util.Arrays;
 public class MinimumNumberofArrowstoBurstBalloons {
 
     public int findMinArrowShots(int[][] points) {
-        if (points.length == 0) {
-            return 0;
-        }
         Arrays.sort(points, (a, b) -> Double.compare(a[0], b[0]));
-        int count = 0;
-        int[] curr = points[0];
-        int i = 1;
-        while (i < points.length) {
-            if (points[i][0] > curr[1]) {
-                count++;
-                curr = points[i];
+
+        int min = 0;
+        int last[] = points[0];
+        min++;
+        for (int i = 1; i < points.length; i++) {
+            int[] curr = points[i];
+
+            if (curr[0] > last[1]) {
+                min++;
+                last = curr;
             } else {
-                curr = new int[]{Math.max(curr[0], points[i][0]), Math.min(curr[1], points[i][1])};
+                last[1] = Math.min(curr[1], last[1]);
             }
-            i++;
         }
-        count++;
-        return count;
+
+        return min;
     }
 
     public static void main(String args[]) {
