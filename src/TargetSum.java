@@ -1,25 +1,43 @@
 
+import java.util.Arrays;
+
 public class TargetSum {
 
-    int valid = 0;
+    int[][] dp;
+    int total;
 
     public int findTargetSumWays(int[] nums, int target) {
-        helper(nums, target, 0);
-        return this.valid;
+        this.total = 0;
+        for (int i = 0; i < nums.length; i++) {
+            this.total += nums[i];
+        }
+        this.dp = new int[total + total + 1][nums.length];
+        for (int i = 0; i < this.dp.length; i++) {
+            Arrays.fill(this.dp[i], -1);
+        }
+        int ans = helper(nums, target, 0, 0);
+        return ans;
     }
 
-    private void helper(int[] nums, int target, int index) {
+    private int helper(int[] nums, int target, int index, int sum) {
         if (index == nums.length) {
-            if (target == 0) {
-                this.valid++;
+            if (target == sum) {
+                return 1;
             }
-            return;
+            return 0;
         }
 
-        helper(nums, target - nums[index], index + 1);
+        if (this.dp[sum + total][index] != -1) {
+            return this.dp[sum + total][index];
+        }
 
-        helper(nums, target + nums[index], index + 1);
+        int ans = 0;
 
+        ans += helper(nums, target, index + 1, sum + nums[index]);
+
+        ans += helper(nums, target, index + 1, sum - nums[index]);
+
+        return this.dp[sum + total][index] = ans;
     }
 
     public static void main(String args[]) {
