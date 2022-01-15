@@ -4,26 +4,23 @@ public class MinimumSwapstoGroupAll1sTogetherII {
     public int minSwaps(int[] nums) {
         int window = 0;
         int n = nums.length;
-        int[] arr = new int[n * 2];
         for (int i = 0; i < nums.length; i++) {
             if (nums[i] == 1) {
                 window++;
             }
-            arr[i] = nums[i];
-            arr[i + n] = nums[i];
         }
         int swaps = Integer.MAX_VALUE;
 
         int i = 0;
         int j = 0;
         int zeros = 0;
-        while (j < arr.length) {
-            if (arr[j] == 0) {
+        while (j < 2 * n) {
+            if (nums[j % n] == 0) {
                 zeros++;
             }
             j++;
             if (j - i > window) {
-                if (arr[i] == 0) {
+                if (nums[i % n] == 0) {
                     zeros--;
                 }
                 i++;
