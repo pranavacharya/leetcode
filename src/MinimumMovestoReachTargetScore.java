@@ -1,31 +1,35 @@
 
-import java.util.LinkedList;
-import java.util.Queue;
-
 public class MinimumMovestoReachTargetScore {
 
     public int minMoves(int target, int maxDoubles) {
-        return helper(1, maxDoubles, target);
-    }
+        int moves = 0;
 
-    private int helper(int curr, int maxDouble, int target) {
-        if (curr == target) {
-            return 0;
-        }
-        if (maxDouble == 0) {
-            return target - curr;
+        if (target != 1 && target % 2 == 1) {
+            moves++;
+            target--;
         }
 
-        int count = Integer.MAX_VALUE;
-        count = Math.min(count, helper(curr + 1, maxDouble, target));
-        if (curr * 2 <= target) {
-            count = Math.min(count, helper(curr * 2, maxDouble - 1, target));
+        while (target > 1) {
+            if (maxDoubles > 0) {
+                maxDoubles--;
+                target /= 2;
+                moves++;
+            } else {
+                moves += (target - 1);
+                target = 1;
+            }
+
+            if (target != 1 && target % 2 == 1) {
+                target--;
+                moves++;
+            }
         }
-        return count + 1;
+
+        return moves;
     }
 
     public static void main(String[] args) {
         MinimumMovestoReachTargetScore mmrts = new MinimumMovestoReachTargetScore();
-        System.out.println(mmrts.minMoves(100, 4));
+        System.out.println(mmrts.minMoves(1, 4));
     }
 }
