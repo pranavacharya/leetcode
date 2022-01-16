@@ -5,33 +5,27 @@ import java.util.Queue;
 public class MinimumMovestoReachTargetScore {
 
     public int minMoves(int target, int maxDoubles) {
-        Queue<int[]> queue = new LinkedList();
-        queue.add(new int[]{1, maxDoubles});
-        int steps = 0;
-        while (!queue.isEmpty()) {
-            int size = queue.size();
-            while (size > 0) {
-                int[] item = queue.poll();
-                int curr = item[0];
-                int dob = item[1];
-                if (curr == target) {
-                    return steps;
-                }
+        return helper(1, maxDoubles, target);
+    }
 
-                queue.add(new int[]{curr + 1, dob});
-                if (dob > 0 && curr * 2 <= target) {
-                    queue.add(new int[]{curr * 2, dob - 1});
-                }
-                size--;
-            }
-            steps++;
+    private int helper(int curr, int maxDouble, int target) {
+        if (curr == target) {
+            return 0;
+        }
+        if (maxDouble == 0) {
+            return target - curr;
         }
 
-        return steps;
+        int count = Integer.MAX_VALUE;
+        count = Math.min(count, helper(curr + 1, maxDouble, target));
+        if (curr * 2 <= target) {
+            count = Math.min(count, helper(curr * 2, maxDouble - 1, target));
+        }
+        return count + 1;
     }
 
     public static void main(String[] args) {
         MinimumMovestoReachTargetScore mmrts = new MinimumMovestoReachTargetScore();
-        System.out.println(mmrts.minMoves(10000, 4));
+        System.out.println(mmrts.minMoves(100, 4));
     }
 }
