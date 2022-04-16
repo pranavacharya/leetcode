@@ -1,29 +1,26 @@
 
-import java.util.Stack;
 
 public class ConvertBSTtoGreaterTree {
 
     public TreeNode convertBST(TreeNode root) {
-        if (root == null) {
-            return null;
-        }
-        Stack<TreeNode> stack = new Stack();
-        int sum = 0;
-        TreeNode node = root;
-        while (!stack.isEmpty() || node != null) {
-
-            while (node != null) {
-                stack.add(node);
-                node = node.right;
-            }
-
-            node = stack.pop();
-            sum += node.val;
-            node.val = sum;
-
-            node = node.left;
-        }
+        convert(root, 0);
         return root;
+    }
+    
+    private int convert(TreeNode root, int rightSum) {
+        if(root == null) {
+            return 0;
+        }
+        
+        int sum = root.val;
+        
+        sum += convert(root.right, rightSum);
+        
+        root.val = sum + rightSum;
+                
+        sum += convert(root.left, rightSum + sum);
+        
+        return sum;
     }
 
     public static void main(String args[]) {
@@ -37,6 +34,7 @@ public class ConvertBSTtoGreaterTree {
         root.right.left = new TreeNode(5);
         root.right.right = new TreeNode(7);
         root.right.right.right = new TreeNode(8);
-        System.out.println(cbgt.convertBST(root));
+        cbgt.convertBST(root);
+        System.out.println(root);
     }
 }
