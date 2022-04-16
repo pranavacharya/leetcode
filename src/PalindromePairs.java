@@ -26,10 +26,13 @@ public class PalindromePairs {
     }
 
     private boolean isPalindrome(String[] words, int i, int j) {
-        int left = 0;
-        int right = words[i].length() + words[j].length() - 1;
+        int len = words[i].length() + words[j].length();
+        int mid = len / 2;
 
-        while (left < right) {
+        int left = len % 2 == 0 ? mid - 1 : mid;
+        int right = mid;
+        
+        while (left >= 0 && right < len) {
             char lc;
             char rc;
 
@@ -49,8 +52,8 @@ public class PalindromePairs {
                 return false;
             }
 
-            left++;
-            right--;
+            left--;
+            right++;
         }
 
         return true;
