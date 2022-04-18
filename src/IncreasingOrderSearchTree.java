@@ -1,24 +1,25 @@
 
 public class IncreasingOrderSearchTree {
 
-    private TreeNode result;
+    TreeNode result;
 
     public TreeNode increasingBST(TreeNode root) {
         this.result = new TreeNode(-1);
         TreeNode head = this.result;
-        inOrderDfs(root);
+        inorder(root);
         return head.right;
     }
 
-    private void inOrderDfs(TreeNode root) {
-        if (root != null) {
-            inOrderDfs(root.left);
-
-            this.result.right = new TreeNode(root.val);
-            this.result = this.result.right;
-
-            inOrderDfs(root.right);
+    private void inorder(TreeNode root) {
+        if (root == null) {
+            return;
         }
+
+        inorder(root.left);
+        result.right = new TreeNode(root.val);
+        result = result.right;
+
+        inorder(root.right);
     }
 
     public static void main(String args[]) {
