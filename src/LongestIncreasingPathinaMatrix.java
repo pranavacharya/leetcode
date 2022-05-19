@@ -3,24 +3,22 @@ import java.util.Arrays;
 
 public class LongestIncreasingPathinaMatrix {
 
-    int[][] dirs = new int[][]{{0, 1}, {0, -1}, {1, 0}, {-1, 0}};
+    private int[][] dirs = new int[][]{{0, 1}, {0, -1}, {1, 0}, {-1, 0}};
+
     int[][] dp;
 
     public int longestIncreasingPath(int[][] matrix) {
-        int n = matrix.length;
-        int m = matrix[0].length;
-        this.dp = new int[n][m];
-
-        for (int i = 0; i < this.dp.length; i++) {
-            Arrays.fill(this.dp[i], -1);
-        }
-
         int ans = 0;
 
-        for (int i = 0; i < n; i++) {
-            for (int j = 0; j < m; j++) {
-                int local = helper(matrix, i, j);
-                ans = Math.max(ans, local);
+        this.dp = new int[matrix.length][matrix[0].length];
+
+        for (int[] row : dp) {
+            Arrays.fill(row, -1);
+        }
+
+        for (int i = 0; i < matrix.length; i++) {
+            for (int j = 0; j < matrix[i].length; j++) {
+                ans = Math.max(ans, helper(matrix, i, j));
             }
         }
 
@@ -33,22 +31,17 @@ public class LongestIncreasingPathinaMatrix {
             return this.dp[i][j];
         }
 
-        int ans = 0;
-
+        int max = 0;
         for (int[] dir : dirs) {
             int x = i + dir[0];
             int y = j + dir[1];
 
-            if (x < 0 || x > matrix.length - 1 || y < 0 || y > matrix[x].length - 1) {
-                continue;
+            if (x >= 0 && x < matrix.length && y >= 0 && y < matrix[0].length && matrix[i][j] < matrix[x][y]) {
+                max = Math.max(max, helper(matrix, x, y));
             }
 
-            if (matrix[i][j] < matrix[x][y]) {
-                ans = Math.max(ans, helper(matrix, x, y));
-            }
         }
-
-        return this.dp[i][j] = ans + 1;
+        return dp[i][j] = max + 1;
     }
 
     public static void main(String[] args) {
