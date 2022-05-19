@@ -4,42 +4,42 @@ import java.util.Queue;
 
 public class ShortestPathinBinaryMatrix {
 
-    private int dir[][] = new int[][]{{0, 1}, {0, -1}, {1, 0}, {-1, 0}, {1, -1}, {-1, 1}, {-1, -1}, {1, 1}};
+    private int[][] dirs = new int[][]{{1, 1}, {0, 1}, {1, 0}, {0, -1}, {-1, 0}, {-1, -1}, {1, -1}, {-1, 1}};
 
     public int shortestPathBinaryMatrix(int[][] grid) {
-
-        int m = grid.length;
-        int n = grid[0].length;
-
-        if (grid[0][0] == 1 || grid[m - 1][n - 1] == 1) {
+        if (grid[0][0] != 0 || grid[grid.length - 1][grid.length - 1] != 0) {
             return -1;
         }
-
-        boolean[][] visited = new boolean[m][n];
-        visited[0][0] = true;
+        boolean[][] visited = new boolean[grid.length][grid.length];
+        int ans = 0;
         Queue<int[]> queue = new LinkedList();
         queue.add(new int[]{0, 0});
+        visited[0][0] = true;
 
-        int ans = 0;
         while (!queue.isEmpty()) {
             int size = queue.size();
+            ans++;
             while (size > 0) {
                 int[] curr = queue.poll();
-                if (curr[0] == m - 1 && curr[1] == n - 1) {
-                    return ans + 1;
-                }
-                for (int k = 0; k < 8; k++) {
-                    int nextX = dir[k][0] + curr[0];
-                    int nextY = dir[k][1] + curr[1];
 
-                    if (nextX >= 0 && nextX < m && nextY >= 0 && nextY < n && !visited[nextX][nextY] && grid[nextX][nextY] == 0) {
-                        queue.add(new int[]{nextX, nextY});
-                        visited[nextX][nextY] = true;
-                    }
+                if (curr[0] == grid.length - 1 && curr[1] == grid.length - 1) {
+                    return ans;
                 }
+                for (int[] dir : dirs) {
+                    int x = curr[0] + dir[0];
+                    int y = curr[1] + dir[1];
+
+                    if (x >= 0 && x <= grid.length - 1 && y >= 0 && y <= grid.length - 1 && grid[x][y] == 0) {
+                        if (!visited[x][y]) {
+                            visited[x][y] = true;
+                            queue.add(new int[]{x, y});
+                        }
+                    }
+
+                }
+
                 size--;
             }
-            ans++;
         }
 
         return -1;
