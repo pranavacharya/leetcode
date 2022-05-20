@@ -1,44 +1,32 @@
 
-import java.util.Arrays;
 
 public class UniquePaths2 {
 
-    private int[][] dp;
-
     public int uniquePathsWithObstacles(int[][] obstacleGrid) {
-        int n = obstacleGrid.length;
-        int m = obstacleGrid[0].length;
-        this.dp = new int[n][m];
-        for (int i = 0; i < this.dp.length; i++) {
-            Arrays.fill(this.dp[i], -1);
-        }
-        return helper(obstacleGrid, n - 1, m - 1);
-    }
-
-    private int helper(int[][] obstacleGrid, int i, int j) {
-        if (obstacleGrid[i][j] == 1) {
+        
+        int m = obstacleGrid.length;
+        int n = obstacleGrid[0].length;
+        
+        if (obstacleGrid[0][0] == 1 || obstacleGrid[m - 1][n - 1] == 1) {
             return 0;
         }
-
-        if (i == 0 && j == 0) {
-            return 1;
+        
+        
+        int[][] dp = new int[m + 1][n + 1];
+        dp[1][1] = 1; 
+        
+        for(int i = 0; i < obstacleGrid.length; i++) {
+            for(int j = 0; j < obstacleGrid[i].length; j++) {
+                if(i == 0 && j == 0) {
+                    continue;
+                }
+                if(obstacleGrid[i][j] == 0) {
+                    dp[i + 1][j + 1] = dp[i][j + 1] + dp[i + 1][j];    
+                }
+            }
         }
-
-        if (this.dp[i][j] != -1) {
-            return this.dp[i][j];
-        }
-
-        int ans = 0;
-
-        if (i > 0) {
-            ans += helper(obstacleGrid, i - 1, j);
-        }
-
-        if (j > 0) {
-            ans += helper(obstacleGrid, i, j - 1);
-        }
-
-        return this.dp[i][j] = ans;
+        
+        return dp[m][n];
     }
 
     public static void main(String args[]) {
