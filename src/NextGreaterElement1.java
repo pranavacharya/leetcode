@@ -1,29 +1,29 @@
 
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Stack;
 
 public class NextGreaterElement1 {
 
     public int[] nextGreaterElement(int[] nums1, int[] nums2) {
-        int[] ind = new int[10000];
-        int[] max = new int[nums2.length];
-        int pointer = 0;
-        
-        for (int i = 0; i < nums1.length; i++) {
-            ind[nums1[i]] = i + 1;
+        HashMap<Integer, Integer> map = new HashMap();
+        Stack<Integer> stack = new Stack();
+        for(int i = 0; i < nums2.length; i++) {
+            while (!stack.isEmpty() && stack.peek() < nums2[i]) {
+                map.put(stack.pop(), nums2[i]);
+            }
+            stack.push(nums2[i]);
+        }
+        int[] ans = new int[nums1.length];
+        for(int i = 0; i < nums1.length; i++) {
+            if(map.containsKey(nums1[i])) {
+                ans[i] = map.get(nums1[i]);
+            } else {
+                ans[i] = -1;
+            }
         }
         
-        int[] res = new int[nums1.length];
-        for (int i = nums2.length - 1; i >= 0; i--) {
-            int num = nums2[i];
-            while (pointer > 0 && max[pointer - 1] < num) {
-                pointer--;
-            }
-            if (ind[num] > 0) {
-                res[ind[num] - 1] = pointer == 0 ? -1 : max[pointer - 1];
-            }
-            max[pointer++] = num;
-        }
-        return res;
+        return ans;
     }
 
     public static void main(String args[]) {
