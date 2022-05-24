@@ -2,38 +2,26 @@
 public class PalindromicSubstrings {
 
     public int countSubstrings(String s) {
-        int count = 0;
+        int substring = 0;
+        
         for (int i = 0; i < s.length(); i++) {
-            count += expandFromCenter(s, i);
-            count += expandFromCenterEven(s, i);
+            substring += expandFromCenter(s, i, i);
+            substring += expandFromCenter(s, i - 1, i);
         }
-        return count;
+        
+        return substring;
     }
-
-    public int expandFromCenter(String s, int index) {
-        int count = 1;
-        int i = 1;
-        while (index - i >= 0 && index + i < s.length()) {
-            if (s.charAt(index - i) == s.charAt(index + i)) {
+    
+    private int expandFromCenter(String s, int i, int j) {
+        int count = 0;    
+        while (i >= 0 && j < s.length()) {
+            if (s.charAt(i) == s.charAt(j)) {
                 count++;
+                i--;
+                j++;
             } else {
-                return count;
+                break;
             }
-            i++;
-        }
-        return count;
-    }
-
-    public int expandFromCenterEven(String s, int index) {
-        int count = 0;
-        int i = 0;
-        while (index - 1 - i >= 0 && index + i < s.length()) {
-            if (s.charAt(index - 1 - i) == s.charAt(index + i)) {
-                count++;
-            } else {
-                return count;
-            }
-            i++;
         }
         return count;
     }
