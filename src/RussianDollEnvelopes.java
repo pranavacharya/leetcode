@@ -4,23 +4,28 @@ import java.util.Arrays;
 public class RussianDollEnvelopes {
 
     public int maxEnvelopes(int[][] envelopes) {
-        Arrays.sort(envelopes, (a, b) -> a[0] == b[0] ? Double.compare(a[1], b[1]) : Double.compare(a[0], b[0]));
-        int[] dp = new int[envelopes.length];
-        Arrays.fill(dp, 1);
-
+        Arrays.sort(envelopes, (a, b) -> a[0] == b[0] ? Double.compare(b[1], a[1]) : Double.compare(a[0], b[0]));
+        int[] heights = new int[envelopes.length];
         for (int i = 0; i < envelopes.length; i++) {
-            for (int j = i - 1; j >= 0; j--) {
-                if (envelopes[j][0] < envelopes[i][0] && envelopes[j][1] < envelopes[i][1]) {
-                    dp[i] = Math.max(dp[i], 1 + dp[j]);
-                }
+            heights[i] = envelopes[i][1];
+        }
+        return llis(heights);
+    }
+
+    private int llis(int[] nums) {
+        int len = 0;
+        int[] dp = new int[nums.length];
+        for (int num : nums) {
+            int i = Arrays.binarySearch(dp, 0, len, num);
+            if (i < 0) {
+                i = -(i + 1);
+            }
+            dp[i] = num;
+            if (i == len) {
+                len++;
             }
         }
-
-        int ans = 0;
-        for (int i = 0; i < dp.length; i++) {
-            ans = Math.max(ans, dp[i]);
-        }
-        return ans;
+        return len;
     }
 
     public static void main(String[] args) {
