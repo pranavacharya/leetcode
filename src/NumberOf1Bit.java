@@ -2,15 +2,15 @@
 public class NumberOf1Bit {
 
     public int hammingWeight(int n) {
-        int weight = 0;
+        int count = 0;
         int mask = 1;
         for (int i = 0; i < 32; i++) {
-            if ((n & mask) == mask) {
-                weight++;
+            if((mask & n) != 0) {
+                count++;
             }
             mask = mask << 1;
         }
-        return weight;
+        return count;
     }
 
     public static void main(String args[]) {
