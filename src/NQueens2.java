@@ -3,46 +3,71 @@ import java.util.Arrays;
 
 public class NQueens2 {
 
+    int count;
+
     public int totalNQueens(int n) {
-        int[][] board = new int[n][n];
-        int count = permutations(board, n, 0);
-        return count;
+        this.count = 0;
+        int[][] grid = new int[n][n];
+        backtrack(grid, 0, 0, n);
+        return this.count;
     }
 
-    public int permutations(int[][] board, int n, int row) {
+    private void backtrack(int[][] grid, int row, int col, int n) {
         if (n == 0) {
-            System.out.println(Arrays.deepToString(board));
-            return 1;
+            this.count++;
+            return;
+        }
+
+        if (row == grid.length) {
+            return;
+        }
+
+        if (isValid(grid, row, col)) {
+            grid[row][col] = 1;
+            if (col == grid.length - 1) {
+                backtrack(grid, row + 1, 0, n - 1);
+            } else {
+                backtrack(grid, row, col + 1, n - 1);
+            }
+            grid[row][col] = 0;
+        }
+
+        if (col == grid.length - 1) {
+            backtrack(grid, row + 1, 0, n);
         } else {
-            int count = 0;
-            for (int i = row; i < board.length && board.length - i == n; i++) {
-                for (int j = 0; j < board.length; j++) {
-                    if (isSafe(board, i, j)) {
-                        board[i][j] = 1;
-                        count += permutations(board, n - 1, i + 1);
-                        board[i][j] = 0;
-                    }
+            backtrack(grid, row, col + 1, n);
+        }
+
+    }
+
+    private boolean isValid(int[][] grid, int row, int col) {
+        int rowcount = 0;
+        int colcount = 0;
+        for (int i = 0; i < grid.length; i++) {
+            if (grid[row][i] == 1) {
+                rowcount++;
+                break;
+            }
+            if (grid[i][col] == 1) {
+                colcount++;
+                break;
+            }
+        }
+        if (rowcount > 0 || colcount > 0) {
+            return false;
+        }
+
+        int diacount = 0;
+        for (int i = 0; i < grid.length; i++) {
+            for (int j = 0; j < grid.length; j++) {
+                if (grid[i][j] == 1 && Math.abs(row - i) == Math.abs(col - j)) {
+                    diacount++;
+                    break;
                 }
             }
-            return count;
         }
-    }
-
-    public boolean isSafe(int[][] board, int row, int col) {
-        for (int i = 0; i < row; i++) {
-            if (board[i][col] == 1) {
-                return false;
-            }
-        }
-        for (int i = row, j = col; i >= 0 && j >= 0; i--, j--) {
-            if (board[i][j] == 1) {
-                return false;
-            }
-        }
-        for (int i = row, j = col; i >= 0 && j < board.length; i--, j++) {
-            if (board[i][j] == 1) {
-                return false;
-            }
+        if (diacount > 0) {
+            return false;
         }
         return true;
     }
