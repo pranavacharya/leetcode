@@ -5,56 +5,54 @@ import java.util.List;
 
 public class SearchSuggestionsSystem {
 
-    class Trie {
+    public class Trie {
 
-        Trie[] children = new Trie[26];
+        Trie[] node = new Trie[26];
         boolean isEnd;
-        List<String> list;
+        List<String> list = new ArrayList();
     }
 
-    private Trie root;
-
-    private void add(String word) {
+    public void addWord(Trie root, String word) {
         Trie temp = root;
-        for (int i = 0; i < word.length(); i++) {
-            char c = word.charAt(i);
-            if (temp.children[c - 'a'] == null) {
-                temp.children[c - 'a'] = new Trie();
-                temp.children[c - 'a'].list = new ArrayList();
+        for (char c : word.toCharArray()) {
+            if (temp.node[c - 'a'] == null) {
+                temp.node[c - 'a'] = new Trie();
             }
-            temp = temp.children[c - 'a'];
-            temp.list.add(word);
-            if (temp.list.size() > 3) {
-                temp.list.remove(temp.list.size() - 1);
+            temp = temp.node[c - 'a'];
+            if (temp.list.size() < 3) {
+                temp.list.add(word);
             }
         }
         temp.isEnd = true;
     }
 
-    private List<String> fetchWithPrefix(String prefix) {
+    public List<List<String>> findList(Trie root, String searchWord) {
+        List<List<String>> result = new ArrayList();
         Trie temp = root;
-        for (int i = 0; i < prefix.length(); i++) {
-            char c = prefix.charAt(i);
-            if (temp.children[c - 'a'] == null) {
-                return new ArrayList();
+        for (int i = 0; i < searchWord.length(); i++) {
+            char c = searchWord.charAt(i);
+            if (temp.node[c - 'a'] == null) {
+                for (int j = i; j < searchWord.length(); j++) {
+                    result.add(new ArrayList());
+                }
+                return result;
             } else {
-                temp = temp.children[c - 'a'];
+                temp = temp.node[c - 'a'];
+                result.add(temp.list);
             }
         }
-        return temp.list;
+        return result;
     }
 
+    public Trie root;
+
     public List<List<String>> suggestedProducts(String[] products, String searchWord) {
-        List<List<String>> list = new ArrayList();
         this.root = new Trie();
         Arrays.sort(products);
         for (String product : products) {
-            add(product);
+            addWord(this.root, product);
         }
-        for (int i = 1; i <= searchWord.length(); i++) {
-            list.add(fetchWithPrefix(searchWord.substring(0, i)));
-        }
-        return list;
+        return findList(this.root, searchWord);
     }
 
     public static void main(String[] args) {
